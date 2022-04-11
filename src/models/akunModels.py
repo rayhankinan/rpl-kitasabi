@@ -1,4 +1,5 @@
 from db import mysql
+from cdn import imageBucket
 
 class Akun:
     def __init__(self, email, noTelp, namaDepan, namaBelakang, username, password, foto):
@@ -10,5 +11,6 @@ class Akun:
         self.password = password
         self.foto = foto
 
-    def create():
-        pass
+    def create(self):
+        if self.foto != None:
+            pass
