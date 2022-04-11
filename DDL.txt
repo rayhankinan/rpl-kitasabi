@@ -1,0 +1,17 @@
+CREATE TABLE Akun (
+	IDPengguna INT UNSIGNED AUTO_INCREMENT,
+	Email VARCHAR(320) NOT NULL,
+    NamaDepan VARCHAR(255) NOT NULL,
+    NamaBelakang VARCHAR(255) NOT NULL,
+    Username VARCHAR(255) NOT NULL,
+    Password VARCHAR(255) NOT NULL,
+    Foto VARCHAR(255) DEFAULT NULL,
+    PRIMARY KEY (IDPengguna)
+);
+
+CREATE TABLE Akun_No_Telp (
+    IDPengguna INT UNSIGNED,
+    NoTelp VARCHAR(15),
+    PRIMARY KEY (IDPengguna, NoTelp),
+    FOREIGN KEY (IDPengguna) REFERENCES Akun (IDPengguna) ON DELETE CASCADE
+);
