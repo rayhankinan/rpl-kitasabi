@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_session import Session
 from dotenv import load_dotenv
+
 from config import applicationConfig
 
 load_dotenv()

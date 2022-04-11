@@ -36,7 +36,7 @@ CREATE TABLE `akun` (
   `NamaDepan` varchar(255) NOT NULL,
   `NamaBelakang` varchar(255) NOT NULL,
   `Username` varchar(255) NOT NULL,
-  `Password` varchar(255) NOT NULL,
+  `Password` varchar(60) NOT NULL,
   `Foto` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`IDPengguna`),
   UNIQUE KEY `Email` (`Email`),
@@ -86,4 +86,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-12  3:12:51
+-- Dump completed on 2022-04-12  3:57:30

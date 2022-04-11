@@ -1,4 +1,5 @@
 from flask_mysqldb import MySQL
+
 from config import databaseConfig
 from application import app
 

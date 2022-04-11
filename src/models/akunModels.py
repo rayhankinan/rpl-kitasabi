@@ -1,3 +1,7 @@
+import bcrypt
+from email_validator import validate_email, EmailNotValidError
+from phonenumbers import is_possible_number, is_valid_number
+
 from db import mysql
 from cdn import imageBucket
 
@@ -12,4 +16,27 @@ class Akun:
         self.foto = foto
 
     def create(self):
-        pass
+        try:
+            valid = validate_email(self.email)
+            self.email = valid.email
+
+        except EmailNotValidError:
+            raise Exception(f"{self.email} bukanlah email yang valid!")
+
+        if not is_possible_number(self.noTelp):
+            raise Exception(f"{self.noTelp} bukanlah nomor telepon yang valid!")
+
+        if not is_valid_number(self.noTelp):
+            raise Exception(f"{self.noTelp} tidak terdaftar pada provider apapun!")
+
+        if not self.namaDepan.isalpha():
+            raise Exception(f"{self.namaDepan} bukanlah nama yang valid!")
+
+        if not self.namaBelakang.isalpha():
+            raise Exception(f"{self.namaBelakang} bukanlah nama yang valid!")
+
+        # VALIDATE USERNAME
+
+        # VALIDATE PASSWORD
+
+        # VALIDATE FOTO

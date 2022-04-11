@@ -1,4 +1,5 @@
 from flask import Blueprint
+
 from application import app
 from controllers.akunControllers import login, register, logout, edit, delete
 
