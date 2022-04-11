@@ -1,4 +1,4 @@
-from .db import mysql
+from db import mysql
 
 class Akun:
     pass
