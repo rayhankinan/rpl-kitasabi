@@ -12,5 +12,4 @@ class Akun:
         self.foto = foto
 
     def create(self):
-        if self.foto != None:
-            pass
+        pass
