@@ -1,42 +1,69 @@
 from email_validator import validate_email, EmailNotValidError
-from phonenumbers import is_possible_number, is_valid_number
+from phonenumbers import is_possible_number, is_valid_number, parse
 import bcrypt
 
-from db import mysql
-from cdn import imageBucket
+from models.db import mysql
+from models.cdn import bucket
 
 class Akun:
-    def __init__(self, email, noTelp, namaDepan, namaBelakang, username, password, foto):
-        self.email = email
-        self.noTelp = noTelp
-        self.namaDepan = namaDepan
-        self.namaBelakang = namaBelakang
+    def __init__(self, email, listNoTelp, namaDepan, namaBelakang, username, password, foto):
+        # VALIDATE EMAIL
+        try:
+            valid = validate_email(email)
+            self.email = valid.ascii_email
+
+        except EmailNotValidError:
+            raise Exception(f"{email} bukanlah email yang valid!")
+
+        # VALIDATE PHONE NUMBER
+        self.listNoTelp = []
+        for noTelp in listNoTelp:
+            if not is_possible_number(parse(noTelp)):
+                raise Exception(f"{noTelp} bukanlah nomor telepon yang valid!")
+            elif not is_valid_number(parse(noTelp)):
+                raise Exception(f"{noTelp} tidak terdaftar pada provider apapun!")
+            else:
+                self.listNoTelp.append(noTelp)
+
+        # VALIDATE NAMA
+        if not namaDepan.isalpha():
+            raise Exception(f"{namaDepan} bukanlah nama yang valid!")
+        else:
+            self.namaDepan = namaDepan
+
+        if not namaBelakang.isalpha():
+            raise Exception(f"{namaBelakang} bukanlah nama yang valid!")
+        else:
+            self.namaBelakang = namaBelakang
+
+        # NO VALIDATION REQUIRED
         self.username = username
         self.password = password
         self.foto = foto
 
     def create(self):
-        try:
-            valid = validate_email(self.email)
-            self.email = valid.email
+        # HASH PASSWORD
+        hashedPassword = bcrypt.hashpw(self.password.encode("utf-8"), bcrypt.gensalt())
 
-        except EmailNotValidError:
-            raise Exception(f"{self.email} bukanlah email yang valid!")
+        # UPLOAD FOTO
+        blob = bucket.blob(self.foto.filename)
+        blob.upload_from_string(self.foto.stream.read())
 
-        if not is_possible_number(self.noTelp):
-            raise Exception(f"{self.noTelp} bukanlah nomor telepon yang valid!")
+        gcloudURL = f"https://storage.googleapis.com/{bucket.name}/{blob.name}"
 
-        if not is_valid_number(self.noTelp):
-            raise Exception(f"{self.noTelp} tidak terdaftar pada provider apapun!")
+        # MASUKKAN AKUN KE DALAM DATABASE
+        cursor = mysql.connection.cursor()
 
-        if not self.namaDepan.isalpha():
-            raise Exception(f"{self.namaDepan} bukanlah nama yang valid!")
+        cursor.execute("INSERT INTO Akun (Email, NamaDepan, NamaBelakang, Username, Password, Foto) VALUES (%s, %s, %s, %s, %s, %s)", (self.email, self.namaDepan, self.namaBelakang, self.username, hashedPassword, gcloudURL))
+        
+        mysql.connection.commit()
+        cursor.close()
 
-        if not self.namaBelakang.isalpha():
-            raise Exception(f"{self.namaBelakang} bukanlah nama yang valid!")
+        # MASUKKAN NO TELP KE DALAM DATABASE
+        cursor = mysql.connection.cursor()
 
-        # VALIDATE USERNAME
+        for noTelp in self.listNoTelp:
+            cursor.execute("INSERT INTO Akun_No_Telp (IDPengguna, NoTelp) SELECT MAX(IDPengguna), %s FROM Akun", (noTelp, ))
 
-        # VALIDATE PASSWORD
-
-        # VALIDATE FOTO
+        mysql.connection.commit()
+        cursor.close()

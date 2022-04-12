@@ -1,4 +1,4 @@
-from application import app
+from routes.routes import routed_app
 
 if __name__ == "__main__":
-    app.run(port=3000, debug=True)
+    routed_app.run(port=3000, debug=True)

@@ -1,16 +1,33 @@
+from flask import request
+
 from models.akunModels import Akun
 
 def login():
-    pass
+    return "Bad Request", 400
 
 def register():
-    pass
+    try:
+        email = request.form.get("email")
+        listNoTelp = request.form.getlist("no-telp")
+        namaDepan = request.form.get("nama-depan")
+        namaBelakang = request.form.get("nama-belakang")
+        username = request.form.get("username")
+        password = request.form.get("password")
+        foto = request.files.get("foto")
+
+        newAkun = Akun(email, listNoTelp, namaDepan, namaBelakang, username, password, foto)
+        newAkun.create()
+
+        return "Created", 201
+
+    except Exception as e:
+        return str(e), 400
 
 def logout():
-    pass
+    return "Bad Request", 400
 
 def edit():
-    pass
+    return "Bad Request", 400
 
 def delete():
-    pass
+    return "Bad Request", 400
