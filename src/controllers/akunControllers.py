@@ -1,9 +1,22 @@
 from flask import request, session
+import json
 
 from models.akunModels import Akun
 
 def login():
-    return "Bad Request", 400
+    try:
+        emailOrUsername = request.form.get("email-username")
+        password = request.form.get("password")
+
+        user = Akun.getByEmailOrUsername(emailOrUsername)
+
+        if user.matchPassword(password):
+            session["user"] = json.dumps(email=user.getEmail(), username=user.getUsername())
+        else:
+            return "Unauthorized", 401
+
+    except Exception as e:
+        return str(e), 400
 
 def register():
     try:
