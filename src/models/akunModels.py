@@ -20,10 +20,8 @@ class Akun:
 
         if len(dataAkun) == 0:
             raise Exception(f"Username atau Email {emailOrUsername} belum terdaftar pada sistem!")
-        elif len(dataAkun) > 1:
-            raise Exception(f"Terdapat kesalahan pada server!")
         else:
-            pass # FIX THIS
+            pass # BUG (FIX THIS IMMEDIATELY)
 
     # NONSTATIC METHOD
     def __init__(self, email, listNoTelp, namaDepan, namaBelakang, username, password, foto):
@@ -63,7 +61,29 @@ class Akun:
 
         # UPLOAD FOTO JIKA ADA
         if foto is not None:
-            self.setFoto(foto)
+            blob = bucket.blob(foto.filename)
+            blob.upload_from_string(foto.stream.read())
+
+            self.gcloudURL = blob.public_url
+            self.photoFilename = foto.filename
+        else:
+            self.gcloudURL = None
+            self.photoFilename = None
+
+        # INISIALISASI CURSOR
+        cursor = mysql.connection.cursor()
+
+        # MASUKKAN AKUN KE DALAM DATABASE
+        cursor.execute("INSERT INTO Akun (Email, NamaDepan, NamaBelakang, Username, Password, Foto) VALUES (%s, %s, %s, %s, %s, %s)", (self.email, self.namaDepan, self.namaBelakang, self.username, self.hashedPassword, self.gcloudURL))
+        mysql.connection.commit()
+
+        # MASUKKAN NO TELP KE DALAM DATABASE
+        for noTelp in self.listNoTelp:
+            cursor.execute("INSERT INTO Akun_No_Telp (IDPengguna, NoTelp) SELECT MAX(IDPengguna), %s FROM Akun", (noTelp, ))
+        mysql.connection.commit()
+
+        # TUTUP CURSOR
+        cursor.close()
 
     # EMAIL
     def getEmail(self):
@@ -81,10 +101,30 @@ class Akun:
         elif noTelp in self.listNoTelp:
             raise Exception(f"{noTelp} sudah terdaftar pada sistem!")
         else:
+            # UPDATE ATTRIBUTE
             self.listNoTelp.append(noTelp)
 
+            # INISIALISASI CURSOR
+            cursor = mysql.connection.cursor()
+
+            cursor.execute("INSERT INTO Akun_No_Telp (IDPengguna, NoTelp) SELECT MAX(IDPengguna), %s FROM Akun", (noTelp, ))
+            mysql.connection.commit()
+
+            # TUTUP CURSOR
+            cursor.close()
+
     def deleteNoTelp(self, noTelp):
+        # UPDATE ATTRIBUTE
         self.listNoTelp.remove(noTelp)
+
+        # INISIALISASI CURSOR
+        cursor = mysql.connection.cursor()
+
+        cursor.execute("DELETE FROM Akun_No_Telp WHERE IDPengguna = (SELECT IDPengguna FROM Akun WHERE Email = %s) AND NoTelp = %s", (self.email, noTelp))
+        mysql.connection.commit()
+
+        # TUTUP CURSOR
+        cursor.close()
 
     # NAMA
     def getNamaDepan(self):
@@ -101,7 +141,20 @@ class Akun:
         return self.username
 
     def setUsername(self, username):
-        self.username = username
+        if not username.isalnum():
+            raise Exception(f"{username} bukanlah username yang valid!")
+        else:
+            # UPDATE ATTRIBUTE
+            self.username = username
+
+            # INISIALISASI CURSOR
+            cursor = mysql.connection.cursor()
+
+            cursor.execute("UPDATE Akun SET Username = %s WHERE Email = %s", (username, self.email))
+            mysql.connection.commit()
+
+            # TUTUP CURSOR
+            cursor.close()
 
     # PASSWORD
     def matchPassword(self, password):
@@ -111,37 +164,80 @@ class Akun:
         return self.hashedPassword
 
     def setPassword(self, password):
-        self.hashedPassword = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+        if len(password) < 8:
+            raise Exception(f"Password {password} memiliki panjang kurang dari 8!")
+        else:
+            newHashedPassword = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+
+            # UPDATE ATTRIBUTE
+            self.hashedPassword = newHashedPassword
+
+            # INISIALISASI CURSOR
+            cursor = mysql.connection.cursor()
+
+            cursor.execute("UPDATE Akun SET Password = %s WHERE Email = %s", (newHashedPassword, self.email))
+            mysql.connection.commit()
+
+            # TUTUP CURSOR
+            cursor.close()
 
     # FOTO
     def getGcloudURL(self):
         return self.gcloudURL
 
+    def getPhotoFilename(self):
+        return self.photoFilename
+
     def setFoto(self, foto):
+        # DELETE FOTO
+        blob = bucket.blob(self.photoFilename)
+        blob.delete()
+
+        # UPLOAD FOTO
         blob = bucket.blob(foto.filename)
         blob.upload_from_string(foto.stream.read())
 
+        # UPDATE ATTRIBUTE
         self.gcloudURL = blob.public_url
+        self.photoFilename = foto.filename
 
-    # CLASS METHOD
-    def create(self):
         # INISIALISASI CURSOR
         cursor = mysql.connection.cursor()
 
-        # MASUKKAN AKUN KE DALAM DATABASE
-        cursor.execute("INSERT INTO Akun (Email, NamaDepan, NamaBelakang, Username, Password, Foto) VALUES (%s, %s, %s, %s, %s, %s)", (self.email, self.namaDepan, self.namaBelakang, self.username, self.hashedPassword, self.gcloudURL))
-        mysql.connection.commit()
-
-        # MASUKKAN NO TELP KE DALAM DATABASE
-        for noTelp in self.listNoTelp:
-            cursor.execute("INSERT INTO Akun_No_Telp (IDPengguna, NoTelp) SELECT MAX(IDPengguna), %s FROM Akun", (noTelp, ))
+        cursor.execute("UPDATE Akun SET Foto = %s WHERE Email = %s", (self.gcloudURL, self.email))
         mysql.connection.commit()
 
         # TUTUP CURSOR
         cursor.close()
 
-    def update(self):
-        pass
+    def deleteFoto(self):
+        # DELETE FOTO
+        blob = bucket.blob(self.photoFilename)
+        blob.delete()
+
+        # UPDATE ATTRIBUTE
+        self.gcloudURL = None
+        self.photoFilename = None
+
+        # INISIALISASI CURSOR
+        cursor = mysql.connection.cursor()
+
+        cursor.execute("UPDATE Akun SET Foto = NULL WHERE Email = %s", (self.email, ))
+        mysql.connection.commit()
+
+        # TUTUP CURSOR
+        cursor.close()
+
+    # CLASS METHOD
+    def update(self, **kwargs):
+        pass # BUG (FIX THIS IMMEDIATELY)
 
     def delete(self):
-        pass
+        # INISIALISASI CURSOR
+        cursor = mysql.connection.cursor()
+
+        cursor.execute("DELETE FROM Akun WHERE Email = %s", (self.email, ))
+        mysql.connection.commit()
+
+        # TUTUP CURSOR
+        cursor.close()
