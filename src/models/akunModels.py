@@ -1,6 +1,6 @@
-import bcrypt
 from email_validator import validate_email, EmailNotValidError
 from phonenumbers import is_possible_number, is_valid_number
+import bcrypt
 
 from db import mysql
 from cdn import imageBucket
