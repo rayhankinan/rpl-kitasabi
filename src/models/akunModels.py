@@ -150,7 +150,7 @@ class Akun:
             # INISIALISASI CURSOR
             cursor = mysql.connection.cursor()
 
-            cursor.execute("UPDATE Akun SET Username = %s WHERE Email = %s", (username, self.email))
+            cursor.execute("UPDATE Akun SET Username = %s WHERE Email = %s", (self.username, self.email))
             mysql.connection.commit()
 
             # TUTUP CURSOR
@@ -167,15 +167,13 @@ class Akun:
         if len(password) < 8:
             raise Exception(f"Password {password} memiliki panjang kurang dari 8!")
         else:
-            newHashedPassword = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
-
             # UPDATE ATTRIBUTE
-            self.hashedPassword = newHashedPassword
+            self.hashedPassword = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
 
             # INISIALISASI CURSOR
             cursor = mysql.connection.cursor()
 
-            cursor.execute("UPDATE Akun SET Password = %s WHERE Email = %s", (newHashedPassword, self.email))
+            cursor.execute("UPDATE Akun SET Password = %s WHERE Email = %s", (self.hashedPassword, self.email))
             mysql.connection.commit()
 
             # TUTUP CURSOR

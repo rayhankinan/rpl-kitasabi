@@ -11,7 +11,7 @@ def login():
         user = Akun.getByEmailOrUsername(emailOrUsername)
 
         if user.matchPassword(password):
-            session["user"] = json.dumps(email=user.getEmail(), username=user.getUsername())
+            session["User"] = json.dumps(email=user.getEmail(), username=user.getUsername())
         else:
             return "Unauthorized", 401
 
