@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, session
 
 from models.akunModels import Akun
 
