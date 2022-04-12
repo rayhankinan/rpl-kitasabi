@@ -10,10 +10,10 @@ class AkunController:
             emailOrUsername = request.form.get("email-username")
             password = request.form.get("password")
 
-            newAkun = Akun.getByEmailOrUsername(emailOrUsername)
+            akun = Akun.getByEmailOrUsername(emailOrUsername)
 
-            if newAkun.matchPassword(password):
-                session["User"] = json.dumps({"email": newAkun.getEmail(), "username": newAkun.getUsername()})
+            if akun.matchPassword(password):
+                session["User"] = json.dumps({"Email": akun.getEmail(), "Username": akun.getUsername()})
                 return "Created", 201
 
             else:
@@ -33,7 +33,7 @@ class AkunController:
             password = request.form.get("password")
             foto = request.files.get("foto")
 
-            newAkun = Akun(email, listNoTelp, namaDepan, namaBelakang, username, password, foto)
+            akun = Akun(email, listNoTelp, namaDepan, namaBelakang, username, password, foto)
 
             return "Created", 201
 
@@ -55,4 +55,12 @@ class AkunController:
 
     @staticmethod
     def delete():
-        return "Bad Request", 400
+        try:
+            data = json.loads(session["User"])
+            akun = Akun.getByEmailOrUsername(data["Email"])
+            akun.delete()
+
+            return "OK", 200
+
+        except Exception as e:
+            return str(e), 400
