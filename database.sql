@@ -36,7 +36,7 @@ CREATE TABLE `akun` (
   `NamaDepan` varchar(255) NOT NULL,
   `NamaBelakang` varchar(255) NOT NULL,
   `Username` varchar(255) NOT NULL,
-  `Password` varchar(60) NOT NULL,
+  `Password` varbinary(60) NOT NULL,
   `Foto` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`IDPengguna`),
   UNIQUE KEY `Email` (`Email`),
@@ -62,7 +62,7 @@ DROP TABLE IF EXISTS `akun_no_telp`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `akun_no_telp` (
   `IDPengguna` int unsigned NOT NULL,
-  `NoTelp` varchar(15) NOT NULL,
+  `NoTelp` varchar(31) NOT NULL,
   PRIMARY KEY (`IDPengguna`,`NoTelp`),
   CONSTRAINT `akun_no_telp_ibfk_1` FOREIGN KEY (`IDPengguna`) REFERENCES `akun` (`IDPengguna`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -86,4 +86,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-12  3:57:30
+-- Dump completed on 2022-04-13  4:27:52

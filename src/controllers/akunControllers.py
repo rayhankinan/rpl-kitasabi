@@ -3,44 +3,56 @@ import json
 
 from models.akunModels import Akun
 
-def login():
-    try:
-        emailOrUsername = request.form.get("email-username")
-        password = request.form.get("password")
+class AkunController:
+    @staticmethod
+    def login():
+        try:
+            emailOrUsername = request.form.get("email-username")
+            password = request.form.get("password")
 
-        user = Akun.getByEmailOrUsername(emailOrUsername)
+            newAkun = Akun.getByEmailOrUsername(emailOrUsername)
 
-        if user.matchPassword(password):
-            session["User"] = json.dumps(email=user.getEmail(), username=user.getUsername())
-        else:
-            return "Unauthorized", 401
+            if newAkun.matchPassword(password):
+                session["User"] = json.dumps({"email": newAkun.getEmail(), "username": newAkun.getUsername()})
+                return "Created", 201
 
-    except Exception as e:
-        return str(e), 400
+            else:
+                return "Unauthorized", 401
 
-def register():
-    try:
-        email = request.form.get("email")
-        listNoTelp = request.form.getlist("no-telp")
-        namaDepan = request.form.get("nama-depan")
-        namaBelakang = request.form.get("nama-belakang")
-        username = request.form.get("username")
-        password = request.form.get("password")
-        foto = request.files.get("foto")
+        except Exception as e:
+            return str(e), 400
 
-        newAkun = Akun(email, listNoTelp, namaDepan, namaBelakang, username, password, foto)
-        newAkun.create()
+    @staticmethod
+    def register():
+        try:
+            email = request.form.get("email")
+            listNoTelp = request.form.getlist("no-telp")
+            namaDepan = request.form.get("nama-depan")
+            namaBelakang = request.form.get("nama-belakang")
+            username = request.form.get("username")
+            password = request.form.get("password")
+            foto = request.files.get("foto")
 
-        return "Created", 201
+            newAkun = Akun(email, listNoTelp, namaDepan, namaBelakang, username, password, foto)
 
-    except Exception as e:
-        return str(e), 400
+            return "Created", 201
 
-def logout():
-    return "Bad Request", 400
+        except Exception as e:
+            return str(e), 400
 
-def edit():
-    return "Bad Request", 400
+    @staticmethod
+    def logout():
+        try:
+            session["User"] = None
+            return "Created", 201
 
-def delete():
-    return "Bad Request", 400
+        except Exception as e:
+            return str(e), 400
+
+    @staticmethod
+    def edit():
+        return "Bad Request", 400
+
+    @staticmethod
+    def delete():
+        return "Bad Request", 400

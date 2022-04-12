@@ -6,24 +6,7 @@ from models.db import mysql
 from models.cdn import bucket
 
 class Akun:
-    # STATIC METHOD
-    def getByEmailOrUsername(emailOrUsername):
-        cursor = mysql.connection.cursor()
-
-        cursor.execute("SELECT Email, NamaDepan, NamaBelakang, Username, Password, Foto FROM Akun WHERE Email = %s OR Username = %s", (emailOrUsername, emailOrUsername))
-        dataAkun = cursor.fetchall()
-
-        cursor.execute("SELECT NoTelp FROM Akun_No_Telp NATURAL JOIN Akun WHERE Email = %s OR Username = %s", (emailOrUsername, emailOrUsername))
-        dataNoTelp = cursor.fetchall()
-
-        cursor.close()
-
-        if len(dataAkun) == 0:
-            raise Exception(f"Username atau Email {emailOrUsername} belum terdaftar pada sistem!")
-        else:
-            pass # BUG (FIX THIS IMMEDIATELY)
-
-    # NONSTATIC METHOD
+    # CONSTRUCTOR
     def __init__(self, email, listNoTelp, namaDepan, namaBelakang, username, password, foto):
         # VALIDATE EMAIL
         try:
@@ -36,7 +19,15 @@ class Akun:
         # VALIDATE PHONE NUMBER
         self.listNoTelp = []
         for noTelp in listNoTelp:
-            self.addNoTelp(noTelp)
+            if not phonenumbers.is_possible_number(phonenumbers.parse(noTelp)):
+                raise Exception(f"{noTelp} bukanlah nomor telepon yang valid!")
+            elif not phonenumbers.is_valid_number(phonenumbers.parse(noTelp)):
+                raise Exception(f"{noTelp} tidak terdaftar pada provider apapun!")
+            elif noTelp in self.listNoTelp:
+                raise Exception(f"{noTelp} sudah terdaftar pada sistem!")
+            else:
+                # UPDATE ATTRIBUTE
+                self.listNoTelp.append(noTelp)
 
         # VALIDATE NAMA
         if not namaDepan.isalpha():
@@ -65,10 +56,8 @@ class Akun:
             blob.upload_from_string(foto.stream.read())
 
             self.gcloudURL = blob.public_url
-            self.photoFilename = foto.filename
         else:
             self.gcloudURL = None
-            self.photoFilename = None
 
         # INISIALISASI CURSOR
         cursor = mysql.connection.cursor()
@@ -85,11 +74,40 @@ class Akun:
         # TUTUP CURSOR
         cursor.close()
 
-    # EMAIL
+    # CLASS METHOD
+    @classmethod
+    def getByEmailOrUsername(cls, emailOrUsername):
+        cursor = mysql.connection.cursor()
+
+        cursor.execute("SELECT Email, NamaDepan, NamaBelakang, Username, Password, Foto FROM Akun WHERE Email = %s OR Username = %s", (emailOrUsername, emailOrUsername))
+        dataAkun = cursor.fetchone()
+
+        cursor.execute("SELECT NoTelp FROM Akun_No_Telp NATURAL JOIN Akun WHERE Email = %s OR Username = %s", (emailOrUsername, emailOrUsername))
+        dataNoTelp = cursor.fetchall()
+
+        cursor.close()
+
+        if dataAkun is None:
+            raise Exception(f"Username atau Email {emailOrUsername} belum terdaftar pada sistem!")
+        else:
+            email, namaDepan, namaBelakang, username, hashedPassword, gcloudURL = dataAkun
+            listNoTelp = dataNoTelp
+
+            self = cls.__new__(cls)
+            self.email = email
+            self.listNoTelp = listNoTelp
+            self.namaDepan = namaDepan
+            self.namaBelakang = namaBelakang
+            self.username = username
+            self.hashedPassword = hashedPassword
+            self.gcloudURL = gcloudURL
+            
+            return self
+
+    # ATTRIBUTE METHOD
     def getEmail(self):
         return self.email
 
-    # NO TELP
     def getListNoTelp(self):
         return self.listNoTelp
 
@@ -126,7 +144,6 @@ class Akun:
         # TUTUP CURSOR
         cursor.close()
 
-    # NAMA
     def getNamaDepan(self):
         return self.namaDepan
 
@@ -136,7 +153,6 @@ class Akun:
     def getNamaLengkap(self):
         return f"{self.namaDepan} {self.namaBelakang}"
 
-    # USERNAME
     def getUsername(self):
         return self.username
 
@@ -156,7 +172,6 @@ class Akun:
             # TUTUP CURSOR
             cursor.close()
 
-    # PASSWORD
     def matchPassword(self, password):
         return bcrypt.checkpw(password.encode("utf-8"), self.hashedPassword)
 
@@ -179,16 +194,12 @@ class Akun:
             # TUTUP CURSOR
             cursor.close()
 
-    # FOTO
     def getGcloudURL(self):
         return self.gcloudURL
 
-    def getPhotoFilename(self):
-        return self.photoFilename
-
     def setFoto(self, foto):
         # DELETE FOTO
-        blob = bucket.blob(self.photoFilename)
+        blob = bucket.blob(self.gcloudURL.rsplit("/", 1)[-1])
         blob.delete()
 
         # UPLOAD FOTO
@@ -197,7 +208,6 @@ class Akun:
 
         # UPDATE ATTRIBUTE
         self.gcloudURL = blob.public_url
-        self.photoFilename = foto.filename
 
         # INISIALISASI CURSOR
         cursor = mysql.connection.cursor()
@@ -210,12 +220,11 @@ class Akun:
 
     def deleteFoto(self):
         # DELETE FOTO
-        blob = bucket.blob(self.photoFilename)
+        blob = bucket.blob(self.gcloudURL.rsplit("/", 1)[-1])
         blob.delete()
 
         # UPDATE ATTRIBUTE
         self.gcloudURL = None
-        self.photoFilename = None
 
         # INISIALISASI CURSOR
         cursor = mysql.connection.cursor()
@@ -226,11 +235,11 @@ class Akun:
         # TUTUP CURSOR
         cursor.close()
 
-    # CLASS METHOD
-    def update(self, **kwargs):
-        pass # BUG (FIX THIS IMMEDIATELY)
-
+    # PROCEDURAL METHOD
     def delete(self):
+        # HAPUS DARI CDN
+        self.deleteFoto()
+
         # INISIALISASI CURSOR
         cursor = mysql.connection.cursor()
 
