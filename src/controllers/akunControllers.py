@@ -51,7 +51,22 @@ class AkunController:
 
     @staticmethod
     def edit():
-        return "Bad Request", 400
+        try:
+            username = request.form.get("username")
+            password = request.form.get("password")
+            foto = request.files.get("foto")
+
+            data = json.loads(session["User"])
+            akun = Akun.getByEmailOrUsername(data["Email"])
+
+            akun.setUsername(username)
+            akun.setPassword(password)
+            akun.setFoto(foto)
+
+            return "OK", 200
+
+        except Exception as e:
+            return str(e), 400
 
     @staticmethod
     def delete():
