@@ -18,5 +18,4 @@ with app.app_context():
     cursor.execute("CREATE TABLE Akun_No_Telp (IDPengguna INT UNSIGNED, NoTelp VARCHAR(31), PRIMARY KEY (IDPengguna, NoTelp), FOREIGN KEY (IDPengguna) REFERENCES Akun (IDPengguna) ON DELETE CASCADE)")
     
     mysql.connection.commit()
-
     cursor.close()
