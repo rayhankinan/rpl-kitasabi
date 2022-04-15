@@ -64,14 +64,13 @@ class Akun:
 
         # MASUKKAN AKUN KE DALAM DATABASE
         cursor.execute("INSERT INTO Akun (Email, NamaDepan, NamaBelakang, Username, Password, Foto) VALUES (%s, %s, %s, %s, %s, %s)", (self.email, self.namaDepan, self.namaBelakang, self.username, self.hashedPassword, self.gcloudURL))
-        mysql.connection.commit()
 
         # MASUKKAN NO TELP KE DALAM DATABASE
         for noTelp in self.listNoTelp:
             cursor.execute("INSERT INTO Akun_No_Telp (IDPengguna, NoTelp) SELECT MAX(IDPengguna), %s FROM Akun", (noTelp, ))
-        mysql.connection.commit()
-
+        
         # TUTUP CURSOR
+        mysql.connection.commit()
         cursor.close()
 
     # CLASS METHOD
@@ -126,9 +125,9 @@ class Akun:
             cursor = mysql.connection.cursor()
 
             cursor.execute("INSERT INTO Akun_No_Telp (IDPengguna, NoTelp) SELECT MAX(IDPengguna), %s FROM Akun", (noTelp, ))
-            mysql.connection.commit()
 
             # TUTUP CURSOR
+            mysql.connection.commit()
             cursor.close()
 
     def deleteNoTelp(self, noTelp):
@@ -139,9 +138,9 @@ class Akun:
         cursor = mysql.connection.cursor()
 
         cursor.execute("DELETE FROM Akun_No_Telp WHERE IDPengguna = (SELECT IDPengguna FROM Akun WHERE Email = %s) AND NoTelp = %s", (self.email, noTelp))
-        mysql.connection.commit()
 
         # TUTUP CURSOR
+        mysql.connection.commit()
         cursor.close()
 
     def getNamaDepan(self):
@@ -167,9 +166,9 @@ class Akun:
             cursor = mysql.connection.cursor()
 
             cursor.execute("UPDATE Akun SET Username = %s WHERE Email = %s", (self.username, self.email))
-            mysql.connection.commit()
 
             # TUTUP CURSOR
+            mysql.connection.commit()
             cursor.close()
 
     def matchPassword(self, password):
@@ -189,9 +188,9 @@ class Akun:
             cursor = mysql.connection.cursor()
 
             cursor.execute("UPDATE Akun SET Password = %s WHERE Email = %s", (self.hashedPassword, self.email))
-            mysql.connection.commit()
 
             # TUTUP CURSOR
+            mysql.connection.commit()
             cursor.close()
 
     def getGcloudURL(self):
@@ -213,9 +212,9 @@ class Akun:
         cursor = mysql.connection.cursor()
 
         cursor.execute("UPDATE Akun SET Foto = %s WHERE Email = %s", (self.gcloudURL, self.email))
-        mysql.connection.commit()
 
         # TUTUP CURSOR
+        mysql.connection.commit()
         cursor.close()
 
     def deleteFoto(self):
@@ -230,9 +229,9 @@ class Akun:
         cursor = mysql.connection.cursor()
 
         cursor.execute("UPDATE Akun SET Foto = NULL WHERE Email = %s", (self.email, ))
-        mysql.connection.commit()
 
         # TUTUP CURSOR
+        mysql.connection.commit()
         cursor.close()
 
     # PROCEDURAL METHOD
@@ -244,7 +243,7 @@ class Akun:
         cursor = mysql.connection.cursor()
 
         cursor.execute("DELETE FROM Akun WHERE Email = %s", (self.email, ))
-        mysql.connection.commit()
 
         # TUTUP CURSOR
+        mysql.connection.commit()
         cursor.close()
