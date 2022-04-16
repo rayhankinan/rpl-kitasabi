@@ -32,6 +32,7 @@ class LoginWindow(QWidget):
 
     mulish44 = QFont()
     mulish44.setFamily("Mulish"); mulish44.setPixelSize(44)
+    mulish44.setBold(True)
 
 
     # Label log in
@@ -57,7 +58,7 @@ class LoginWindow(QWidget):
       color: rgba(37, 49, 60, 1);
       background-color: #FFFFFF
     ''')
-    self.usernameEdit.setFont(mulish24)
+    self.usernameEdit.setFont(mulish16)
 
     # Input password
     self.passwordEdit = QLineEdit(self)
@@ -121,13 +122,6 @@ class LoginWindow(QWidget):
 
   def showRegisterWindow(self):
     self.switch.emit("register", {})
-
-  def toggleShowPassword(self):
-    self.showPassword = not (self.showPassword)
-    if (self.showPassword):
-      self.passwordEdit.setEchoMode(QLineEdit.EchoMode.Normal)
-    else:
-      self.passwordEdit.setEchoMode(QLineEdit.EchoMode.Password)
 
   def login(self):
     c = self.conn.cursor()
