@@ -105,7 +105,7 @@ with app.app_context():
 	                StatusPencairan BOOLEAN DEFAULT FALSE NOT NULL,\
 	                PRIMARY KEY (IDTransaksi),\
 	                FOREIGN KEY (IDDonatur) REFERENCES Akun (IDPengguna) ON DELETE SET NULL,\
-	                FOREIGN KEY (IDLaman) REFERENCES Laman (IDLaman) ON DELETE SET NULL\
+	                FOREIGN KEY (IDLaman) REFERENCES Laman (IDLaman) ON DELETE SET NULL,\
                     UNIQUE (IDDonatur, IDLaman, Timestamp))")
 
     mysql.connection.commit()
