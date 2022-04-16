@@ -1,6 +1,6 @@
-from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QTextEdit, QPushButton, QFileDialog, QCalendarWidget, QHBoxLayout, QLineEdit, QComboBox
+from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QTextEdit, QPushButton, QLineEdit, QComboBox
 from PyQt6.QtGui import QFont, QCursor
-from PyQt6.QtCore import Qt, QDate
+from PyQt6.QtCore import Qt
 import sys
 
 class LamanPembayaran(QWidget):
@@ -66,16 +66,19 @@ class LamanPembayaran(QWidget):
         self.returnButton = QPushButton(self)
         self.returnButton.setText("< Kembali ke Laman Penggalangan Dana")
         self.returnButton.setFixedSize(308, 36)
-        self.returnButton.move(54, 120)
+        self.returnButton.move(233, 140)
         self.returnButton.setStyleSheet('''
             QPushButton {
                 padding-left: 2px;
-                background: #FFFFFF;
+                background: #5A4FF3;
                 border: 1px solid #5A4FF3;
+                color: white;
                 border-radius: 28;
+                font-weight: bold;
             }
             QPushButton:hover {
-                background: #5A4FF3;
+                background: #FFFFFF;
+                color: black;
             }
         ''')
         # self.returnButton.clicked.connected(go to home)
@@ -157,6 +160,7 @@ class LamanPembayaran(QWidget):
                 padding: 10px 10px 10px 10px;
                 color: white;
                 font-weight: bold;
+                font-size: 16px;
             }
             QPushButton:hover {
                 background-color: #FFFFFF;
@@ -165,43 +169,10 @@ class LamanPembayaran(QWidget):
         ''')
         self.bayar.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         # self.submitPage.clicked.connect(send)
-
-
         
-
-    # get jpg file
-    def openFile(self):
-        file = QFileDialog.getOpenFileName(self, 'Open a file', '', 'Image (*.jpg*)')
-        if file != ('', ''):
-            path = file[0]
-            print(path)
-            # TEST OPEN TXT FILE
-            # with open(path, "r") as f:
-            #     print(f.readline())
-            
-    # get date
-    def pickDate(self):
-        # date picker
-        self.cal = QCalendarWidget(self)
-        self.cal.setGridVisible(True)
-        self.cal.clicked[QDate].connect(self.setDate)
-        
-        # pop up calendar view
-        self.calendarWindow = QWidget()
-        viewbox = QHBoxLayout()
-        viewbox.addWidget(self.cal)
-        self.calendarWindow.setLayout(viewbox)
-        self.calendarWindow.setGeometry(300, 300, 415, 350)
-        self.calendarWindow.setWindowTitle('Pilih Tanggal')
-        self.calendarWindow.show()
-
-    # set input as selected date
-    def setDate(self, date):
-        self.setDeadline.setText(date.toString())
-
 
 # UNCOMMENT BELOW FOR TESTING  
-app = QApplication(sys.argv)
-window = LamanPembayaran()
-window.show()
-sys.exit(app.exec())
+# app = QApplication(sys.argv)
+# window = LamanPembayaran()
+# window.show()
+# sys.exit(app.exec())
