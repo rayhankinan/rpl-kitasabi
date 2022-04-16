@@ -39,6 +39,23 @@ class MainWindow(QWidget):
     mulish44.setFamily("Mulish"); mulish44.setPixelSize(44)
     mulish44.setBold(True)
     
+    # profile button
+    self.profileButton = QPushButton(self)
+    self.profileButton.setFixedSize(56, 56)
+    self.profileButton.move(1323, 22)
+    self.profileButton.setStyleSheet('''
+        QPushButton {
+            padding-right: 50px;
+            padding-top: 25px;
+            background: #DAE3EA;
+            border: 2px;
+            border-radius: 28;
+        }
+        QPushButton:hover {
+            background: #FFFFFF;
+        }
+    ''')
+    # self.profileButton.clicked.connected(go to profile edit)    
     # Kata Kata Motivasi
     heading = QLabel(self)
     heading.setFixedSize(1151, 403)
