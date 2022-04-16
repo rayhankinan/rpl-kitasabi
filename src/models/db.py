@@ -12,7 +12,8 @@ with app.app_context():
     cursor = mysql.connection.cursor()
 
     # DROP EXISTING TABLE
-    cursor.execute("DROP TABLE IF EXISTS FotoLaman")
+    cursor.execute("DROP TABLE IF EXISTS Transaksi")
+    cursor.execute("DROP TABLE IF EXISTS LamanFoto")
     cursor.execute("DROP TABLE IF EXISTS Laman")
     cursor.execute("DROP TABLE IF EXISTS PermintaanKesehatan")
     cursor.execute("DROP TABLE IF EXISTS PermintaanLainnya")
@@ -21,6 +22,7 @@ with app.app_context():
     cursor.execute("DROP TABLE IF EXISTS Akun")
 
     # CREATE NEW TABLE
+
     # TABLE Akun
     cursor.execute("CREATE TABLE Akun ( \
                     IDPengguna INT UNSIGNED AUTO_INCREMENT, \
@@ -31,12 +33,14 @@ with app.app_context():
                     Password VARBINARY(60) NOT NULL, \
                     Foto VARCHAR(255) DEFAULT NULL, \
                     PRIMARY KEY (IDPengguna))")
+
     # TABLE AkunNoTelp
     cursor.execute("CREATE TABLE AkunNoTelp ( \
                     IDPengguna INT UNSIGNED, \
                     NoTelp VARCHAR(31), \
                     PRIMARY KEY (IDPengguna, NoTelp), \
                     FOREIGN KEY (IDPengguna) REFERENCES Akun (IDPengguna) ON DELETE CASCADE)")
+
     # TABLE Permintaan
     cursor.execute("CREATE TABLE Permintaan (\
                     IDPermintaan INT UNSIGNED AUTO_INCREMENT,\
@@ -46,6 +50,7 @@ with app.app_context():
                     Target BIGINT UNSIGNED,\
                     PRIMARY KEY (IDPermintaan),\
                     FOREIGN KEY (IDPengguna) REFERENCES Akun (IDPengguna) ON DELETE CASCADE)")
+
     # TABLE PermintaanKesehatan
     cursor.execute("CREATE TABLE PermintaanKesehatan (\
                     IDPermintaan INT UNSIGNED,\
@@ -57,6 +62,7 @@ with app.app_context():
                     NamaPasien VARCHAR(255) NOT NULL,\
                     PRIMARY KEY (IDPermintaan),\
                     FOREIGN KEY (IDPermintaan) REFERENCES Permintaan (IDPermintaan) ON DELETE CASCADE)")
+
     # TABLE PermintaanLainnya
     cursor.execute("CREATE TABLE PermintaanLainnya (\
                     IDPermintaan INT UNSIGNED,\
@@ -66,6 +72,7 @@ with app.app_context():
                     AkunFacebook VARCHAR(255),\
                     PRIMARY KEY (IDPermintaan),\
                     FOREIGN KEY (IDPermintaan) REFERENCES Permintaan (IDPermintaan) ON DELETE CASCADE)")
+
     # TABLE Laman
     cursor.execute("CREATE TABLE Laman (\
                     IDLaman INT UNSIGNED AUTO_INCREMENT,\
@@ -80,12 +87,25 @@ with app.app_context():
                     PRIMARY KEY (IDLaman),\
                     FOREIGN KEY (IDPenggalang) REFERENCES Akun (IDPengguna) ON DELETE CASCADE,\
                     FOREIGN KEY (IDAutentikasi) REFERENCES Permintaan (IDPermintaan) ON DELETE CASCADE)")
+
     # TABLE FotoLaman
-    cursor.execute("CREATE TABLE FotoLaman (\
+    cursor.execute("CREATE TABLE LamanFoto (\
                     IDLaman INT UNSIGNED,\
                     Foto VARCHAR(255) NOT NULL,\
                     PRIMARY KEY (IDLaman, Foto),\
                     FOREIGN KEY (IDLaman) REFERENCES Laman (IDLaman) ON DELETE CASCADE)")
+
+    # TABLE Transaksi
+    cursor.execute("CREATE TABLE Transaksi (\
+	                IDTransaksi INT UNSIGNED AUTO_INCREMENT,\
+	                IDDonatur INT UNSIGNED,\
+	                IDLaman INT UNSIGNED,\
+	                JumlahTransaksi BIGINT UNSIGNED NOT NULL,\
+	                Timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP() NOT NULL,\
+	                StatusPencairan BOOLEAN DEFAULT FALSE NOT NULL,\
+	                PRIMARY KEY (IDTransaksi),\
+	                FOREIGN KEY (IDDonatur) REFERENCES Akun (IDPengguna) ON DELETE SET NULL,\
+	                FOREIGN KEY (IDLaman) REFERENCES Laman (IDLaman) ON DELETE SET NULL)")
 
     mysql.connection.commit()
     cursor.close()
