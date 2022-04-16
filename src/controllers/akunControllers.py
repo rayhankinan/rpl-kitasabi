@@ -1,4 +1,4 @@
-from flask import request, session
+from flask import request, session, jsonify
 import json
 
 from models.akunModels import Akun
@@ -13,11 +13,20 @@ class AkunController:
             akun = Akun.getByEmailOrUsername(emailOrUsername)
 
             if akun.matchPassword(password):
-                session["User"] = json.dumps({"Email": akun.getEmail(), "Username": akun.getUsername()})
+                session["User"] = json.dumps({"ID": akun.getIDPengguna(), "Email": akun.getEmail(), "Username": akun.getUsername()})
                 return "Created", 201
 
             else:
                 return "Unauthorized", 401
+
+        except Exception as e:
+            return str(e), 400
+
+    @staticmethod
+    def logout():
+        try:
+            session["User"] = None
+            return "Created", 201
 
         except Exception as e:
             return str(e), 400
@@ -33,7 +42,7 @@ class AkunController:
             password = request.form.get("password")
             foto = request.files.get("foto")
 
-            akun = Akun(email, listNoTelp, namaDepan, namaBelakang, username, password, foto)
+            Akun(email, listNoTelp, namaDepan, namaBelakang, username, password, foto)
 
             return "Created", 201
 
@@ -41,10 +50,12 @@ class AkunController:
             return str(e), 400
 
     @staticmethod
-    def logout():
+    def profile():
         try:
-            session["User"] = None
-            return "Created", 201
+            data = json.loads(session["User"])
+            akun = Akun.getByEmailOrUsername(data["Email"])
+
+            return jsonify(email=akun.getEmail(), listNoTelp=akun.getListNoTelp(), namaDepan=akun.getNamaDepan(), namaBelakang=akun.getNamaBelakang(), username=akun.getUsername(), foto=akun.getGcloudURL())
 
         except Exception as e:
             return str(e), 400

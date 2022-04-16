@@ -65,6 +65,8 @@ class Akun:
         # MASUKKAN AKUN KE DALAM DATABASE
         cursor.execute("INSERT INTO Akun (Email, NamaDepan, NamaBelakang, Username, Password, Foto) VALUES (%s, %s, %s, %s, %s, %s)", (self.email, self.namaDepan, self.namaBelakang, self.username, self.hashedPassword, self.gcloudURL))
 
+        self.idPengguna = cursor.lastrowid
+
         # MASUKKAN NO TELP KE DALAM DATABASE
         for noTelp in self.listNoTelp:
             cursor.execute("INSERT INTO AkunNoTelp (IDPengguna, NoTelp) SELECT MAX(IDPengguna), %s FROM Akun", (noTelp, ))
@@ -78,7 +80,7 @@ class Akun:
     def getByEmailOrUsername(cls, emailOrUsername):
         cursor = mysql.connection.cursor()
 
-        cursor.execute("SELECT Email, NamaDepan, NamaBelakang, Username, Password, Foto FROM Akun WHERE Email = %s OR Username = %s", (emailOrUsername, emailOrUsername))
+        cursor.execute("SELECT * FROM Akun WHERE Email = %s OR Username = %s", (emailOrUsername, emailOrUsername))
         dataAkun = cursor.fetchone()
 
         cursor.execute("SELECT NoTelp FROM AkunNoTelp NATURAL JOIN Akun WHERE Email = %s OR Username = %s", (emailOrUsername, emailOrUsername))
@@ -89,10 +91,11 @@ class Akun:
         if dataAkun is None:
             raise Exception(f"Username atau Email {emailOrUsername} belum terdaftar pada sistem!")
         else:
-            email, namaDepan, namaBelakang, username, hashedPassword, gcloudURL = dataAkun
+            idPengguna, email, namaDepan, namaBelakang, username, hashedPassword, gcloudURL = dataAkun
             listNoTelp = dataNoTelp
 
             self = cls.__new__(cls)
+            self.idPengguna = idPengguna
             self.email = email
             self.listNoTelp = listNoTelp
             self.namaDepan = namaDepan
@@ -104,6 +107,9 @@ class Akun:
             return self
 
     # ATTRIBUTE METHOD
+    def getIDPengguna(self):
+        return self.idPengguna
+        
     def getEmail(self):
         return self.email
 
