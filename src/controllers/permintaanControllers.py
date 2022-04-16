@@ -1,28 +1,78 @@
+from os import system
 from flask import request, session
+import sys
 import json
 
-from models.permintaanModels import Permintaan
+from models.permintaanModels import PermintaanKesehatan, PermintaanLainnya
 
 class PermintaanController:
   @staticmethod
   def createPermintaanKesehatan():
     try:
-      pass
+      judul = request.form.get("judul")
+      deskripsi = request.form.get("deskripsi")
+      target = int(request.form.get("target"))
+      fotoKTP = request.files.get("foto-ktp")
+      fotoKK = request.files.get("foto-kk")
+      fotoKetMedis = request.files.get("foto-ket-medis")
+      fotoPemeriksaan = request.files.get("foto-pemeriksaan")
+      tujuan = request.form.get("tujuan")
+      namaPasien = request.form.get("nama-pasien")
+
+      dataAkun = json.loads(session["User"])
+      idPengguna = int(dataAkun["ID"])
+
+      # TODO : get IDPengguna
+      permintaanKesehatan = PermintaanKesehatan(idPengguna, judul, deskripsi, target, fotoKTP, fotoKK, fotoKetMedis, fotoPemeriksaan, tujuan, namaPasien)
+      return "Permintaan Kesehatan Created", 201
+
     except Exception as e:
       return str(e), 400
 
   @staticmethod
   def createPermintaanLainnya():
     try:
-      pass
+      judul = request.form.get("judul")
+      deskripsi = request.form.get("deskripsi")
+      target = int(request.form.get("target"))
+      instansi = request.form.get("instansi")
+      ig = request.form.get("akun-instagram")
+      twt = request.form.get("akun-twitter")
+      fb = request.form.get("akun-facebook")
+
+      dataAkun = json.loads(session["User"])
+      idPengguna = int(dataAkun["ID"])
+
+      # TODO : get IDPengguna
+      permintaanLainnya = PermintaanLainnya(idPengguna, judul, deskripsi, target, instansi, ig, twt, fb)
+      return "Permintaan Lainnya Created", 201
+
     except Exception as e:
       return str(e), 400
 
   @staticmethod
-  def setujuiPermintaan():
-    pass
+  def setujuiPermintaanKesehatan():
+    try:
+      idPermintaanKesehatan = request.form.get("id-permintaan-kesehatan")
+      permintaanKesehatan = PermintaanKesehatan.getByIDPermintaanKesehatan(idPermintaanKesehatan)
+      permintaanKesehatan.setStatusAutentikasi(True)
+
+      return "Permintaan Kesehatan Approved", 201
+    except Exception as e:
+      return str(e), 400
 
   @staticmethod
-  def riwayat():
+  def setujuiPermintaanLainnya():
+    try:
+      idPermintaanLainnya = request.form.get("id-permintaan-lainnya")
+      permintaanLainnya = PermintaanLainnya.getByIDPermintaanLainnya(idPermintaanLainnya)
+      permintaanLainnya.setStatusAutentikasi(True)
+
+      return "Permintaan Kesehatan Approved", 201
+    except Exception as e:
+      return str(e), 400
+
+  @staticmethod
+  def riwayatPermintaan():
     pass
 

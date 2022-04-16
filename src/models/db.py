@@ -47,34 +47,33 @@ with app.app_context():
                     IDPengguna INT UNSIGNED,\
                     Judul VARCHAR(255) NOT NULL, \
                     Deskripsi VARCHAR(255) NOT NULL,\
-                    Target BIGINT UNSIGNED,\
-                    StatusAutentikasi BOOLEAN, \
-                    UNIQUE (Judul, Deskripsi) \
+                    Target BIGINT UNSIGNED NOT NULL,\
+                    StatusAutentikasi BOOLEAN DEFAULT False NOT NULL, \
+                    UNIQUE (Judul, Deskripsi), \
                     PRIMARY KEY (IDPermintaan),\
                     FOREIGN KEY (IDPengguna) REFERENCES Akun (IDPengguna) ON DELETE CASCADE)")
 
     # TABLE PermintaanKesehatan
     cursor.execute("CREATE TABLE PermintaanKesehatan (\
-                    IDPermintaan INT UNSIGNED,\
+                    IDPermintaanKesehatan INT UNSIGNED,\
                     FotoKTP VARCHAR(255) NOT NULL,\
                     FotoKK VARCHAR(255) NOT NULL,\
                     FotoSuratKeteranganMedis VARCHAR(255) NOT NULL,\
                     FotoHasilPemeriksaan VARCHAR(255) NOT NULL,\
                     Tujuan VARCHAR(255) NOT NULL,\
                     NamaPasien VARCHAR(255) NOT NULL,\
-                    PRIMARY KEY (IDPermintaan),\
-                    FOREIGN KEY (IDPermintaan) REFERENCES Permintaan (IDPermintaan) ON DELETE CASCADE)")
+                    PRIMARY KEY (IDPermintaanKesehatan),\
+                    FOREIGN KEY (IDPermintaanKesehatan) REFERENCES Permintaan (IDPermintaan) ON DELETE CASCADE)")
 
     # TABLE PermintaanLainnya
     cursor.execute("CREATE TABLE PermintaanLainnya (\
-                    IDPermintaan INT UNSIGNED,\
+                    IDPermintaanLainnya INT UNSIGNED,\
                     Instansi VARCHAR(255) NOT NULL,\
                     AkunInstagram VARCHAR(255),\
                     AkunTwitter VARCHAR(255),\
                     AkunFacebook VARCHAR(255),\
-                    PRIMARY KEY (IDPermintaan),\
-                    FOREIGN KEY (IDPermintaan) REFERENCES Permintaan (IDPermintaan) ON DELETE CASCADE)")
-
+                    PRIMARY KEY (IDPermintaanLainnya),\
+                    FOREIGN KEY (IDPermintaanLainnya) REFERENCES Permintaan (IDPermintaan) ON DELETE CASCADE)")
     # TABLE Laman
     cursor.execute("CREATE TABLE Laman (\
                     IDLaman INT UNSIGNED AUTO_INCREMENT,\
@@ -83,6 +82,7 @@ with app.app_context():
                     Judul VARCHAR(255) NOT NULL,\
                     Deskripsi VARCHAR(255) NOT NULL,\
                     Target  BIGINT UNSIGNED,\
+                    TotalDonasi BIGINT UNSIGNED, \
                     Kategori VARCHAR(255) NOT NULL,\
                     Deadline DATE NOT NULL,\
                     Timestamp DATE NOT NULL,\
@@ -99,15 +99,15 @@ with app.app_context():
 
     # TABLE Transaksi
     cursor.execute("CREATE TABLE Transaksi (\
-	                IDTransaksi INT UNSIGNED AUTO_INCREMENT,\
-	                IDDonatur INT UNSIGNED,\
-	                IDLaman INT UNSIGNED,\
-	                JumlahTransaksi BIGINT UNSIGNED NOT NULL,\
-	                Timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP() NOT NULL,\
-	                StatusPencairan BOOLEAN DEFAULT FALSE NOT NULL,\
-	                PRIMARY KEY (IDTransaksi),\
-	                FOREIGN KEY (IDDonatur) REFERENCES Akun (IDPengguna) ON DELETE SET NULL,\
-	                FOREIGN KEY (IDLaman) REFERENCES Laman (IDLaman) ON DELETE SET NULL,\
+                    IDTransaksi INT UNSIGNED AUTO_INCREMENT,\
+                    IDDonatur INT UNSIGNED,\
+                    IDLaman INT UNSIGNED,\
+                    JumlahTransaksi BIGINT UNSIGNED NOT NULL,\
+                    Timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP() NOT NULL,\
+                    StatusPencairan BOOLEAN DEFAULT FALSE NOT NULL,\
+                    PRIMARY KEY (IDTransaksi),\
+                    FOREIGN KEY (IDDonatur) REFERENCES Akun (IDPengguna) ON DELETE SET NULL,\
+                    FOREIGN KEY (IDLaman) REFERENCES Laman (IDLaman) ON DELETE SET NULL,\
                     UNIQUE (IDDonatur, IDLaman, Timestamp))")
 
     mysql.connection.commit()
