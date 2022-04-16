@@ -145,7 +145,7 @@ class Akun:
         # INISIALISASI CURSOR
         cursor = mysql.connection.cursor()
 
-        cursor.execute("DELETE FROM AkunNoTelp WHERE IDPengguna = (SELECT IDPengguna FROM Akun WHERE Email = %s) AND NoTelp = %s", (self.email, noTelp))
+        cursor.execute("DELETE FROM AkunNoTelp WHERE IDPengguna = (SELECT IDPengguna FROM Akun WHERE IDPengguna = %s) AND NoTelp = %s", (self.idPengguna, noTelp))
 
         # TUTUP CURSOR
         mysql.connection.commit()
@@ -173,7 +173,7 @@ class Akun:
             # INISIALISASI CURSOR
             cursor = mysql.connection.cursor()
 
-            cursor.execute("UPDATE Akun SET Username = %s WHERE Email = %s", (self.username, self.email))
+            cursor.execute("UPDATE Akun SET Username = %s WHERE IDPengguna = %s", (self.username, self.idPengguna))
 
             # TUTUP CURSOR
             mysql.connection.commit()
@@ -195,7 +195,7 @@ class Akun:
             # INISIALISASI CURSOR
             cursor = mysql.connection.cursor()
 
-            cursor.execute("UPDATE Akun SET Password = %s WHERE Email = %s", (self.hashedPassword, self.email))
+            cursor.execute("UPDATE Akun SET Password = %s WHERE IDPengguna = %s", (self.hashedPassword, self.idPengguna))
 
             # TUTUP CURSOR
             mysql.connection.commit()
@@ -209,7 +209,7 @@ class Akun:
         foto.seek(0, os.SEEK_END)
         if foto.tell() == 0:
             raise Exception("File foto tidak ada!")
-            
+
         # DELETE FOTO JIKA ADA
         if self.gcloudURL is not None:
             blob = bucket.blob(self.gcloudURL.rsplit("/", 1)[-1])
@@ -225,7 +225,7 @@ class Akun:
         # INISIALISASI CURSOR
         cursor = mysql.connection.cursor()
 
-        cursor.execute("UPDATE Akun SET Foto = %s WHERE Email = %s", (self.gcloudURL, self.email))
+        cursor.execute("UPDATE Akun SET Foto = %s WHERE IDPengguna = %s", (self.gcloudURL, self.idPengguna))
 
         # TUTUP CURSOR
         mysql.connection.commit()
@@ -236,6 +236,7 @@ class Akun:
         if self.gcloudURL is None:
             raise Exception(f"Akun {self.username} tidak memiliki foto profil!")
             
+        # DELETE FOTO DARI CDN
         blob = bucket.blob(self.gcloudURL.rsplit("/", 1)[-1])
         blob.delete()
 
@@ -245,7 +246,7 @@ class Akun:
         # INISIALISASI CURSOR
         cursor = mysql.connection.cursor()
 
-        cursor.execute("UPDATE Akun SET Foto = NULL WHERE Email = %s", (self.email, ))
+        cursor.execute("UPDATE Akun SET Foto = NULL WHERE IDPengguna = %s", (self.idPengguna, ))
 
         # TUTUP CURSOR
         mysql.connection.commit()
@@ -259,7 +260,7 @@ class Akun:
         # INISIALISASI CURSOR
         cursor = mysql.connection.cursor()
 
-        cursor.execute("DELETE FROM Akun WHERE Email = %s", (self.email, ))
+        cursor.execute("DELETE FROM Akun WHERE IDPengguna = %s", (self.idPengguna, ))
 
         # TUTUP CURSOR
         mysql.connection.commit()
