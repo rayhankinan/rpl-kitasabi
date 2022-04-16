@@ -1,7 +1,9 @@
-from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QTextEdit, QPushButton, QLineEdit
-from PyQt6.QtGui import QFont, QCursor
+from PyQt6.QtWidgets import QApplication, QWidget, QTextEdit, QPushButton, QLineEdit, QLabel
+from PyQt6.QtGui import QFont, QCursor, QImage, QPixmap
 from PyQt6.QtCore import Qt
 import sys
+import urllib.request
+
 
 class LamanEksplor(QWidget):
     def __init__(self):
@@ -92,12 +94,19 @@ class LamanEksplor(QWidget):
             color: #25313C;
         ''')
         # temporary for image
-        self.previewImg1 = QTextEdit(self)
-        self.previewImg1.setText('ISI PAKE DATA')
-        self.previewImg1.setDisabled(True)
+        url1 = 'https://pbs.twimg.com/profile_images/631884742896431104/RMnmakF-_400x400.jpg'
+        data1 = urllib.request.urlopen(url1).read()
+
+        image1 = QImage()
+        image1.loadFromData(data1)
+
+        self.previewImg1 = QLabel(self)
         self.previewImg1.setFixedSize(176, 176)
         self.previewImg1.move(268, 238)
-        self.previewImg1.setStyleSheet('background-color: #94A3B1; color: black;')
+        self.previewImg1.setScaledContents(True)
+        pixmap1 = QPixmap(image1)
+        self.previewImg1.setPixmap(pixmap1)
+
 
         # set bayar button
         self.bayar1 = QPushButton(self)
@@ -141,12 +150,18 @@ class LamanEksplor(QWidget):
             color: #25313C;
         ''')
         # temporary for image
-        self.previewImg2 = QTextEdit(self)
-        self.previewImg2.setText('ISI PAKE DATA')
-        self.previewImg2.setDisabled(True)
+        url2 = 'https://pbs.twimg.com/profile_images/631884742896431104/RMnmakF-_400x400.jpg'
+        data2 = urllib.request.urlopen(url2).read()
+
+        image2 = QImage()
+        image2.loadFromData(data2)
+
+        self.previewImg2 = QLabel(self)
         self.previewImg2.setFixedSize(176, 176)
         self.previewImg2.move(268, 488)
-        self.previewImg2.setStyleSheet('background-color: #94A3B1; color: black;')
+        self.previewImg2.setScaledContents(True)
+        pixmap2 = QPixmap(image2)
+        self.previewImg2.setPixmap(pixmap2)
 
         # set bayar button
         self.bayar2 = QPushButton(self)
@@ -179,8 +194,8 @@ class LamanEksplor(QWidget):
         
 
 # UNCOMMENT BELOW FOR TESTING  
-app = QApplication(sys.argv)
-window = LamanEksplor()
-window.show()
-sys.exit(app.exec())
+# app = QApplication(sys.argv)
+# window = LamanEksplor()
+# window.show()
+# sys.exit(app.exec())
 
