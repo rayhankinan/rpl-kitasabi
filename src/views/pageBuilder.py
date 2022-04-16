@@ -39,7 +39,7 @@ class PageBuilder(QWidget):
         self.judulFixed = QTextEdit(self)
         self.judulFixed.setEnabled(False)
         self.judulFixed.setPlaceholderText("tolong keluarga ini membeli beras (ISI PAKE DATA DR DATABASE)")
-        self.judulFixed.setFixedSize(377, 57)
+        self.judulFixed.setFixedSize(377, 47)
         self.judulFixed.move(531, 208)
         self.judulFixed.setStyleSheet('''
             border: 2px solid #5A4FF3;
@@ -50,8 +50,8 @@ class PageBuilder(QWidget):
         # set upload foto box
         self.uploadFoto = QPushButton(self)
         self.uploadFoto.setText("Upload Foto")
-        self.uploadFoto.setFixedSize(377, 57)
-        self.uploadFoto.move(531, 294)
+        self.uploadFoto.setFixedSize(377, 47)
+        self.uploadFoto.move(531, 274)
         self.uploadFoto.setStyleSheet('''
             QPushButton {
                 border: 2px solid #5A4FF3;
@@ -70,7 +70,7 @@ class PageBuilder(QWidget):
         self.descFixed.setEnabled(False)
         self.descFixed.setPlaceholderText("ibu jubaidah dan anaknya ilham ingin membeli beras tolonglah mereka membeli segelintir beras (ISI PAKE DATA DR DATABASE)")
         self.descFixed.setFixedSize(377, 163)
-        self.descFixed.move(531, 379)
+        self.descFixed.move(531, 339)
         self.descFixed.setStyleSheet('''
             border: 2px solid #5A4FF3;
             background-color: #DAE3EA;
@@ -81,8 +81,8 @@ class PageBuilder(QWidget):
         self.targetFixed = QTextEdit(self)
         self.targetFixed.setEnabled(False)
         self.targetFixed.setPlaceholderText("10 juta (ISI PAKE DATA DR DATABASE)")
-        self.targetFixed.setFixedSize(377, 57)
-        self.targetFixed.move(531, 571)
+        self.targetFixed.setFixedSize(377, 47)
+        self.targetFixed.move(531, 521)
         self.targetFixed.setStyleSheet('''
             border: 2px solid #5A4FF3;
             background-color: #DAE3EA;
@@ -92,8 +92,8 @@ class PageBuilder(QWidget):
         # set date picker box
         self.setDeadline = QPushButton(self)
         self.setDeadline.setText("Pilih Tenggat Waktu")
-        self.setDeadline.setFixedSize(377, 57)
-        self.setDeadline.move(531, 656)
+        self.setDeadline.setFixedSize(377, 47)
+        self.setDeadline.move(531, 586)
         self.setDeadline.setStyleSheet('''
             QPushButton {
                 border: 2px solid #5A4FF3;
@@ -106,6 +106,25 @@ class PageBuilder(QWidget):
         ''')
         self.setDeadline.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.setDeadline.clicked.connect(self.pickDate)
+
+        # set submit button
+        self.submitPage = QPushButton(self)
+        self.submitPage.setText("SUBMIT")
+        self.submitPage.setFixedSize(165, 52)
+        self.submitPage.move(638, 664)
+        self.submitPage.setStyleSheet('''
+            QPushButton {
+                border: 2px solid #5A4FF3;
+                border-radius: 20px;
+                background-color: #5A4FF3;
+                padding: 10px 10px 10px 10px;
+            }
+            QPushButton:hover {
+                background-color: #FFFFFF;
+            }
+        ''')
+        self.submitPage.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        # self.submitPage.clicked.connect(send)
 
     # get jpg file
     def openFile(self):
@@ -139,7 +158,7 @@ class PageBuilder(QWidget):
 
 
 # UNCOMMENT BELOW FOR TESTING  
-# app = QApplication(sys.argv)
-# window = PageBuilder()
-# window.show()
-# sys.exit(app.exec())
+app = QApplication(sys.argv)
+window = PageBuilder()
+window.show()
+sys.exit(app.exec())
