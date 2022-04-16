@@ -16,6 +16,8 @@ class Transaksi:
 
         # MASUKKAN TRANSAKSI KE DALAM DATABASE
         cursor.execute("INSERT INTO Transaksi (IDDonatur, IDLaman, JumlahTransaksi) VALUES (%d, %d, %d)", (self.idDonatur, self.idLaman, self.jumlahTransaksi))
+
+        self.idTransaksi = cursor.lastrowid
         
         # TUTUP CURSOR
         mysql.connection.commit()
@@ -36,19 +38,20 @@ class Transaksi:
 
     # CLASS METHOD
     @classmethod
-    def getRiwayatDonasi(cls, id):
+    def getRiwayatDonasi(cls, idDonatur):
         cursor = mysql.connection.cursor()
 
-        cursor.execute("SELECT IDDonatur, IDLaman, JumlahTransaksi, Timestamp, StatusPencairan FROM Transaksi WHERE IDDonatur = %d", (id, ))
+        cursor.execute("SELECT * FROM Transaksi WHERE IDDonatur = %d", (idDonatur, ))
         dataRiwayat = cursor.fetchall()
 
         cursor.close()
 
         riwayat = []
         for row in dataRiwayat:
-            idDonatur, idLaman, jumlahTransaksi, timestamp, statusPencairan = row
+            idTransaksi, _, idLaman, jumlahTransaksi, timestamp, statusPencairan = row
 
             self = cls.__new__(cls)
+            self.idTransaksi = idTransaksi
             self.idDonatur = idDonatur
             self.idLaman = idLaman
             self.jumlahTransaksi = jumlahTransaksi
@@ -61,19 +64,20 @@ class Transaksi:
 
 
     @classmethod
-    def getRiwayatLaman(cls, id):
+    def getRiwayatLaman(cls, idLaman):
         cursor = mysql.connection.cursor()
 
-        cursor.execute("SELECT IDDonatur, IDLaman, JumlahTransaksi, Timestamp, StatusPencairan FROM Transaksi WHERE IDLaman = %d", (id, ))
+        cursor.execute("SELECT * FROM Transaksi WHERE IDLaman = %d", (idLaman, ))
         dataRiwayat = cursor.fetchall()
 
         cursor.close()
 
         riwayat = []
         for row in dataRiwayat:
-            idDonatur, idLaman, jumlahTransaksi, timestamp, statusPencairan = row
+            idTransaksi, idDonatur, _, jumlahTransaksi, timestamp, statusPencairan = row
 
             self = cls.__new__(cls)
+            self.idTransaksi = idTransaksi
             self.idDonatur = idDonatur
             self.idLaman = idLaman
             self.jumlahTransaksi = jumlahTransaksi
@@ -84,7 +88,21 @@ class Transaksi:
 
         return riwayat
 
+    @classmethod
+    def getByDonaturLamanTimestamp(cls, idDonatur, idLaman, timestamp):
+        cursor = mysql.connection.cursor()
+
+        cursor.execute("SELECT * FROM Transaksi WHERE IDDonatur = %d AND IDLaman = %d and Timestamp = %s", (idDonatur, idLaman, timestamp))
+        data = cursor.fetchone()
+
+        cursor.close()
+
+        self = cls.__new__(cls)
+
     # ATTRIBUTE METHOD
+    def getIDTransaksi(self):
+        return self.idTransaksi
+
     def getIDDonatur(self):
         return self.idDonatur
 

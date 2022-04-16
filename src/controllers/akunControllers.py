@@ -15,7 +15,6 @@ class AkunController:
             if akun.matchPassword(password):
                 session["User"] = json.dumps({"ID": akun.getIDPengguna(), "Email": akun.getEmail(), "Username": akun.getUsername()})
                 return "Created", 201
-
             else:
                 return "Unauthorized", 401
 
@@ -35,7 +34,7 @@ class AkunController:
     def register():
         try:
             email = request.form.get("email")
-            listNoTelp = request.form.getlist("no-telp")
+            listNoTelp = list(request.form.getlist("no-telp"))
             namaDepan = request.form.get("nama-depan")
             namaBelakang = request.form.get("nama-belakang")
             username = request.form.get("username")
@@ -55,7 +54,7 @@ class AkunController:
             data = json.loads(session["User"])
             akun = Akun.getByEmailOrUsername(data["Email"])
 
-            return jsonify(email=akun.getEmail(), listNoTelp=akun.getListNoTelp(), namaDepan=akun.getNamaDepan(), namaBelakang=akun.getNamaBelakang(), username=akun.getUsername(), foto=akun.getGcloudURL())
+            return jsonify(email=akun.getEmail(), listNoTelp=akun.getListNoTelp(), namaDepan=akun.getNamaDepan(), namaBelakang=akun.getNamaBelakang(), username=akun.getUsername(), foto=akun.getGcloudURL()), 200
 
         except Exception as e:
             return str(e), 400
