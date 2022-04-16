@@ -86,7 +86,9 @@ class Permintaan:
     cursor.execute("UPDATE Permintaan \
                     SET StatusAutentikasi = %s \
                     WHERE IdPermintaan = %s", (self.statusAutentikasi, self.idPermintaan))
-
+    # CLOSE AND COMMIT CURSOR
+    mysql.connection.commit()
+    cursor.close()
 
 class PermintaanKesehatan(Permintaan):
   # CONSTRUCTOR
@@ -149,10 +151,10 @@ class PermintaanKesehatan(Permintaan):
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT FotoKTP, FotoKK, FotoSuratKeteranganMedis, FotoHasilPemeriksaan, Tujuan, NamaPasien \
                     FROM PermintaanKesehatan \
-                    WHERE IDPermintaan = %s", (idPermintaanKesehatan))
+                    WHERE IDPermintaanKesehatan = %s", (idPermintaanKesehatan))
 
     dataPermintaan = Permintaan.getByIDPermintaan(idPermintaanKesehatan)
-    dataPermintaanKesehatan = cursor.fecthone()
+    dataPermintaanKesehatan = cursor.fetchone()
     cursor.close()
 
     if dataPermintaanKesehatan is None:
@@ -206,7 +208,7 @@ class PermintaanKesehatan(Permintaan):
                         FROM PermintaanKesehatan \
                         WHERE IdPermintaanKesehatan = %s", (idPermintaan))
 
-        dataPermintaanKesehatan = cursor.fecthone();
+        dataPermintaanKesehatan = cursor.fetchone();
         fotoKTP, fotoKK, fotoKetMedis, fotoPemeriksan, tujuan, namaPasien = dataPermintaanKesehatan;
 
         self = cls.__new__(cls)
@@ -275,12 +277,12 @@ class PermintaanLainnya(Permintaan):
   def getByIDPermintaanLainnya(cls, idPermintaanLainnya):
     # INITIALIZE CURSOR
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT Instansi, AkunInstagramm, AkunTwitter, AkunFacebook \
+    cursor.execute("SELECT Instansi, AkunInstagram, AkunTwitter, AkunFacebook \
                     FROM PermintaanLainnya \
                     WHERE IDPermintaanLainnya = %s", (idPermintaanLainnya))
 
     dataPermintaan = Permintaan.getByIDPermintaan(idPermintaanLainnya)
-    dataPermintaanLainnya = cursor.fecthone()
+    dataPermintaanLainnya = cursor.fetchone()
     cursor.close()
 
     if dataPermintaanLainnya is None:
@@ -333,7 +335,7 @@ class PermintaanLainnya(Permintaan):
                         FROM PermintaanLainnya \
                         WHERE IdPermintaanLainnya = %s", (idPermintaan))
 
-        dataPermintaanLainnya = cursor.fecthone();
+        dataPermintaanLainnya = cursor.fetchone();
         instansi, ig, twt, fb = dataPermintaanLainnya;
 
         self = cls.__new__(cls)
