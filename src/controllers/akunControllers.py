@@ -13,7 +13,7 @@ class AkunController:
             akun = Akun.getByEmailOrUsername(emailOrUsername)
 
             if akun.matchPassword(password):
-                session["User"] = json.dumps({"Email": akun.getEmail(), "Username": akun.getUsername()})
+                session["User"] = json.dumps({"ID": akun.getIDPengguna(), "Email": akun.getEmail(), "Username": akun.getUsername()})
                 return "Created", 201
 
             else:
