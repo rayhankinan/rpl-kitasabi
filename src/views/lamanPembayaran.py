@@ -1,7 +1,8 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QTextEdit, QPushButton, QLineEdit, QComboBox
-from PyQt6.QtGui import QFont, QCursor
+from PyQt6.QtGui import QFont, QCursor, QImage, QPixmap
 from PyQt6.QtCore import Qt
 import sys
+import urllib.request
 
 class LamanPembayaran(QWidget):
     def __init__(self):
@@ -112,12 +113,18 @@ class LamanPembayaran(QWidget):
             color: #25313C;
         ''')
         # temporary for image
-        self.previewImg = QTextEdit(self)
-        self.previewImg.setText('ISI PAKE DATA')
-        self.previewImg.setDisabled(True)
+        url = 'https://pbs.twimg.com/profile_images/631884742896431104/RMnmakF-_400x400.jpg'
+        data = urllib.request.urlopen(url).read()
+
+        image = QImage()
+        image.loadFromData(data)
+
+        self.previewImg = QLabel(self)
         self.previewImg.setFixedSize(190, 176)
         self.previewImg.move(278, 243)
-        self.previewImg.setStyleSheet('background-color: #94A3B1; color: black;')
+        self.previewImg.setScaledContents(True)
+        pixmap = QPixmap(image)
+        self.previewImg.setPixmap(pixmap)
 
         # set input nominal box
         self.nominal = QLineEdit(self)
@@ -176,3 +183,4 @@ class LamanPembayaran(QWidget):
 # window = LamanPembayaran()
 # window.show()
 # sys.exit(app.exec())
+

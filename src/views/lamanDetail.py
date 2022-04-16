@@ -1,7 +1,8 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QTextEdit, QPushButton
-from PyQt6.QtGui import QFont, QCursor
+from PyQt6.QtGui import QFont, QCursor, QImage, QPixmap
 from PyQt6.QtCore import Qt
 import sys
+import urllib.request
 
 class LamanDetail(QWidget):
     def __init__(self):
@@ -72,7 +73,7 @@ class LamanDetail(QWidget):
         self.judulPg.setDisabled(True)
         self.judulPg.setFixedSize(754, 70)
         self.judulPg.move(72, 171)
-        self.judulPg.setText("Judul Penggalangan Dana (ISI PAKE DATA)")
+        self.judulPg.setText("BANTU SAYA REFORMASI CIREBON")
         self.judulPg.setStyleSheet('''
             background-color: #F2F4F7; 
             padding: 20 5 5 20; 
@@ -87,11 +88,18 @@ class LamanDetail(QWidget):
         self.descPg.setText("Deskripsi Penggalangan Dana (ISI PAKE DATA)")
         self.descPg.setStyleSheet('padding: 10 10 10 10')
         # temporary for image
-        self.imagePg = QTextEdit(self)
-        self.imagePg.setDisabled(True)
+        url = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
+        data = urllib.request.urlopen(url).read()
+
+        image = QImage()
+        image.loadFromData(data)
+
+        self.imagePg = QLabel(self)
         self.imagePg.setFixedSize(754, 243)
         self.imagePg.move(72, 255)
-        self.imagePg.setText("Image Penggalangan Dana (ISI PAKE DATA)")
+        self.imagePg.setScaledContents(True)
+        pixmap = QPixmap(image)
+        self.imagePg.setPixmap(pixmap)
         
         # set timeline donatur
         self.donaturTimeline = QTextEdit(self)
