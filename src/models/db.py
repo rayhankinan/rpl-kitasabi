@@ -44,6 +44,8 @@ with app.app_context():
                     Judul VARCHAR(255) NOT NULL, \
                     Deskripsi VARCHAR(255) NOT NULL,\
                     Target BIGINT UNSIGNED,\
+                    StatusAutentikasi BOOLEAN, \
+                    UNIQUE (Judul, Deskripsi) \
                     PRIMARY KEY (IDPermintaan),\
                     FOREIGN KEY (IDPengguna) REFERENCES Akun (IDPengguna) ON DELETE CASCADE)")
     # TABLE PermintaanKesehatan
