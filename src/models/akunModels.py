@@ -67,7 +67,7 @@ class Akun:
 
         # MASUKKAN NO TELP KE DALAM DATABASE
         for noTelp in self.listNoTelp:
-            cursor.execute("INSERT INTO Akun_No_Telp (IDPengguna, NoTelp) SELECT MAX(IDPengguna), %s FROM Akun", (noTelp, ))
+            cursor.execute("INSERT INTO AkunNoTelp (IDPengguna, NoTelp) SELECT MAX(IDPengguna), %s FROM Akun", (noTelp, ))
         
         # TUTUP CURSOR
         mysql.connection.commit()
@@ -81,7 +81,7 @@ class Akun:
         cursor.execute("SELECT Email, NamaDepan, NamaBelakang, Username, Password, Foto FROM Akun WHERE Email = %s OR Username = %s", (emailOrUsername, emailOrUsername))
         dataAkun = cursor.fetchone()
 
-        cursor.execute("SELECT NoTelp FROM Akun_No_Telp NATURAL JOIN Akun WHERE Email = %s OR Username = %s", (emailOrUsername, emailOrUsername))
+        cursor.execute("SELECT NoTelp FROM AkunNoTelp NATURAL JOIN Akun WHERE Email = %s OR Username = %s", (emailOrUsername, emailOrUsername))
         dataNoTelp = cursor.fetchall()
 
         cursor.close()
@@ -124,7 +124,7 @@ class Akun:
             # INISIALISASI CURSOR
             cursor = mysql.connection.cursor()
 
-            cursor.execute("INSERT INTO Akun_No_Telp (IDPengguna, NoTelp) SELECT MAX(IDPengguna), %s FROM Akun", (noTelp, ))
+            cursor.execute("INSERT INTO AkunNoTelp (IDPengguna, NoTelp) SELECT MAX(IDPengguna), %s FROM Akun", (noTelp, ))
 
             # TUTUP CURSOR
             mysql.connection.commit()
@@ -137,7 +137,7 @@ class Akun:
         # INISIALISASI CURSOR
         cursor = mysql.connection.cursor()
 
-        cursor.execute("DELETE FROM Akun_No_Telp WHERE IDPengguna = (SELECT IDPengguna FROM Akun WHERE Email = %s) AND NoTelp = %s", (self.email, noTelp))
+        cursor.execute("DELETE FROM AkunNoTelp WHERE IDPengguna = (SELECT IDPengguna FROM Akun WHERE Email = %s) AND NoTelp = %s", (self.email, noTelp))
 
         # TUTUP CURSOR
         mysql.connection.commit()
