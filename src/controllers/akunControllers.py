@@ -15,6 +15,7 @@ class AkunController:
             if akun.matchPassword(password):
                 session["User"] = json.dumps({"ID": akun.getIDPengguna(), "Email": akun.getEmail(), "Username": akun.getUsername()})
                 return "Created", 201
+                
             else:
                 return "Unauthorized", 401
 
