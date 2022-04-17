@@ -58,6 +58,38 @@ class Permintaan:
 
       return self
 
+  # CONSTRUCTOR BY IDPengguna
+  @classmethod
+  def getByIDPengguna(cls, idPengguna):
+    # INITIALIZE CURSOR
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT IDPermintaan, Judul, Deskripsi, Target, StatusAutentikasi\
+                    FROM Permintaan \
+                    WHERE IDPengguna = %s", (idPengguna, ))
+
+    dataPermintaan = cursor.fetchall()
+
+    if len(dataPermintaan) == 0:
+      return None
+    else:
+      listPermintaan = []
+
+      for data in dataPermintaan:
+        idPermintaan, judul, deskripsi, target, statusAutentikasi = data
+
+        self = cls.__new__(cls)
+        self.idPermintaan = idPermintaan          #1
+        self.idPengguna = idPengguna              #2
+        self.judul = judul                        #3
+        self.deskripsi = deskripsi                #4
+        self.target = target                      #5
+        self.statusAutentikasi = statusAutentikasi#6
+
+        listPermintaan.append(self)
+
+      cursor.close()
+      return listPermintaan
+
   # ATTRIBUTE METHOD
   def getIDPermintaan(self):
     return self.idPermintaan
@@ -189,46 +221,53 @@ class PermintaanKesehatan(Permintaan):
   def getByIDPengguna(cls, idPengguna):
     # INITIALIZE CURSOR
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT IDPermintaan, Judul, Deskripsi, Target, StatusAutentikasi\
-                    FROM Permintaan \
-                    WHERE IDPengguna = %s", (idPengguna))
 
-    dataPermintaan = cursor.fetchall()
+    dataPermintaan = Permintaan.getByIDPengguna(idPengguna)
+    print(len(dataPermintaan), file=sys.stdout)
 
     if dataPermintaan is None:
-      raise Exception(f"IDPengguna {idPengguna} tidak memiliki permintaan penggalangan dana!")
+      return None
     else:
       listPermintaan = []
 
       for data in dataPermintaan:
-        idPermintaan, judul, deskripsi, target, statusAutentikasi = data
+        idPermintaan = data.idPermintaan
+        judul = data.judul
+        deskripsi = data.deskripsi
+        target = data.target
+        statusAutentikasi = data.statusAutentikasi
 
         # SELECT PermintaanKesehatan BY IDPermintaan
         cursor.execute("SELECT FotoKTP, FotoKK, FotoSuratKeteranganMedis, FotoHasilPemeriksaan, Tujuan, NamaPasien\
                         FROM PermintaanKesehatan \
-                        WHERE IdPermintaanKesehatan = %s", (idPermintaan))
+                        WHERE IdPermintaanKesehatan = %s", (idPermintaan, ))
 
         dataPermintaanKesehatan = cursor.fetchone();
-        fotoKTP, fotoKK, fotoKetMedis, fotoPemeriksan, tujuan, namaPasien = dataPermintaanKesehatan;
+        if (dataPermintaanKesehatan is not None):
+          fotoKTP, fotoKK, fotoKetMedis, fotoPemeriksan, tujuan, namaPasien = dataPermintaanKesehatan;
 
-        self = cls.__new__(cls)
-        self.idPermintaan = idPermintaan          #1
-        self.idPengguna = idPengguna              #2
-        self.judul = judul                        #3
-        self.deskripsi = deskripsi                #4
-        self.target = target                      #5
-        self.statusAutentikasi = statusAutentikasi#6
-        self.tujuan = tujuan                      #7
-        self.namaPasien = namaPasien              #8
-        self.fotoKTP = fotoKTP                    #9
-        self.fotoKK = fotoKK                      #10
-        self.fotoKetMedis = fotoKetMedis          #11
-        self.fotoPemeriksaan = fotoPemeriksan     #12
+          self = cls.__new__(cls)
+          self.idPermintaan = idPermintaan          #1
+          self.idPengguna = idPengguna              #2
+          self.judul = judul                        #3
+          self.deskripsi = deskripsi                #4
+          self.target = target                      #5
+          self.statusAutentikasi = statusAutentikasi#6
+          self.tujuan = tujuan                      #7
+          self.namaPasien = namaPasien              #8
+          self.fotoKTP = fotoKTP                    #9
+          self.fotoKK = fotoKK                      #10
+          self.fotoKetMedis = fotoKetMedis          #11
+          self.fotoPemeriksaan = fotoPemeriksan     #12
 
-        listPermintaan.append(self)
+          listPermintaan.append(self)
 
       cursor.close()
-      return listPermintaan
+
+      if (len(listPermintaan) == 0):
+        return None
+      else:
+        return listPermintaan
 
   # ATTRIBUTE METHOD
   def getFotoKTP(self):
@@ -279,7 +318,7 @@ class PermintaanLainnya(Permintaan):
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT Instansi, AkunInstagram, AkunTwitter, AkunFacebook \
                     FROM PermintaanLainnya \
-                    WHERE IDPermintaanLainnya = %s", (idPermintaanLainnya))
+                    WHERE IDPermintaanLainnya = %s", (idPermintaanLainnya, ))
 
     dataPermintaan = Permintaan.getByIDPermintaan(idPermintaanLainnya)
     dataPermintaanLainnya = cursor.fetchone()
@@ -316,41 +355,45 @@ class PermintaanLainnya(Permintaan):
   def getByIDPengguna(cls, idPengguna):
     # INITIALIZE CURSOR
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT IDPermintaan, Judul, Deskripsi, Target, StatusAutentikasi\
-                    FROM Permintaan \
-                    WHERE IDPengguna = %s", (idPengguna))
 
-    dataPermintaan = cursor.fetchall()
+    dataPermintaan = Permintaan.getByIDPengguna(idPengguna)
+    print(dataPermintaan, file=sys.stdout)
 
     if dataPermintaan is None:
-      raise Exception(f"IDPengguna {idPengguna} tidak memiliki permintaan penggalangan dana!")
+      return None
     else:
       listPermintaan = []
 
       for data in dataPermintaan:
-        idPermintaan, judul, deskripsi, target, statusAutentikasi = data
+        idPermintaan = data.idPermintaan
+        judul = data.judul
+        deskripsi = data.deskripsi
+        target = data.target
+        statusAutentikasi = data.statusAutentikasi
 
         # SELECT PermintaanLainnya BY IDPermintaan
-        cursor.execute("SELECT Instansi, AkunInstagramm, AkunTwitter, AkunFacebook \
+        cursor.execute("SELECT Instansi, AkunInstagram, AkunTwitter, AkunFacebook \
                         FROM PermintaanLainnya \
-                        WHERE IdPermintaanLainnya = %s", (idPermintaan))
+                        WHERE IdPermintaanLainnya = %s", (idPermintaan, ))
 
         dataPermintaanLainnya = cursor.fetchone();
-        instansi, ig, twt, fb = dataPermintaanLainnya;
 
-        self = cls.__new__(cls)
-        self.idPermintaan = idPermintaan          #1
-        self.idPengguna = idPengguna              #2
-        self.judul = judul                        #3
-        self.deskripsi = deskripsi                #4
-        self.target = target                      #5
-        self.statusAutentikasi = statusAutentikasi#6
-        self.instansi = instansi                  #7
-        self.instagram = ig                       #8
-        self.twitter = twt                        #9
-        self.facebook = fb                        #10
+        if (dataPermintaanLainnya is not None):
+          instansi, ig, twt, fb = dataPermintaanLainnya;
 
-        listPermintaan.append(self)
+          self = cls.__new__(cls)
+          self.idPermintaan = idPermintaan          #1
+          self.idPengguna = idPengguna              #2
+          self.judul = judul                        #3
+          self.deskripsi = deskripsi                #4
+          self.target = target                      #5
+          self.statusAutentikasi = statusAutentikasi#6
+          self.instansi = instansi                  #7
+          self.instagram = ig                       #8
+          self.twitter = twt                        #9
+          self.facebook = fb                        #10
+
+          listPermintaan.append(self)
 
       cursor.close()
       return listPermintaan

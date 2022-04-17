@@ -1,5 +1,5 @@
 from os import system
-from flask import request, session
+from flask import jsonify, request, session
 import sys
 import json
 
@@ -74,5 +74,27 @@ class PermintaanController:
 
   @staticmethod
   def riwayatPermintaan():
-    pass
+    # try:
+      dataAkun = json.loads(session["User"])
+      idPengguna = int(dataAkun["ID"])
+
+      result = []
+      riwayatKesehatan = PermintaanKesehatan.getByIDPengguna(idPengguna)
+      riwayatLainnya = PermintaanLainnya.getByIDPengguna(idPengguna)
+
+      if (riwayatKesehatan is not None):
+        for kes in riwayatKesehatan:
+          result.append({"id-permintaan" : kes.getIDPermintaan(), "id-pengguna": kes.getIDPengguna(), "judul": kes.getJudul(), "deskripsi": kes.getDeskripsi(), "target": kes.getTarget(), "status-autentikasi": kes.getStatusAutentikasi(), "foto-ktp": kes.getFotoKTP(), "foto-kk": kes.getFotoKK(), "foto-ket-medis": kes.getFotoKetMedis(), "foto-pemeriksaan": kes.getFotoPemeriksaan(), "tujuan": kes.getTujuan(), "nama-pasien": kes.getNamaPasien()})
+
+      if (riwayatLainnya is not None):
+        for lain in riwayatLainnya:
+          result.append({"id-permintaan" : lain.getIDPermintaan(), "id-pengguna": lain.getIDPengguna(), "judul": lain.getJudul(), "deskripsi": lain.getDeskripsi(), "target": lain.getTarget(), "status-autentikasi": lain.getStatusAutentikasi(), "instansi" : lain.getInstansi(), "akun-instagram": lain.getAkunInstagram(), "akun-twitter": lain.getAkunTwitter(), "akun-facebook": lain.getAkunFacebook()})
+
+      if (riwayatKesehatan == None and riwayatLainnya == None):
+        return jsonify({}), 200
+      else:
+        return jsonify(result), 200
+
+    # except Exception as e:
+    #   return str(e), 400
 
