@@ -1,11 +1,13 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox
+from PyQt6.QtWidgets import QApplication, QWidget, QTextEdit, QLabel, QLineEdit, QPushButton, QMessageBox
 from PyQt6.QtGui import QFont, QPixmap, QCursor, QImage
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import pyqtSignal
 from custom_widgets import ClickableLabel
 import urllib.request
 
+import sys
+import urllib.request
 
 graybg = '#F2F4F7'
 ungu = 'rgba(90, 79, 243, 1)'
@@ -146,12 +148,68 @@ class MainWindow(QWidget):
         }
       ''')
       
+      # Ubah Data Button
+      self.ubahDataButton = QPushButton(self)
+      self.ubahDataButton.setText("Ubah Data")
+      self.ubahDataButton.move(379, 900)
+      self.ubahDataButton.setFixedSize(165,52)
+      self.ubahDataButton.setFont(mulish16)
+      self.ubahDataButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+      self.ubahDataButton.setStyleSheet('''
+      QPushButton {
+        color: #ffffff;
+        background-color: #3643fc;
+        border: none;
+        border-radius: 12px;
+      }
+      QPushButton:hover {
+        background-color: #6b75ff;
+      }
+      ''') 
       
+      # laman riwayat button
+      self.lamanRiwayatButton = QPushButton(self)
+      self.lamanRiwayatButton.setText("Laman Riwayat")
+      self.lamanRiwayatButton.move(634, 900)
+      self.lamanRiwayatButton.setFixedSize(165,52)
+      self.lamanRiwayatButton.setFont(mulish16)
+      self.lamanRiwayatButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+      self.lamanRiwayatButton.setStyleSheet('''
+      QPushButton {
+        color: #ffffff;
+        background-color: #3643fc;
+        border: none;
+        border-radius: 12px;
+      }
+      QPushButton:hover {
+        background-color: #6b75ff;
+      }
+      ''')   
+      
+      # logout button
+      self.logoutButton = QPushButton(self)
+      self.logoutButton.setText("Logout")
+      self.logoutButton.move(895, 900)
+      self.logoutButton.setFixedSize(165,52)
+      self.logoutButton.setFont(mulish16)
+      self.logoutButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+      self.logoutButton.setStyleSheet('''
+      QPushButton {
+        color: #ffffff;
+        background-color: #3643fc;
+        border: none;
+        border-radius: 12px;
+      }
+      QPushButton:hover {
+        background-color: #6b75ff;
+      }
+      ''')   
+                                       
       #  Tombol explore lebih banyak penggalangan dana
       self.explore_button = QPushButton(self)
       self.explore_button.setText("Explore Lebih Banyak Penggalangan Dana")
       self.explore_button.setFixedSize(442, 53)
-      self.explore_button.move(499,900)
+      self.explore_button.move(499,754)
       self.explore_button.setFont(mulish16)
       self.explore_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
       self.explore_button.setStyleSheet('''
