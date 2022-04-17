@@ -15,7 +15,7 @@ class Transaksi:
         cursor = mysql.connection.cursor()
 
         # MASUKKAN TRANSAKSI KE DALAM DATABASE
-        cursor.execute("INSERT INTO Transaksi (IDDonatur, IDLaman, JumlahTransaksi) VALUES (%d, %d, %d)", (self.idDonatur, self.idLaman, self.jumlahTransaksi))
+        cursor.execute("INSERT INTO Transaksi (IDDonatur, IDLaman, JumlahTransaksi) VALUES (%s, %s, %s)", (self.idDonatur, self.idLaman, self.jumlahTransaksi))
 
         self.idTransaksi = cursor.lastrowid
         
@@ -28,12 +28,12 @@ class Transaksi:
     def getTotalByLaman(idLaman):
         cursor = mysql.connection.cursor()
 
-        cursor.execute("SELECT SUM(JumlahTransaksi) FROM Transaksi WHERE IDLaman = %d AND NOT StatusPencairan GROUP BY IDLaman", (idLaman, ))
+        cursor.execute("SELECT SUM(JumlahTransaksi) FROM Transaksi WHERE IDLaman = %s AND NOT StatusPencairan GROUP BY IDLaman", (idLaman, ))
         dataTotalTransaksi = cursor.fetchone()
 
         cursor.close()
 
-        totalTransaksi, = dataTotalTransaksi
+        totalTransaksi = dataTotalTransaksi
         return totalTransaksi
 
     # CLASS METHOD
@@ -41,7 +41,7 @@ class Transaksi:
     def getRiwayatDonasi(cls, idDonatur):
         cursor = mysql.connection.cursor()
 
-        cursor.execute("SELECT * FROM Transaksi WHERE IDDonatur = %d", (idDonatur, ))
+        cursor.execute("SELECT * FROM Transaksi WHERE IDDonatur = %s", (idDonatur, ))
         dataRiwayat = cursor.fetchall()
 
         cursor.close()
@@ -67,7 +67,7 @@ class Transaksi:
     def getRiwayatLaman(cls, idLaman):
         cursor = mysql.connection.cursor()
 
-        cursor.execute("SELECT * FROM Transaksi WHERE IDLaman = %d", (idLaman, ))
+        cursor.execute("SELECT * FROM Transaksi WHERE IDLaman = %s", (idLaman, ))
         dataRiwayat = cursor.fetchall()
 
         cursor.close()
@@ -92,7 +92,7 @@ class Transaksi:
     def getByDonaturLamanTimestamp(cls, idDonatur, idLaman, timestamp):
         cursor = mysql.connection.cursor()
 
-        cursor.execute("SELECT * FROM Transaksi WHERE IDDonatur = %d AND IDLaman = %d and Timestamp = %s", (idDonatur, idLaman, timestamp))
+        cursor.execute("SELECT * FROM Transaksi WHERE IDDonatur = %s AND IDLaman = %s and Timestamp = %s", (idDonatur, idLaman, timestamp))
         data = cursor.fetchone()
 
         cursor.close()

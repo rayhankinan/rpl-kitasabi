@@ -190,7 +190,7 @@ class PermintaanKesehatan(Permintaan):
     cursor.close()
 
     if dataPermintaanKesehatan is None:
-      raise Exception(f"IDPermintaanKesehatan {idPermintaanKesehatan} tidak ada!")
+      return None
     else:
       idPengguna = dataPermintaan.idPengguna
       judul = dataPermintaan.judul
@@ -223,7 +223,6 @@ class PermintaanKesehatan(Permintaan):
     cursor = mysql.connection.cursor()
 
     dataPermintaan = Permintaan.getByIDPengguna(idPengguna)
-    print(len(dataPermintaan), file=sys.stdout)
 
     if dataPermintaan is None:
       return None
@@ -326,7 +325,7 @@ class PermintaanLainnya(Permintaan):
     cursor.close()
 
     if dataPermintaanLainnya is None:
-      raise Exception(f"IDPermintaanLainnya {idPermintaanLainnya} tidak ada!")
+      return None
     else:
       # CREATE INSTANCES
       idPengguna = dataPermintaan.idPengguna
