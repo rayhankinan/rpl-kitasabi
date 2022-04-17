@@ -109,54 +109,57 @@ class RiwayatDonasiWindow(QWidget):
     self.cardBackground.move(124, 440)
     self.cardBackground.setStyleSheet('background-color: rgba(187, 200, 212, 1)')
     
-    # set preview penggalangan dana
-    bg_list = QLabel(self)
-    bg_list.setFixedSize(956, 144)
-    bg_list.setStyleSheet(f'background-color: {graybg}')
-    bg_list.move(271,474)
-    # Preview penggalangan dana +i *185
-    self.judul_penggalangan_dana = QLabel(self)
-    self.judul_penggalangan_dana.setText("Judul Penggalangan Dana")
-    self.judul_penggalangan_dana.setStyleSheet('color: rgba(37, 49, 60, 1)')
-    self.judul_penggalangan_dana.setStyleSheet('background-color: #F2F4F7')
-    self.judul_penggalangan_dana.move(443, 505) 
-    self.judul_penggalangan_dana.setFont(mulish24)
-    # nominal penggalangan dana
-    self.nominal = QLabel(self)
-    self.nominal.setText("Nominal")
-    self.nominal.setStyleSheet('color: rgba(37, 49, 60, 1)')
-    self.nominal.setStyleSheet('background-color: #F2F4F7')
-    self.nominal.move(443, 549)
-    self.nominal.setFont(mulish24)
-    # foto          
-    url2 = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
-    data2 = urllib.request.urlopen(url2).read()
-    image2 = QImage()
-    image2.loadFromData(data2)
-    self.previewImg2 = QLabel(self)
-    self.previewImg2.setFixedSize(117, 117)
-    self.previewImg2.move(287, 487)
-    self.previewImg2.setScaledContents(True)
-    pixmap2 = QPixmap(image2)
-    self.previewImg2.setPixmap(pixmap2)
-    # cairkan button
-    self.cairkan_button = QPushButton(self)
-    self.cairkan_button.setText("Cairkan")
-    self.cairkan_button.setFixedSize(165, 56)
-    self.cairkan_button.move(990, 518)
-    self.cairkan_button.setFont(mulish24)
-    self.cairkan_button.setStyleSheet('''
-        QPushButton {
-          color: #ffffff;
-          background-color: #3643fc;
-          border: none;
-          border-radius: 12px;
-        }
-        QPushButton:hover {
-          background-color: #6b75ff;
-        }
-    ''')
-    self.cairkan_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+    self.penggalanganDanaCard = []
+    for i in range(3):
+        self.penggalanganDanaCard.append({})
+        # set preview penggalangan dana
+        self.penggalanganDanaCard[i]["bg_list"] = QLabel(self)
+        self.penggalanganDanaCard[i]["bg_list"].setFixedSize(956, 144)
+        self.penggalanganDanaCard[i]["bg_list"].setStyleSheet(f'background-color: {graybg}')
+        self.penggalanganDanaCard[i]["bg_list"].move(271,474 + i * 167)
+        # Preview penggalangan dana +i *185
+        self.penggalanganDanaCard[i]["judul_penggalangan_dana"] = QLabel(self)
+        self.penggalanganDanaCard[i]["judul_penggalangan_dana"].setText("Judul Penggalangan Dana")
+        self.penggalanganDanaCard[i]["judul_penggalangan_dana"].setStyleSheet('color: rgba(37, 49, 60, 1)')
+        self.penggalanganDanaCard[i]["judul_penggalangan_dana"].setStyleSheet('background-color: #F2F4F7')
+        self.penggalanganDanaCard[i]["judul_penggalangan_dana"].move(443, 505+ i * 167) 
+        self.penggalanganDanaCard[i]["judul_penggalangan_dana"].setFont(mulish24)
+        # nominal penggalangan dana
+        self.penggalanganDanaCard[i]["nominal"] = QLabel(self)
+        self.penggalanganDanaCard[i]["nominal"].setText("Nominal")
+        self.penggalanganDanaCard[i]["nominal"].setStyleSheet('color: rgba(37, 49, 60, 1)')
+        self.penggalanganDanaCard[i]["nominal"].setStyleSheet('background-color: #F2F4F7')
+        self.penggalanganDanaCard[i]["nominal"].move(443, 549+ i * 167)
+        self.penggalanganDanaCard[i]["nominal"].setFont(mulish24)
+        # foto          
+        url2 = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
+        data2 = urllib.request.urlopen(url2).read()
+        image2 = QImage()
+        image2.loadFromData(data2)
+        self.penggalanganDanaCard[i]["previewImg2"] = QLabel(self)
+        self.penggalanganDanaCard[i]["previewImg2"].setFixedSize(117, 117)
+        self.penggalanganDanaCard[i]["previewImg2"].move(287, 487+ i * 167)
+        self.penggalanganDanaCard[i]["previewImg2"].setScaledContents(True)
+        pixmap2 = QPixmap(image2)
+        self.penggalanganDanaCard[i]["previewImg2"].setPixmap(pixmap2)
+        # cairkan button
+        self.penggalanganDanaCard[i]["cairkan_button"] = QPushButton(self)
+        self.penggalanganDanaCard[i]["cairkan_button"].setText("Cairkan")
+        self.penggalanganDanaCard[i]["cairkan_button"].setFixedSize(165, 56)
+        self.penggalanganDanaCard[i]["cairkan_button"].move(990, 518+ i * 167)
+        self.penggalanganDanaCard[i]["cairkan_button"].setFont(mulish24)
+        self.penggalanganDanaCard[i]["cairkan_button"].setStyleSheet('''
+            QPushButton {
+            color: #ffffff;
+            background-color: #3643fc;
+            border: none;
+            border-radius: 12px;
+            }
+            QPushButton:hover {
+            background-color: #6b75ff;
+            }
+        ''')
+        self.penggalanganDanaCard[i]["cairkan_button"].setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
     
     
     

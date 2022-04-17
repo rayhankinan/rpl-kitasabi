@@ -85,36 +85,39 @@ class RiwayatDonasiWindow(QWidget):
     self.cardBackground.move(116, 358)
     self.cardBackground.setStyleSheet('background-color: rgba(187, 200, 212, 1)')
     
-    # set preview penggalangan dana
-    bg_list = QLabel(self)
-    bg_list.setFixedSize(956, 158)
-    bg_list.setStyleSheet(f'background-color: {graybg}')
-    bg_list.move(253,399)
-    # Preview penggalangan dana +i *185
-    self.preview_penggalangan_dana = QLabel(self)
-    self.preview_penggalangan_dana.setText("Judul Penggalangan Dana")
-    self.preview_penggalangan_dana.setStyleSheet('color: rgba(37, 49, 60, 1)')
-    self.preview_penggalangan_dana.setStyleSheet('background-color: #F2F4F7')
-    self.preview_penggalangan_dana.move(425, 433) 
-    self.preview_penggalangan_dana.setFont(mulish24)
-    # nominal penggalangan dana
-    self.nominal = QLabel(self)
-    self.nominal.setText("Nominal")
-    self.nominal.setStyleSheet('color: rgba(37, 49, 60, 1)')
-    self.nominal.setStyleSheet('background-color: #F2F4F7')
-    self.nominal.move(425, 482)
-    self.nominal.setFont(mulish24)
-    # foto          
-    url2 = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
-    data2 = urllib.request.urlopen(url2).read()
-    image2 = QImage()
-    image2.loadFromData(data2)
-    self.previewImg2 = QLabel(self)
-    self.previewImg2.setFixedSize(117, 128)
-    self.previewImg2.move(269, 413)
-    self.previewImg2.setScaledContents(True)
-    pixmap2 = QPixmap(image2)
-    self.previewImg2.setPixmap(pixmap2)
+    self.riwayatDonasiCard = []
+    for i in range(3):
+      self.riwayatDonasiCard.append({})
+      # set preview penggalangan dana
+      self.riwayatDonasiCard[i]["bg_list"] = QLabel(self)
+      self.riwayatDonasiCard[i]["bg_list"].setFixedSize(956, 158)
+      self.riwayatDonasiCard[i]["bg_list"].setStyleSheet(f'background-color: {graybg}')
+      self.riwayatDonasiCard[i]["bg_list"].move(253,399+i *185)
+        # Preview penggalangan dana +i *185
+      self.riwayatDonasiCard[i]["preview_penggalangan_dana"] = QLabel(self)
+      self.riwayatDonasiCard[i]["preview_penggalangan_dana"].setText("Judul Penggalangan Dana")
+      self.riwayatDonasiCard[i]["preview_penggalangan_dana"].setStyleSheet('color: rgba(37, 49, 60, 1)')
+      self.riwayatDonasiCard[i]["preview_penggalangan_dana"].setStyleSheet('background-color: #F2F4F7')
+      self.riwayatDonasiCard[i]["preview_penggalangan_dana"].move(425, 433 +i*185) 
+      self.riwayatDonasiCard[i]["preview_penggalangan_dana"].setFont(mulish24)
+      # nominal penggalangan dana
+      self.riwayatDonasiCard[i]["nominal"] = QLabel(self)
+      self.riwayatDonasiCard[i]["nominal"].setText("Nominal")
+      self.riwayatDonasiCard[i]["nominal"].setStyleSheet('color: rgba(37, 49, 60, 1)')
+      self.riwayatDonasiCard[i]["nominal"].setStyleSheet('background-color: #F2F4F7')
+      self.riwayatDonasiCard[i]["nominal"].move(425, 482 +i*185)
+      self.riwayatDonasiCard[i]["nominal"].setFont(mulish24)
+      # foto          
+      url2 = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
+      data2 = urllib.request.urlopen(url2).read()
+      image2 = QImage()
+      image2.loadFromData(data2)
+      self.riwayatDonasiCard[i]["previewImg2"] = QLabel(self)
+      self.riwayatDonasiCard[i]["previewImg2"].setFixedSize(117, 128)
+      self.riwayatDonasiCard[i]["previewImg2"].move(269, 413 +i*185)
+      self.riwayatDonasiCard[i]["previewImg2"].setScaledContents(True)
+      pixmap2 = QPixmap(image2)
+      self.riwayatDonasiCard[i]["previewImg2"].setPixmap(pixmap2)
     
     
 if __name__ == "__main__":
