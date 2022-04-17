@@ -72,8 +72,10 @@ with app.app_context():
                     AkunInstagram VARCHAR(255),\
                     AkunTwitter VARCHAR(255),\
                     AkunFacebook VARCHAR(255),\
+                    NamaPenerima VARCHAR(255), \
                     PRIMARY KEY (IDPermintaanLainnya),\
                     FOREIGN KEY (IDPermintaanLainnya) REFERENCES Permintaan (IDPermintaan) ON DELETE CASCADE)")
+                    
     # TABLE Laman
     cursor.execute("CREATE TABLE Laman (\
                     IDLaman INT UNSIGNED AUTO_INCREMENT,\

@@ -39,12 +39,13 @@ class PermintaanController:
       ig = request.form.get("akun-instagram")
       twt = request.form.get("akun-twitter")
       fb = request.form.get("akun-facebook")
+      penerima = request.form.get("nama-penerima")
 
       dataAkun = json.loads(session["User"])
       idPengguna = int(dataAkun["ID"])
 
       # TODO : get IDPengguna
-      permintaanLainnya = PermintaanLainnya(idPengguna, judul, deskripsi, target, instansi, ig, twt, fb)
+      permintaanLainnya = PermintaanLainnya(idPengguna, judul, deskripsi, target, instansi, ig, twt, fb, penerima)
       return "Permintaan Lainnya Created", 201
 
     except Exception as e:
@@ -74,7 +75,7 @@ class PermintaanController:
 
   @staticmethod
   def riwayatPermintaan():
-    # try:
+    try:
       dataAkun = json.loads(session["User"])
       idPengguna = int(dataAkun["ID"])
 
@@ -88,13 +89,13 @@ class PermintaanController:
 
       if (riwayatLainnya is not None):
         for lain in riwayatLainnya:
-          result.append({"id-permintaan" : lain.getIDPermintaan(), "id-pengguna": lain.getIDPengguna(), "judul": lain.getJudul(), "deskripsi": lain.getDeskripsi(), "target": lain.getTarget(), "status-autentikasi": lain.getStatusAutentikasi(), "instansi" : lain.getInstansi(), "akun-instagram": lain.getAkunInstagram(), "akun-twitter": lain.getAkunTwitter(), "akun-facebook": lain.getAkunFacebook()})
+          result.append({"id-permintaan" : lain.getIDPermintaan(), "id-pengguna": lain.getIDPengguna(), "judul": lain.getJudul(), "deskripsi": lain.getDeskripsi(), "target": lain.getTarget(), "status-autentikasi": lain.getStatusAutentikasi(), "instansi" : lain.getInstansi(), "akun-instagram": lain.getAkunInstagram(), "akun-twitter": lain.getAkunTwitter(), "akun-facebook": lain.getAkunFacebook(), "nama-penerima": lain.getNamaPenerima()})
 
       if (riwayatKesehatan == None and riwayatLainnya == None):
         return jsonify({}), 200
       else:
         return jsonify(result), 200
 
-    # except Exception as e:
-    #   return str(e), 400
+    except Exception as e:
+      return str(e), 400
 

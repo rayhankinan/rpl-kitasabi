@@ -291,7 +291,7 @@ class PermintaanKesehatan(Permintaan):
 class PermintaanLainnya(Permintaan):
 
   # CONSTRUCTOR
-  def __init__(self, idPengguna, judul, deskripsi, target, instansi, ig, twt, fb):
+  def __init__(self, idPengguna, judul, deskripsi, target, instansi, ig, twt, fb, penerima):
     Permintaan.__init__(self,idPengguna, judul, deskripsi, target)
 
     # INITIALIZE ATTRIBUTE
@@ -299,13 +299,14 @@ class PermintaanLainnya(Permintaan):
     self.instagram = ig
     self.twitter = twt
     self.facebook = fb
+    self.penerima = penerima
 
     # INITTIALIZE CURSOR
     cursor = mysql.connection.cursor()
 
     # INSERT INTO DB
-    cursor.execute("INSERT INTO PermintaanLainnya (IDPermintaanLainnya, Instansi, AkunInstagram, AkunTwitter, AkunFacebook) \
-                    VALUES (%s, %s, %s, %s, %s)", (self.idPermintaan, self.instansi, self.instagram, self.twitter, self.facebook))
+    cursor.execute("INSERT INTO PermintaanLainnya (IDPermintaanLainnya, Instansi, AkunInstagram, AkunTwitter, AkunFacebook, NamaPenerima) \
+                    VALUES (%s, %s, %s, %s, %s, %s)", (self.idPermintaan, self.instansi, self.instagram, self.twitter, self.facebook, self.penerima))
     mysql.connection.commit()
 
     # CLOSE DB
@@ -316,7 +317,7 @@ class PermintaanLainnya(Permintaan):
   def getByIDPermintaanLainnya(cls, idPermintaanLainnya):
     # INITIALIZE CURSOR
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT Instansi, AkunInstagram, AkunTwitter, AkunFacebook \
+    cursor.execute("SELECT Instansi, AkunInstagram, AkunTwitter, AkunFacebook, NamaPenerima \
                     FROM PermintaanLainnya \
                     WHERE IDPermintaanLainnya = %s", (idPermintaanLainnya, ))
 
@@ -334,7 +335,7 @@ class PermintaanLainnya(Permintaan):
       target = dataPermintaan.target
       statusAutentikasi = dataPermintaan.statusAutentikasi
 
-      instansi, ig, twt, fb = dataPermintaanLainnya;
+      instansi, ig, twt, fb, penerima = dataPermintaanLainnya;
 
       self = cls.__new__(cls)
       self.idPermintaan = idPermintaanLainnya   #1
@@ -347,6 +348,7 @@ class PermintaanLainnya(Permintaan):
       self.instagram = ig                       #8
       self.twitter = twt                        #9
       self.facebook = fb                        #10
+      self.penerima = penerima                  #11
 
       return self
 
@@ -372,14 +374,14 @@ class PermintaanLainnya(Permintaan):
         statusAutentikasi = data.statusAutentikasi
 
         # SELECT PermintaanLainnya BY IDPermintaan
-        cursor.execute("SELECT Instansi, AkunInstagram, AkunTwitter, AkunFacebook \
+        cursor.execute("SELECT Instansi, AkunInstagram, AkunTwitter, AkunFacebook, NamaPenerima \
                         FROM PermintaanLainnya \
                         WHERE IdPermintaanLainnya = %s", (idPermintaan, ))
 
         dataPermintaanLainnya = cursor.fetchone();
 
         if (dataPermintaanLainnya is not None):
-          instansi, ig, twt, fb = dataPermintaanLainnya;
+          instansi, ig, twt, fb, penerima = dataPermintaanLainnya;
 
           self = cls.__new__(cls)
           self.idPermintaan = idPermintaan          #1
@@ -392,6 +394,7 @@ class PermintaanLainnya(Permintaan):
           self.instagram = ig                       #8
           self.twitter = twt                        #9
           self.facebook = fb                        #10
+          self.penerima = penerima                  #11
 
           listPermintaan.append(self)
 
@@ -410,3 +413,6 @@ class PermintaanLainnya(Permintaan):
 
   def getAkunFacebook(self):
     return self.facebook
+
+  def getNamaPenerima(self):
+    return self.penerima
