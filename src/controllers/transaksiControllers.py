@@ -29,7 +29,14 @@ class TransaksiController:
             result = []
             riwayatTransaksi = Transaksi.getRiwayatDonasi(idDonatur)
             for transaksi in riwayatTransaksi:
-                result.append({"idTransaksi": transaksi.getIDTransaksi(), "idDonatur": transaksi.getIDDonatur(), "idLaman": transaksi.getIDLaman(), "jumlahTransaksi": transaksi.getJumlahTransaksi(), "timestamp": transaksi.getTimestamp(), "statusPencairan": transaksi.getStatusPencairan()})
+                result.append({
+                    "idTransaksi": transaksi.getIDTransaksi(), 
+                    "idDonatur": transaksi.getIDDonatur(), 
+                    "idLaman": transaksi.getIDLaman(), 
+                    "jumlahTransaksi": transaksi.getJumlahTransaksi(), 
+                    "timestamp": transaksi.getTimestamp(), 
+                    "statusPencairan": transaksi.getStatusPencairan()
+                })
 
             return jsonify(result), 200
 
@@ -39,12 +46,11 @@ class TransaksiController:
     @staticmethod
     def cair():
         try:
-            data = json.loads(session["User"])
-            idDonatur = data["ID"]
             idLaman = int(request.form.get("id-laman"))
-            timestamp = request.form.get("timestamp")
 
-            Transaksi.getByDonaturLamanTimestamp(idDonatur, idLaman, timestamp).cairkanTransaksi()
+            riwayatTransaksi = Transaksi.getRiwayatLaman(idLaman)
+            for transaksi in riwayatTransaksi:
+                transaksi.cairkanTransaksi()
 
             return "OK", 200
 
@@ -59,7 +65,14 @@ class TransaksiController:
             result = []
             riwayatTransaksi = Transaksi.getRiwayatLaman(idLaman)
             for transaksi in riwayatTransaksi:
-                result.append({"idTransaksi": transaksi.getIDTransaksi(), "idDonatur": transaksi.getIDDonatur(), "idLaman": transaksi.getIDLaman(), "jumlahTransaksi": transaksi.getJumlahTransaksi(), "timestamp": transaksi.getTimestamp(), "statusPencairan": transaksi.getStatusPencairan()})
+                result.append({
+                    "idTransaksi": transaksi.getIDTransaksi(), 
+                    "idDonatur": transaksi.getIDDonatur(), 
+                    "idLaman": transaksi.getIDLaman(), 
+                    "jumlahTransaksi": transaksi.getJumlahTransaksi(), 
+                    "timestamp": transaksi.getTimestamp(), 
+                    "statusPencairan": transaksi.getStatusPencairan()
+                })
 
             return jsonify(result), 200
             

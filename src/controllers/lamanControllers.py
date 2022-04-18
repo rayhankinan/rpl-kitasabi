@@ -18,7 +18,6 @@ class LamanController:
       if (dataPermintaan.getStatusAutentikasi() == 0):
         return "Permintaan belum disetujui!", 400
       
-
       idPenggalang = int(dataAkun["ID"])
       judul =  dataPermintaan.getJudul()
       deskripsi = dataPermintaan.getDeskripsi()
@@ -28,13 +27,14 @@ class LamanController:
 
       kes = PermintaanKesehatan.getByIDPermintaanKesehatan(idAutentikasi)
 
-      if kes == None:
+      if kes is None:
         kategori = "Lainnya"
+
       else:
         kategori = "Kesehatan"
 
       laman = Laman(idAutentikasi, idPenggalang, judul, deskripsi, target, kategori, deadline, foto)
-      return "Laman Created", 201
+      return "Created", 201
 
     except Exception as e:
       return str(e), 400
@@ -48,7 +48,7 @@ class LamanController:
 
       laman.setFoto(foto)
 
-      return "Foto Laman Changed", 200
+      return "OK", 200
 
     except Exception as e:
       return str(e), 400
@@ -60,8 +60,8 @@ class LamanController:
       judul = request.form.get("query-judul")
       laman = Laman.getByJudul(judul)
 
-      if (laman is None):
-        return "Laman Not Found", 404
+      if laman is None:
+        return "Not Found", 404
       else:
         result = []
         for l in laman:
@@ -90,8 +90,8 @@ class LamanController:
       kategori = request.form.get("query-kategory")
       laman = Laman.getByKategori(kategori)
 
-      if (laman is None):
-        return "Laman Not Found", 404
+      if laman is None:
+        return "Not Found", 404
       else:
         result = []
         for l in laman:
@@ -109,6 +109,7 @@ class LamanController:
                         "foto-laman": l.getFoto()})
 
         return jsonify(result), 200
+
     except Exception as e:
       return str(e), 400
 
@@ -137,6 +138,7 @@ class LamanController:
                         "foto-laman": l.getFoto()})
 
         return jsonify(result), 200
+
     except Exception as e:
       return str(e), 400
 
@@ -172,8 +174,9 @@ class LamanController:
       idPenggalang = int(dataAkun["ID"])
       laman = Laman.riwayatLaman(idPenggalang)
 
-      if (laman is None):
-        return "Laman Not Found", 404
+      if laman is None:
+        return "Not Found", 404
+
       else:
         result = []
         for l in laman:
@@ -191,5 +194,6 @@ class LamanController:
                         "foto-laman": l.getFoto()})
 
         return jsonify(result), 200
+
     except Exception as e:
       return str(e), 400

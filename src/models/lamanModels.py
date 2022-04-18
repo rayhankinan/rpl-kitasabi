@@ -5,7 +5,6 @@ from models.cdn import bucket
 import os
 
 class Laman():
-  
   # CONSTRUCTOR
   def __init__(self, idAutentikasi, idPenggalang, judul, deskripsi, target, kategori, deadline, foto):
     self.idAutentikasi = idAutentikasi
@@ -98,13 +97,14 @@ class Laman():
     # INITIALIZE CURSOR
     cursor = mysql.connection.cursor()
     # SEACH Judul CONTAINS queryJudul
-    cursor.execute("SELECT * FROM Laman WHERE Judul LIKE %s", ("%%" + queryJudul + "%%", ))
+    cursor.execute("SELECT * FROM Laman WHERE Judul LIKE %s", (f"%{queryJudul}%", ))
 
     dataLaman = cursor.fetchall()
 
     if len(dataLaman) == 0:
       cursor.close()
       return None
+
     else:
       listLaman = []
       for data in dataLaman:
@@ -153,6 +153,7 @@ class Laman():
     if len(dataLaman) == 0:
       cursor.close()
       return None
+      
     else:
       listLaman = []
       for data in dataLaman:
@@ -344,4 +345,3 @@ class Laman():
     # CLOSE AND COMMIT
     mysql.connection.commit()
     cursor.close()
-
