@@ -1,10 +1,12 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QTextEdit, QPushButton
 from PyQt6.QtGui import QFont, QCursor, QImage, QPixmap
+from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtCore import Qt
-import sys
 import urllib.request
+import sys
 
 class LamanDetail(QWidget):
+    channel = pyqtSignal(str)
     def __init__(self):
         super().__init__()
         
@@ -12,8 +14,6 @@ class LamanDetail(QWidget):
         self.setFixedSize(1440, 1024)
         self.setWindowTitle("KITASABI - Detail Penggalangan")
         self.setStyleSheet('background-color: #F2F4F7')
-
-        # nanti janlup connect database
     
         # set fonts
         mulish16 = QFont()
@@ -45,7 +45,8 @@ class LamanDetail(QWidget):
                 color: #FFFFFF;
             }
         ''')
-        # self.homeButton.clicked.connected(go to home)
+        self.homeButton.clicked.connect(self.goToHome)
+
         self.profileButton = QPushButton(self)
         self.profileButton.setFixedSize(56, 56)
         self.profileButton.move(1323, 22)
@@ -61,7 +62,7 @@ class LamanDetail(QWidget):
                 background: #FFFFFF;
             }
         ''')
-        # self.profileButton.clicked.connected(go to profile edit)
+        self.profileButton.clicked.connect(self.goToEditProfile)
 
         # set preview penggalangan dana
         self.previewPg = QTextEdit(self)
@@ -151,8 +152,16 @@ class LamanDetail(QWidget):
             }
         ''')
         self.bayar.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        # self.submitPage.clicked.connect(send)
+        self.bayar.clicked.connect(self.goToLamanPembayaran)
 
+    def goToHome(self):
+        self.channel.emit("home")
+        
+    def goToEditProfile(self):
+        self.channel.emit("profile")
+
+    def goToLamanPembayaran(self):
+        self.channel.emit("pembayaran")
 
 # UNCOMMENT BELOW FOR TESTING  
 # app = QApplication(sys.argv)

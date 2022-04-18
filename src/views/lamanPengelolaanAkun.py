@@ -15,7 +15,7 @@ white = 'rgba(255, 255, 255, 1)'
 tulisan = 'rgba(37, 49, 60, 1)'
 
 class PengelolaanAkunWindow(QWidget):
-  switch = pyqtSignal(str, dict)
+  channel = pyqtSignal(str)
   
   def __init__ (self):
     super().__init__()
@@ -68,7 +68,7 @@ class PengelolaanAkunWindow(QWidget):
             color: black;
         }
     ''')
-    # self.returnButton.clicked.connected(go to laman utama)
+    # self.returnButton.clicked.connect(go to laman utama)
 
     # # profile
     # self.profilePicture = QLabel(self)
@@ -198,10 +198,18 @@ class PengelolaanAkunWindow(QWidget):
     ''')
     self.perbaruiButton.setFont(mulish24)
     self.perbaruiButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-    # self.perbaruiButton.clicked.connect(self.register)
+    # perbarui data
+    self.perbaruiButton.clicked.connect(self.register)
+  
+  def register(self):
+    # register 
+    self.goToMainWindow()
+  
+  def goToMainWindow(self):
+    self.channel.emit("mainWindow")
 
-if __name__ == "__main__":
-  app = QApplication(sys.argv)
-  window = PengelolaanAkunWindow()
-  window.show()
-  sys.exit(app.exec())
+# if __name__ == "__main__":
+  # app = QApplication(sys.argv)
+  # window = PengelolaanAkunWindow()
+  # window.show()
+  # sys.exit(app.exec())

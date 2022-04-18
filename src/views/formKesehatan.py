@@ -1,9 +1,10 @@
-from PyQt6.QtWidgets import QLabel, QTextEdit, QPushButton, QDialog, QFileDialog
+from PyQt6.QtWidgets import QLabel, QTextEdit, QPushButton, QWidget, QFileDialog
 from PyQt6.QtGui import QCursor
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, pyqtSignal
 
-class FormKesehatan(QDialog):
-    def __init__(self, value):
+class FormKesehatan(QWidget):
+    channel = pyqtSignal()
+    def __init__(self):
         super().__init__()
         
         # set overall page layout
@@ -205,7 +206,10 @@ class FormKesehatan(QDialog):
             }
         ''')
         self.submitFormK.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        # self.submitFormK.clicked.connect(send)
+        self.submitFormK.clicked.connect(self.goToRiwayatPenggalangan)
+
+    def goToRiwayatPenggalangan(self):
+        self.channel.emit()
 
     def openKTP(self):
         self.openFile("KTP")

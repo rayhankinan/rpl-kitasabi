@@ -1,20 +1,20 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QTextEdit, QPushButton, QLineEdit, QLabel
 from PyQt6.QtGui import QFont, QCursor, QImage, QPixmap
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import pyqtSignal, Qt
 import sys
 import urllib.request
+# from lamanUtama import LamanUtama
 
 
 class LamanEksplor(QWidget):
+    channel = pyqtSignal(str)
     def __init__(self):
         super().__init__()
         
         # set overall page layout
         self.setFixedSize(1440, 1024)
-        self.setWindowTitle("KITASABI - Pembayaran")
+        self.setWindowTitle("KITASABI - Eksplor")
         self.setStyleSheet('background-color: #F2F4F7')
-
-        # nanti janlup connect database
     
         # set fonts
         mulish16 = QFont()
@@ -44,7 +44,7 @@ class LamanEksplor(QWidget):
                 color: black;
             }
         ''')
-        # self.returnButton.clicked.connected(go to laman utama)
+        self.returnButton.clicked.connect(self.goToHome)
 
         self.profileButton = QPushButton(self)
         self.profileButton.setFixedSize(56, 56)
@@ -61,7 +61,7 @@ class LamanEksplor(QWidget):
                 background: #FFFFFF;
             }
         ''')
-        # self.profileButton.clicked.connected(go to profile edit)
+        self.profileButton.clicked.connect(self.goToEditProfil)
 
         # set search bar
         self.searchbar = QLineEdit(self)
@@ -129,7 +129,7 @@ class LamanEksplor(QWidget):
             }
         ''')
         self.bayar1.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        # self.submitPage.clicked.connect(send)
+        self.bayar1.clicked.connect(self.goToLamanDetail)
 
         # set preview penggalangan dana
         self.previewBg2 = QTextEdit(self)
@@ -164,11 +164,11 @@ class LamanEksplor(QWidget):
         self.previewImg2.setPixmap(pixmap2)
 
         # set bayar button
-        self.bayar2 = QPushButton(self)
-        self.bayar2.setText("Lihat Detail >")
-        self.bayar2.setFixedSize(165, 52)
-        self.bayar2.move(1020, 551)
-        self.bayar2.setStyleSheet('''
+        self.detail2 = QPushButton(self)
+        self.detail2.setText("Lihat Detail >")
+        self.detail2.setFixedSize(165, 52)
+        self.detail2.move(1020, 551)
+        self.detail2.setStyleSheet('''
             QPushButton {
                 border: 2px solid #5A4FF3;
                 border-radius: 20px;
@@ -183,8 +183,8 @@ class LamanEksplor(QWidget):
                 color: #5A4FF3;
             }
         ''')
-        self.bayar2.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        # self.submitPage.clicked.connect(send)
+        self.detail2.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.detail2.clicked.connect(self.goToLamanDetail)
 
     def search(self):
         print("yoyo")
@@ -192,6 +192,14 @@ class LamanEksplor(QWidget):
         self.previewText2.setText(self.searchbar.text())
         self.searchbar.clear()
         
+    def goToHome(self):
+        self.channel.emit("home")
+        
+    def goToEditProfil(self):
+        self.channel.emit("profile")
+
+    def goToLamanDetail(self):
+        self.channel.emit("detail")
 
 # UNCOMMENT BELOW FOR TESTING  
 # app = QApplication(sys.argv)

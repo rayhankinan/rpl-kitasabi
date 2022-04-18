@@ -1,12 +1,12 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox
-from PyQt6.QtGui import QFont, QPixmap, QCursor
+from PyQt6.QtGui import QFont, QCursor
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import pyqtSignal
 from custom_widgets import ClickableLabel
 
 class LoginWindow(QWidget):
-  switch = pyqtSignal(str, dict)
+  channel = pyqtSignal(str)
 
   def __init__(self):
     super().__init__()
@@ -117,47 +117,26 @@ class LoginWindow(QWidget):
     '''
     )
     registerHere.move(810, 350)
-    registerHere.clicked.connect(self.showRegisterWindow)
+    registerHere.clicked.connect(self.goToRegisterWindow)
     registerHere.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
-  def showRegisterWindow(self):
-    self.switch.emit("register", {})
+  def goToRegisterWindow(self):
+    self.channel.emit("register")
+  
+  def goToMainWindow(self):
+    self.channel.emit("mainWindow")
 
   def login(self):
-    c = self.conn.cursor()
-    c.execute(f"SELECT * FROM user WHERE (username = '{self.usernameEdit.text()}' OR email = '{self.usernameEdit.text()}') AND password = '{self.passwordEdit.text()}'")
-    res = c.fetchone()
-    if res == None:
-        msgBox = QMessageBox()
-        msgBox.setText("<p>Username/email and password combination not found!</p>")
-        msgBox.setWindowTitle("Login Failed")
-        msgBox.setIcon(QMessageBox.Icon.Warning)
-        msgBox.setStyleSheet("background-color: white")
-        msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
-        msgBox.exec()
-    else:
-        msgBox = QMessageBox()
-        msgBox.setText(f"<p>Hello, {res[0]}!</p>")
-        msgBox.setWindowTitle("Login Successful")
-        msgBox.setIcon(QMessageBox.Icon.Information)
-        msgBox.setStyleSheet("background-color: white")
-        msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
-        msgBox.exec()
-        user = {
-          "fullname": res[0],
-          "username": res[1],
-          "email": res[2],
-          "password": res[3],
-          "type": res[4]
-        }
+    # fetch
     self.clearForm()
+    self.goToMainWindow()
               
   def clearForm(self):
     self.passwordEdit.clear()
     self.usernameEdit.clear()
 
-if __name__ == "__main__":
-  app = QApplication(sys.argv)
-  window = LoginWindow()
-  window.show()
-  sys.exit(app.exec())
+# if __name__ == "__main__":
+#   # app = QApplication(sys.argv)
+#   # window = LoginWindow()
+#   # window.show()
+#   # sys.exit(app.exec())

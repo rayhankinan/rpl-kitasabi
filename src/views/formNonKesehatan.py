@@ -1,9 +1,11 @@
-from PyQt6.QtWidgets import QLabel, QTextEdit, QPushButton, QDialog
+from PyQt6.QtWidgets import QApplication, QLabel, QTextEdit, QPushButton, QWidget
 from PyQt6.QtGui import QCursor
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, pyqtSignal
+import sys
 
-class FormNonKesehatan(QDialog):
-    def __init__(self, value):
+class FormNonKesehatan(QWidget):
+    channel = pyqtSignal()
+    def __init__(self):
         super().__init__()
         
         # set overall page layout
@@ -189,6 +191,13 @@ class FormNonKesehatan(QDialog):
             }
         ''')
         self.submitFormNK.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        # self.submitFormNK.clicked.connect(send)
+        self.submitFormNK.clicked.connect(self.goToRiwayatPenggalangan)
 
-    
+    def goToRiwayatPenggalangan(self):
+        self.channel.emit()
+
+
+# app = QApplication(sys.argv)
+# window = FormNonKesehatan()
+# window.show()
+# sys.exit(app.exec())

@@ -1,11 +1,12 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QPushButton
 from PyQt6.QtGui import QCursor
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import pyqtSignal, Qt
 from formKesehatan import FormKesehatan
 from formNonKesehatan import FormNonKesehatan
 import sys
 
 class LamanPenggalangDana(QWidget):
+    channel = pyqtSignal(str)
     def __init__(self):
         super().__init__()
         
@@ -53,7 +54,7 @@ class LamanPenggalangDana(QWidget):
             }
         ''')
         self.nonkesButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.nonkesButton.clicked.connect(self.formNonKesehatan)
+        self.nonkesButton.clicked.connect(self.goToFormNonKesehatan)
 
         self.kesButton = QPushButton(self)
         self.kesButton.setFixedSize(402, 402)
@@ -74,17 +75,13 @@ class LamanPenggalangDana(QWidget):
             }
         ''')
         self.kesButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.kesButton.clicked.connect(self.formKesehatan)
+        self.kesButton.clicked.connect(self.goToFormKesehatan)
 
-    def formKesehatan(self):
-        self.switch = FormKesehatan(True)
-        self.switch.show()
-        self.close()
+    def goToFormKesehatan(self):
+        self.channel.emit("kesehatan")
 
-    def formNonKesehatan(self):
-        self.switch = FormNonKesehatan(True)
-        self.switch.show()
-        self.close()
+    def goToFormNonKesehatan(self):
+        self.channel.emit("nonkesehatan")
 
 
 # UNCOMMENT BELOW FOR TESTING  

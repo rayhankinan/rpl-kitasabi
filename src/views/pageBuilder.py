@@ -1,9 +1,10 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QTextEdit, QPushButton, QFileDialog, QCalendarWidget, QHBoxLayout
 from PyQt6.QtGui import QFont, QCursor
-from PyQt6.QtCore import Qt, QDate
+from PyQt6.QtCore import Qt, QDate, pyqtSignal
 import sys
 
 class PageBuilder(QWidget):
+    channel = pyqtSignal()
     def __init__(self):
         super().__init__()
         
@@ -33,12 +34,24 @@ class PageBuilder(QWidget):
             font-size: 36px;
             line-height: 24px;
         ''')
-        text.move(374, 93)
+        text.move(374, 53)
 
         # set fixed judul box
         self.judulFixed = QTextEdit(self)
         self.judulFixed.setEnabled(False)
-        self.judulFixed.setPlaceholderText("tolong keluarga ini membeli beras (ISI PAKE DATA DR DATABASE)")
+        self.judulFixed.setPlaceholderText("Kategori: Kesehatan")
+        self.judulFixed.setFixedSize(377, 47)
+        self.judulFixed.move(531, 142)
+        self.judulFixed.setStyleSheet('''
+            border: 2px solid #5A4FF3;
+            background-color: #DAE3EA;
+            padding: 10px 10px 10px 10px;
+        ''')
+
+        # set fixed judul box
+        self.judulFixed = QTextEdit(self)
+        self.judulFixed.setEnabled(False)
+        self.judulFixed.setPlaceholderText("Judul: tolong keluarga ini membeli beras (ISI PAKE DATA DR DATABASE)")
         self.judulFixed.setFixedSize(377, 47)
         self.judulFixed.move(531, 208)
         self.judulFixed.setStyleSheet('''
@@ -68,7 +81,7 @@ class PageBuilder(QWidget):
         # set fixed deskripsi box
         self.descFixed = QTextEdit(self)
         self.descFixed.setEnabled(False)
-        self.descFixed.setPlaceholderText("ibu jubaidah dan anaknya ilham ingin membeli beras tolonglah mereka membeli segelintir beras (ISI PAKE DATA DR DATABASE)")
+        self.descFixed.setPlaceholderText("Deskripsi: ibu jubaidah dan anaknya ilham ingin membeli beras tolonglah mereka membeli segelintir beras (ISI PAKE DATA DR DATABASE)")
         self.descFixed.setFixedSize(377, 163)
         self.descFixed.move(531, 339)
         self.descFixed.setStyleSheet('''
@@ -80,7 +93,7 @@ class PageBuilder(QWidget):
         # set fixed target donasi box
         self.targetFixed = QTextEdit(self)
         self.targetFixed.setEnabled(False)
-        self.targetFixed.setPlaceholderText("10 juta (ISI PAKE DATA DR DATABASE)")
+        self.targetFixed.setPlaceholderText("Target: 10 juta (ISI PAKE DATA DR DATABASE)")
         self.targetFixed.setFixedSize(377, 47)
         self.targetFixed.move(531, 521)
         self.targetFixed.setStyleSheet('''
@@ -124,7 +137,10 @@ class PageBuilder(QWidget):
             }
         ''')
         self.submitPage.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        # self.submitPage.clicked.connect(send)
+        self.submitPage.clicked.connect(self.goToRiwayatPenggalang)
+
+    def goToRiwayatPenggalang(self):
+        self.channel.emit()
 
     # get jpg file
     def openFile(self):
@@ -157,8 +173,8 @@ class PageBuilder(QWidget):
         self.setDeadline.setText(date.toString())
 
 
-# UNCOMMENT BELOW FOR TESTING  
-app = QApplication(sys.argv)
-window = PageBuilder()
-window.show()
-sys.exit(app.exec())
+# # UNCOMMENT BELOW FOR TESTING  
+# app = QApplication(sys.argv)
+# window = PageBuilder()
+# window.show()
+# sys.exit(app.exec())

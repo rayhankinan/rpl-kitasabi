@@ -15,7 +15,7 @@ white = 'rgba(255, 255, 255, 1)'
 tulisan = 'rgba(37, 49, 60, 1)'
 
 class RiwayatDonasiWindow(QWidget):
-  switch = pyqtSignal(str, dict)
+  channel = pyqtSignal()
 
   def __init__(self):
     super().__init__()
@@ -71,12 +71,13 @@ class RiwayatDonasiWindow(QWidget):
     ''')
     self.initializeRiwayatDonasi()
     self.setUpDisplayRiwayatDonasi()
+    self.returnButton.clicked.connect(self.goToLamanEksplor)
     
     # next button
     nextButton = QPushButton(self)
     nextButton.setText(">")
     nextButton.setFixedSize(40, 71)
-    nextButton.move(1336,626)
+    nextButton.move(1336,426)
     nextButton.setStyleSheet('''
       QPushButton {
         color: #ffffff;
@@ -96,7 +97,7 @@ class RiwayatDonasiWindow(QWidget):
     previousButton = QPushButton(self)
     previousButton.setText("<")
     previousButton.setFixedSize(40, 71)
-    previousButton.move(76,626)
+    previousButton.move(76,426)
     previousButton.setStyleSheet('''
       QPushButton {
         color: #ffffff;
@@ -142,12 +143,12 @@ class RiwayatDonasiWindow(QWidget):
     self.labelRiwayatDonasi.setFont(mulish33_bold)
     self.labelRiwayatDonasi.setFixedSize(433,37)
     self.labelRiwayatDonasi.setStyleSheet('background-color: rgba(187, 200, 212, 1)')
-    self.labelRiwayatDonasi.move(452, 196)
+    self.labelRiwayatDonasi.move(452, 96)
 
     # set background
     self.cardBackground = QLabel(self)
     self.cardBackground.setFixedSize(1220, 608)
-    self.cardBackground.move(116, 358)
+    self.cardBackground.move(116, 158)
     self.cardBackground.setStyleSheet('background-color: rgba(187, 200, 212, 1)')
     
     self.riwayatDonasiCard = []
@@ -157,20 +158,20 @@ class RiwayatDonasiWindow(QWidget):
       self.riwayatDonasiCard[i]["bg_list"] = QLabel(self)
       self.riwayatDonasiCard[i]["bg_list"].setFixedSize(956, 158)
       self.riwayatDonasiCard[i]["bg_list"].setStyleSheet(f'background-color: {graybg}')
-      self.riwayatDonasiCard[i]["bg_list"].move(253,399+i *185)
+      self.riwayatDonasiCard[i]["bg_list"].move(253,199+i *185)
         # Preview penggalangan dana +i *185
       self.riwayatDonasiCard[i]["preview_penggalangan_dana"] = QLabel(self)
       self.riwayatDonasiCard[i]["preview_penggalangan_dana"].setText("Judul Penggalangan Dana")
       self.riwayatDonasiCard[i]["preview_penggalangan_dana"].setStyleSheet('color: rgba(37, 49, 60, 1)')
       self.riwayatDonasiCard[i]["preview_penggalangan_dana"].setStyleSheet('background-color: #F2F4F7')
-      self.riwayatDonasiCard[i]["preview_penggalangan_dana"].move(425, 433 +i*185) 
+      self.riwayatDonasiCard[i]["preview_penggalangan_dana"].move(425, 233 +i*185) 
       self.riwayatDonasiCard[i]["preview_penggalangan_dana"].setFont(mulish24)
       # nominal penggalangan dana
       self.riwayatDonasiCard[i]["nominal"] = QLabel(self)
       self.riwayatDonasiCard[i]["nominal"].setText("Nominal")
       self.riwayatDonasiCard[i]["nominal"].setStyleSheet('color: rgba(37, 49, 60, 1)')
       self.riwayatDonasiCard[i]["nominal"].setStyleSheet('background-color: #F2F4F7')
-      self.riwayatDonasiCard[i]["nominal"].move(425, 482 +i*185)
+      self.riwayatDonasiCard[i]["nominal"].move(425, 282 +i*185)
       self.riwayatDonasiCard[i]["nominal"].setFont(mulish24)
       # foto          
       self.url2 = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
@@ -179,7 +180,7 @@ class RiwayatDonasiWindow(QWidget):
       self.image2.loadFromData(self.data2)
       self.riwayatDonasiCard[i]["previewImg2"] = QLabel(self)
       self.riwayatDonasiCard[i]["previewImg2"].setFixedSize(117, 128)
-      self.riwayatDonasiCard[i]["previewImg2"].move(269, 413 +i*185)
+      self.riwayatDonasiCard[i]["previewImg2"].move(269, 213 +i*185)
       self.riwayatDonasiCard[i]["previewImg2"].setScaledContents(True)
       self.pixmap2 = QPixmap(self.image2)
       self.riwayatDonasiCard[i]["previewImg2"].setPixmap(self.pixmap2)
@@ -214,9 +215,11 @@ class RiwayatDonasiWindow(QWidget):
     # else:
     #     print("No more RiwayatDonasi")
 
+  def goToLamanEksplor(self):
+    self.channel.emit()
   
-if __name__ == "__main__":
-  app = QApplication(sys.argv)
-  window = RiwayatDonasiWindow()
-  window.show()
-  sys.exit(app.exec())
+# if __name__ == "__main__":
+#   app = QApplication(sys.argv)
+#   window = RiwayatDonasiWindow()
+#   window.show()
+#   sys.exit(app.exec())

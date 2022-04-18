@@ -15,7 +15,7 @@ white = 'rgba(255, 255, 255, 1)'
 tulisan = 'rgba(37, 49, 60, 1)'
 
 class RiwayatPenggalanganWindow(QWidget):
-  switch = pyqtSignal(str, dict)
+  channel = pyqtSignal(str)
 
   def __init__(self):
     super().__init__()
@@ -71,12 +71,13 @@ class RiwayatPenggalanganWindow(QWidget):
     ''')
     self.initializeRiwayatPenggalangan()
     self.setUpDisplayRiwayatPenggalangan()
+    self.returnButton.clicked.connect(self.goToLamanEksplor)
     
     # next button
     nextButton = QPushButton(self)
     nextButton.setText(">")
     nextButton.setFixedSize(40, 71)
-    nextButton.move(1339,666)
+    nextButton.move(1339,466)
     nextButton.setStyleSheet('''
       QPushButton {
         color: #ffffff;
@@ -96,7 +97,7 @@ class RiwayatPenggalanganWindow(QWidget):
     previousButton = QPushButton(self)
     previousButton.setText("<")
     previousButton.setFixedSize(40, 71)
-    previousButton.move(84,673)
+    previousButton.move(84,466)
     previousButton.setStyleSheet('''
       QPushButton {
         color: #ffffff;
@@ -140,7 +141,7 @@ class RiwayatPenggalanganWindow(QWidget):
     self.labelRiwayatPenggalanganDana.setFont(mulish33_bold)
     self.labelRiwayatPenggalanganDana.setFixedSize(768,73)
     self.labelRiwayatPenggalanganDana.setStyleSheet('background-color: rgba(187, 200, 212, 1)')
-    self.labelRiwayatPenggalanganDana.move(355, 172)
+    self.labelRiwayatPenggalanganDana.move(355, 72)
 
     # Mulai Penggalangan Dana Button
     # tombol mulai penggalangan dana
@@ -148,7 +149,7 @@ class RiwayatPenggalanganWindow(QWidget):
     self.mulai_penggalangan_button.setText("Mulai Penggalangan Dana")
     self.labelRiwayatPenggalanganDana.setAlignment(Qt.AlignmentFlag.AlignCenter)
     self.mulai_penggalangan_button.setFixedSize(321, 56)
-    self.mulai_penggalangan_button.move(602,289)
+    self.mulai_penggalangan_button.move(602,169)
     self.mulai_penggalangan_button.setStyleSheet('''
       QPushButton {
         color: #ffffff;
@@ -162,14 +163,12 @@ class RiwayatPenggalanganWindow(QWidget):
     ''')
     self.mulai_penggalangan_button.setFont(mulish24)
     self.mulai_penggalangan_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-    # self.mulai_penggalangan_button.clicked.connect(self.showPenggalanganDanaWindow)
-    
-    
+    self.mulai_penggalangan_button.clicked.connect(self.goToLamanPenggalang)
     
     # set background
     self.cardBackground = QLabel(self)
-    self.cardBackground.setFixedSize(1220, 546)
-    self.cardBackground.move(124, 440)
+    self.cardBackground.setFixedSize(1220, 506)
+    self.cardBackground.move(124, 270)
     self.cardBackground.setStyleSheet('background-color: rgba(187, 200, 212, 1)')
     
     self.penggalanganDanaCard = []
@@ -179,20 +178,20 @@ class RiwayatPenggalanganWindow(QWidget):
         self.penggalanganDanaCard[i]["bg_list"] = QLabel(self)
         self.penggalanganDanaCard[i]["bg_list"].setFixedSize(956, 144)
         self.penggalanganDanaCard[i]["bg_list"].setStyleSheet(f'background-color: {graybg}')
-        self.penggalanganDanaCard[i]["bg_list"].move(271,474 + i * 167)
+        self.penggalanganDanaCard[i]["bg_list"].move(271,284 + i * 167)
         # Preview penggalangan dana +i *185
         self.penggalanganDanaCard[i]["judul_penggalangan_dana"] = QLabel(self)
         self.penggalanganDanaCard[i]["judul_penggalangan_dana"].setText("Judul Penggalangan Dana")
         self.penggalanganDanaCard[i]["judul_penggalangan_dana"].setStyleSheet('color: rgba(37, 49, 60, 1)')
         self.penggalanganDanaCard[i]["judul_penggalangan_dana"].setStyleSheet('background-color: #F2F4F7')
-        self.penggalanganDanaCard[i]["judul_penggalangan_dana"].move(443, 505+ i * 167) 
+        self.penggalanganDanaCard[i]["judul_penggalangan_dana"].move(443, 315+ i * 167) 
         self.penggalanganDanaCard[i]["judul_penggalangan_dana"].setFont(mulish24)
         # nominal penggalangan dana
         self.penggalanganDanaCard[i]["nominal"] = QLabel(self)
         self.penggalanganDanaCard[i]["nominal"].setText("Nominal")
         self.penggalanganDanaCard[i]["nominal"].setStyleSheet('color: rgba(37, 49, 60, 1)')
         self.penggalanganDanaCard[i]["nominal"].setStyleSheet('background-color: #F2F4F7')
-        self.penggalanganDanaCard[i]["nominal"].move(443, 549+ i * 167)
+        self.penggalanganDanaCard[i]["nominal"].move(443, 359+ i * 167)
         self.penggalanganDanaCard[i]["nominal"].setFont(mulish24)
         # foto          
         url2 = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
@@ -201,7 +200,7 @@ class RiwayatPenggalanganWindow(QWidget):
         image2.loadFromData(data2)
         self.penggalanganDanaCard[i]["previewImg2"] = QLabel(self)
         self.penggalanganDanaCard[i]["previewImg2"].setFixedSize(117, 117)
-        self.penggalanganDanaCard[i]["previewImg2"].move(287, 487+ i * 167)
+        self.penggalanganDanaCard[i]["previewImg2"].move(287, 297+ i * 167)
         self.penggalanganDanaCard[i]["previewImg2"].setScaledContents(True)
         pixmap2 = QPixmap(image2)
         self.penggalanganDanaCard[i]["previewImg2"].setPixmap(pixmap2)
@@ -209,7 +208,7 @@ class RiwayatPenggalanganWindow(QWidget):
         self.penggalanganDanaCard[i]["cairkan_button"] = QPushButton(self)
         self.penggalanganDanaCard[i]["cairkan_button"].setText("Cairkan")
         self.penggalanganDanaCard[i]["cairkan_button"].setFixedSize(165, 56)
-        self.penggalanganDanaCard[i]["cairkan_button"].move(990, 518+ i * 167)
+        self.penggalanganDanaCard[i]["cairkan_button"].move(990, 328+ i * 167)
         self.penggalanganDanaCard[i]["cairkan_button"].setFont(mulish24)
         self.penggalanganDanaCard[i]["cairkan_button"].setStyleSheet('''
             QPushButton {
@@ -223,6 +222,18 @@ class RiwayatPenggalanganWindow(QWidget):
             }
         ''')
         self.penggalanganDanaCard[i]["cairkan_button"].setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.penggalanganDanaCard[i]["cairkan_button"].clicked.connect(self.cairkan)
+  
+  def goToLamanEksplor(self):
+    self.channel.emit("eksplor")
+  
+  def cairkan(self):
+    pass
+    # do cair
+
+  def goToLamanPenggalang(self):
+    self.channel.emit("penggalang")
+  
   def setUpDisplayRiwayatPenggalangan(self):
     start = self.pageRiwayatPenggalangan * 3
     # for i in range(3):
@@ -254,8 +265,8 @@ class RiwayatPenggalanganWindow(QWidget):
     #     print("No more RiwayatPenggalangan")
     
     
-if __name__ == "__main__":
-  app = QApplication(sys.argv)
-  window = RiwayatPenggalanganWindow()
-  window.show()
-  sys.exit(app.exec())
+# if __name__ == "__main__":
+#   app = QApplication(sys.argv)
+#   window = RiwayatPenggalanganWindow()
+#   window.show()
+#   sys.exit(app.exec())

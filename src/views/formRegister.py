@@ -11,7 +11,7 @@ white = 'rgba(255, 255, 255, 1)'
 tulisan = 'rgba(37, 49, 60, 1)'
 
 class RegisterWindow(QWidget):
-  switch = pyqtSignal()
+  channel = pyqtSignal()
 
   def __init__(self):
       super().__init__()
@@ -67,7 +67,7 @@ class RegisterWindow(QWidget):
       '''
       )
       masukDisini.move(770, 273)
-      masukDisini.clicked.connect(self.showLoginWindow)
+      masukDisini.clicked.connect(self.goToLoginWindow)
       masukDisini.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
       
       # Full name input
@@ -168,8 +168,8 @@ class RegisterWindow(QWidget):
       self.registerButton.clicked.connect(self.register)
 
   
-  def showLoginWindow(self):
-      self.switch.emit()
+  def goToLoginWindow(self):
+      self.channel.emit()
 
   def register(self):
       # validasi masukan tidak boleh kosong
@@ -246,10 +246,10 @@ class RegisterWindow(QWidget):
       self.telphoneEdit.clear()
       self.confirmPwEdit.clear()
       # Emit signal to controller
-      self.switch.emit()
+      self.channel.emit()
 
-if __name__ == "__main__":
-  app = QApplication(sys.argv)
-  window = RegisterWindow()
-  window.show()
-  sys.exit(app.exec())
+# if __name__ == "__main__":
+#   # app = QApplication(sys.argv)
+#   # window = RegisterWindow()
+#   # window.show()
+#   # sys.exit(app.exec())
