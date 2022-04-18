@@ -97,7 +97,7 @@ class Laman():
     # INITIALIZE CURSOR
     cursor = mysql.connection.cursor()
     # SEACH Judul CONTAINS queryJudul
-    cursor.execute("SELECT * FROM Laman WHERE Judul LIKE %s", (f"%{queryJudul}%", ))
+    cursor.execute("SELECT * FROM Laman WHERE Judul LIKE %s", (f"%%{queryJudul}%%", ))
 
     dataLaman = cursor.fetchall()
 

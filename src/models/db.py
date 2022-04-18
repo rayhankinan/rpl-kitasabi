@@ -84,7 +84,7 @@ with app.app_context():
                     Judul VARCHAR(255) NOT NULL,\
                     Deskripsi VARCHAR(255) NOT NULL,\
                     Target  BIGINT UNSIGNED,\
-                    Kategori VARCHAR(255) NOT NULL,\
+                    Kategori ENUM('Kesehatan', 'Lainnya') NOT NULL,\
                     Deadline DATE NOT NULL,\
                     Timestamp DATETIME NOT NULL,\
                     PRIMARY KEY (IDLaman),\
