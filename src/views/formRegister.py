@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButto
 from PyQt6.QtGui import QFont, QPixmap, QCursor
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import pyqtSignal
-from custom_widgets import ClickableLabel
+from views.custom_widgets import ClickableLabel
 
 graybg = '#F2F4F7'
 ungu = 'rgba(90, 79, 243, 1)'
@@ -305,8 +305,8 @@ class RegisterWindow(QWidget):
     self.channel.emit()
 
 
-if __name__ == "__main__":
-  app = QApplication(sys.argv)
-  window = RegisterWindow()
-  window.show()
-  sys.exit(app.exec())
+# if __name__ == "__main__":
+#   app = QApplication(sys.argv)
+#   window = RegisterWindow()
+#   window.show()
+#   sys.exit(app.exec())
