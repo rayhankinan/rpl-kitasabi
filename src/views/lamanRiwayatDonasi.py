@@ -19,6 +19,7 @@ class RiwayatDonasiWindow(QWidget):
 
   def __init__(self):
     super().__init__()
+    self.pageRiwayatDonasi = 0
     self.setUpRiwayatDonasiWindow()
     
   def setUpRiwayatDonasiWindow(self):
@@ -68,8 +69,72 @@ class RiwayatDonasiWindow(QWidget):
             color: black;
         }
     ''')
-  
+    self.initializeRiwayatDonasi()
+    self.setUpDisplayRiwayatDonasi()
+    
+    # next button
+    nextButton = QPushButton(self)
+    nextButton.setText(">")
+    nextButton.setFixedSize(40, 71)
+    nextButton.move(1336,626)
+    nextButton.setStyleSheet('''
+      QPushButton {
+        color: #ffffff;
+        background-color: #3643fc;
+        border: none;
+        border-radius: 12px;
+      }
+      QPushButton:hover {
+        background-color: #6b75ff;
+      }
+    ''')
+    nextButton.setFont(mulish44)
+    nextButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+    nextButton.clicked.connect(self.nextRiwayatDonasi())
+    
+    # previous button
+    previousButton = QPushButton(self)
+    previousButton.setText("<")
+    previousButton.setFixedSize(40, 71)
+    previousButton.move(76,626)
+    previousButton.setStyleSheet('''
+      QPushButton {
+        color: #ffffff;
+        background-color: #3643fc;
+        border: none;
+        border-radius: 12px;
+      }
+      QPushButton:hover {
+        background-color: #6b75ff;
+      }
+    ''')
+    previousButton.setFont(mulish44)
+    previousButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+    previousButton.clicked.connect(self.previousRiwayatDonasi())
+      
     # label riwayat donasi
+    
+  def initializeRiwayatDonasi(self):
+    # set up font
+    mulish16 = QFont()
+    mulish16.setFamily("Mulish"); mulish16.setPixelSize(16)
+    
+    mulish24 = QFont()
+    mulish24.setFamily("Mulish"); mulish24.setPixelSize(24)
+    
+    mulish24_bold = QFont()
+    mulish24_bold.setFamily("Mulish"); mulish24.setPixelSize(24)
+    mulish24_bold.setBold(True)
+    
+    mulish33_bold = QFont()
+    mulish33_bold.setFamily("Mulish"); mulish33_bold.setPixelSize(33)
+    mulish33_bold.setBold(True)
+        
+    mulish44 = QFont()
+    mulish44.setFamily("Mulish"); mulish44.setPixelSize(44)
+    mulish44.setBold(True)  
+    
+    
     self.labelRiwayatDonasi = QLabel(self)
     self.labelRiwayatDonasi.setText("Riwayat Donasi")
     # align center text
@@ -108,18 +173,48 @@ class RiwayatDonasiWindow(QWidget):
       self.riwayatDonasiCard[i]["nominal"].move(425, 482 +i*185)
       self.riwayatDonasiCard[i]["nominal"].setFont(mulish24)
       # foto          
-      url2 = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
-      data2 = urllib.request.urlopen(url2).read()
-      image2 = QImage()
-      image2.loadFromData(data2)
+      self.url2 = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
+      self.data2 = urllib.request.urlopen(self.url2).read()
+      self.image2 = QImage()
+      self.image2.loadFromData(self.data2)
       self.riwayatDonasiCard[i]["previewImg2"] = QLabel(self)
       self.riwayatDonasiCard[i]["previewImg2"].setFixedSize(117, 128)
       self.riwayatDonasiCard[i]["previewImg2"].move(269, 413 +i*185)
       self.riwayatDonasiCard[i]["previewImg2"].setScaledContents(True)
-      pixmap2 = QPixmap(image2)
-      self.riwayatDonasiCard[i]["previewImg2"].setPixmap(pixmap2)
-    
-    
+      self.pixmap2 = QPixmap(self.image2)
+      self.riwayatDonasiCard[i]["previewImg2"].setPixmap(self.pixmap2)
+
+  def setUpDisplayRiwayatDonasi(self):
+    # start = self.pageRiwayatDonasi * 3
+    # for i in range(3):
+    #   # if start + i < len(self.databaseRiwayatDonasi):
+    #     # Preview penggalangan dana +i *185
+    #     self.riwayatDonasiCard[i]["preview_penggalangan_dana"].setText("Judul Penggalangan Dana")
+    #     # nominal penggalangan dana
+    #     self.riwayatDonasiCard[i]["nominal"].setText("Nominal")
+    #     # foto          
+    #     self.url2 = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'   
+      
+  
+  def nextRiwayatDonasi(self):
+    print("Right button clicked")
+    # if (self.pageRiwayatDonasi + 1 < (len(self.RiwayatDonasi)//3)):
+    #     self.pageRiwayatDonasi += 1
+    #     print("page: ", self.pageRiwayatDonasi)
+    #     self.setUpDisplayRiwayatDonasi()
+    # else:
+    #     print("No more RiwayatDonasi")
+
+  def previousRiwayatDonasi(self):
+    print("Left button clicked")
+    # if (self.pageRiwayatDonasi > 0):
+    #     self.pageRiwayatDonasi -= 1
+    #     print("page: ", self.pageRiwayatDonasi)
+    #     self.setUpDisplayRiwayatDonasi()
+    # else:
+    #     print("No more RiwayatDonasi")
+
+  
 if __name__ == "__main__":
   app = QApplication(sys.argv)
   window = RiwayatDonasiWindow()
