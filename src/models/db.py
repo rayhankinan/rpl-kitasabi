@@ -84,10 +84,9 @@ with app.app_context():
                     Judul VARCHAR(255) NOT NULL,\
                     Deskripsi VARCHAR(255) NOT NULL,\
                     Target  BIGINT UNSIGNED,\
-                    TotalDonasi BIGINT UNSIGNED, \
-                    Kategori VARCHAR(255) NOT NULL,\
+                    Kategori ENUM('Kesehatan', 'Lainnya') NOT NULL,\
                     Deadline DATE NOT NULL,\
-                    Timestamp DATE NOT NULL,\
+                    Timestamp DATETIME NOT NULL,\
                     PRIMARY KEY (IDLaman),\
                     FOREIGN KEY (IDPenggalang) REFERENCES Akun (IDPengguna) ON DELETE CASCADE,\
                     FOREIGN KEY (IDAutentikasi) REFERENCES Permintaan (IDPermintaan) ON DELETE CASCADE)")

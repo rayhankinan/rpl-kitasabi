@@ -23,8 +23,8 @@ class PermintaanController:
       idPengguna = int(dataAkun["ID"])
 
       # TODO : get IDPengguna
-      permintaanKesehatan = PermintaanKesehatan(idPengguna, judul, deskripsi, target, fotoKTP, fotoKK, fotoKetMedis, fotoPemeriksaan, tujuan, namaPasien)
-      return "Permintaan Kesehatan Created", 201
+      PermintaanKesehatan(idPengguna, judul, deskripsi, target, fotoKTP, fotoKK, fotoKetMedis, fotoPemeriksaan, tujuan, namaPasien)
+      return "Created", 201
 
     except Exception as e:
       return str(e), 400
@@ -45,8 +45,8 @@ class PermintaanController:
       idPengguna = int(dataAkun["ID"])
 
       # TODO : get IDPengguna
-      permintaanLainnya = PermintaanLainnya(idPengguna, judul, deskripsi, target, instansi, ig, twt, fb, penerima)
-      return "Permintaan Lainnya Created", 201
+      PermintaanLainnya(idPengguna, judul, deskripsi, target, instansi, ig, twt, fb, penerima)
+      return "Created", 201
 
     except Exception as e:
       return str(e), 400
@@ -58,7 +58,8 @@ class PermintaanController:
       permintaanKesehatan = PermintaanKesehatan.getByIDPermintaanKesehatan(idPermintaanKesehatan)
       permintaanKesehatan.setStatusAutentikasi(True)
 
-      return "Permintaan Kesehatan Approved", 201
+      return "OK", 200
+
     except Exception as e:
       return str(e), 400
 
@@ -69,7 +70,8 @@ class PermintaanController:
       permintaanLainnya = PermintaanLainnya.getByIDPermintaanLainnya(idPermintaanLainnya)
       permintaanLainnya.setStatusAutentikasi(True)
 
-      return "Permintaan Kesehatan Approved", 201
+      return "OK", 200
+
     except Exception as e:
       return str(e), 400
 
@@ -83,19 +85,19 @@ class PermintaanController:
       riwayatKesehatan = PermintaanKesehatan.getByIDPengguna(idPengguna)
       riwayatLainnya = PermintaanLainnya.getByIDPengguna(idPengguna)
 
-      if (riwayatKesehatan is not None):
+      if riwayatKesehatan is not None:
         for kes in riwayatKesehatan:
           result.append({"id-permintaan" : kes.getIDPermintaan(), "id-pengguna": kes.getIDPengguna(), "judul": kes.getJudul(), "deskripsi": kes.getDeskripsi(), "target": kes.getTarget(), "status-autentikasi": kes.getStatusAutentikasi(), "foto-ktp": kes.getFotoKTP(), "foto-kk": kes.getFotoKK(), "foto-ket-medis": kes.getFotoKetMedis(), "foto-pemeriksaan": kes.getFotoPemeriksaan(), "tujuan": kes.getTujuan(), "nama-pasien": kes.getNamaPasien()})
 
-      if (riwayatLainnya is not None):
+      if riwayatLainnya is not None:
         for lain in riwayatLainnya:
           result.append({"id-permintaan" : lain.getIDPermintaan(), "id-pengguna": lain.getIDPengguna(), "judul": lain.getJudul(), "deskripsi": lain.getDeskripsi(), "target": lain.getTarget(), "status-autentikasi": lain.getStatusAutentikasi(), "instansi" : lain.getInstansi(), "akun-instagram": lain.getAkunInstagram(), "akun-twitter": lain.getAkunTwitter(), "akun-facebook": lain.getAkunFacebook(), "nama-penerima": lain.getNamaPenerima()})
 
-      if (riwayatKesehatan == None and riwayatLainnya == None):
+      if riwayatKesehatan is None and riwayatLainnya is None:
         return jsonify({}), 200
+
       else:
         return jsonify(result), 200
 
     except Exception as e:
       return str(e), 400
-

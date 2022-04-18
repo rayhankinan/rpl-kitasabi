@@ -2,38 +2,39 @@ from datetime import datetime
 
 from models.db import mysql
 from models.cdn import bucket
+import os
 
 class Laman():
-  
   # CONSTRUCTOR
-  def __init__(self, idAutentikasi, idPenggalang, judul, deskripsi, target, totalDonasi, kategori, deadline, foto):
+  def __init__(self, idAutentikasi, idPenggalang, judul, deskripsi, target, kategori, deadline, foto):
     self.idAutentikasi = idAutentikasi
     self.idPenggalang = idPenggalang
     self.judul = judul
     self.deskripsi = deskripsi
     self.target = target
-    self.totalDonasi = totalDonasi
     self.kategori = kategori
     self.deadline = deadline
-    self.timestamp = datetime.now().strftime("%Y-%m-%d")
+    self.timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     # CHECK FOTO 
-    if len(foto) == 0:
-      self.foto = None
-    else:
-      listFoto = []
-      for f in foto:
-        blob = bucket.blob(f.filename)
-        blob.upload_from_string(f.stream.read())
-        listFoto.append(blob.public_url)
-      self.foto = listFoto
+    listFoto = []
+    for f in foto:
+      f.seek(0, os.SEEK_END)
+      if f.tell() == 0:
+        raise Exception("Foto is needed!")
+
+      blob = bucket.blob(f.filename)
+      blob.upload_from_string(f.stream.read())
+      listFoto.append(blob.public_url)
+
+    self.foto = listFoto
 
     # INISIALIZE CURSOR
     cursor = mysql.connection.cursor()
 
     # INSERT Laman INTO DATABASE
-    cursor.execute("INSERT INTO Laman (IDAutentikasi, IDPenggalang, Judul, Deskripsi, Target, TotalDonasi, Kategori, Deadline, Timestamp) \
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", (self.idAutentikasi, self.idPenggalang, self.judul, self.deskripsi, self.target, self.totalDonasi, self.kategori, self.deadline, self.timestamp))
+    cursor.execute("INSERT INTO Laman (IDAutentikasi, IDPenggalang, Judul, Deskripsi, Target, Kategori, Deadline, Timestamp) \
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (self.idAutentikasi, self.idPenggalang, self.judul, self.deskripsi, self.target, self.kategori, self.deadline, self.timestamp))
 
     self.idLaman = cursor.lastrowid
 
@@ -53,7 +54,7 @@ class Laman():
     cursor = mysql.connection.cursor()
 
     # SEARCH IDLaman
-    cursor.execute("SELECT IDAutentikasi, IDPenggalang, Judul, Deskripsi, Target, TotalDonasi, Kategori, Deadline, Timestamp \
+    cursor.execute("SELECT IDAutentikasi, IDPenggalang, Judul, Deskripsi, Target, Kategori, Deadline, Timestamp \
                     FROM Laman \
                     WHERE IDLaman = %s", (idLaman, ))
     
@@ -66,7 +67,7 @@ class Laman():
     
     dataFoto = cursor.fetchall()
 
-    idAutentikasi, idPenggalang, judul, deskripsi, target, totalDonasi, kategori, deadline, timestamp = dataLaman
+    idAutentikasi, idPenggalang, judul, deskripsi, target, kategori, deadline, timestamp = dataLaman
 
     # initialize class
     self = cls.__new__(cls)
@@ -76,16 +77,15 @@ class Laman():
     self.judul = judul                  #4
     self.deskripsi = deskripsi          #5
     self.target = target                #6
-    self.totalDonasi = totalDonasi      #7
-    self.kategori = kategori            #8
-    self.deadline = deadline            #9
-    self.timestamp = timestamp          #10
+    self.kategori = kategori            #7
+    self.deadline = deadline            #8
+    self.timestamp = timestamp          #9
 
     listFoto = []
     for foto in dataFoto:
       listFoto.append(foto)
 
-    self.foto = listFoto                #11
+    self.foto = listFoto                #10
 
     # CLOSE AND RETURN
     cursor.close()
@@ -97,17 +97,18 @@ class Laman():
     # INITIALIZE CURSOR
     cursor = mysql.connection.cursor()
     # SEACH Judul CONTAINS queryJudul
-    cursor.execute("SELECT * FROM Laman WHERE Judul LIKE %s", ("%%" + queryJudul + "%%", ))
+    cursor.execute("SELECT * FROM Laman WHERE Judul LIKE %s", (f"%%{queryJudul}%%", ))
 
     dataLaman = cursor.fetchall()
 
     if len(dataLaman) == 0:
       cursor.close()
       return None
+
     else:
       listLaman = []
       for data in dataLaman:
-        idLaman, idAutentikasi, idPenggalang, judul, deskripsi, target, totalDonasi, kategori, deadline, timestamp = data
+        idLaman, idAutentikasi, idPenggalang, judul, deskripsi, target, kategori, deadline, timestamp = data
 
         # SEARCH Foto by IDLaman
         cursor.execute("SELECT Foto \
@@ -124,16 +125,15 @@ class Laman():
         self.judul = judul                  #4
         self.deskripsi = deskripsi          #5
         self.target = target                #6
-        self.totalDonasi = totalDonasi      #7
-        self.kategori = kategori            #8
-        self.deadline = deadline            #9
-        self.timestamp = timestamp          #10
+        self.kategori = kategori            #7
+        self.deadline = deadline            #8
+        self.timestamp = timestamp          #9
 
         listFoto = []
         for foto in dataFoto:
           listFoto.append(foto)
 
-        self.foto = listFoto                #11
+        self.foto = listFoto                #10
         listLaman.append(self)
 
       # CLOSE AND RETURN
@@ -153,10 +153,11 @@ class Laman():
     if len(dataLaman) == 0:
       cursor.close()
       return None
+      
     else:
       listLaman = []
       for data in dataLaman:
-        idLaman, idAutentikasi, idPenggalang, judul, deskripsi, target, totalDonasi, kategori, deadline, timestamp = data
+        idLaman, idAutentikasi, idPenggalang, judul, deskripsi, target, kategori, deadline, timestamp = data
 
         # SEARCH Foto by IDLaman
         cursor.execute("SELECT Foto \
@@ -173,16 +174,15 @@ class Laman():
         self.judul = judul                  #4
         self.deskripsi = deskripsi          #5
         self.target = target                #6
-        self.totalDonasi = totalDonasi      #7
-        self.kategori = kategori            #8
-        self.deadline = deadline            #9
-        self.timestamp = timestamp          #10
+        self.kategori = kategori            #7
+        self.deadline = deadline            #8
+        self.timestamp = timestamp          #9
 
         listFoto = []
         for foto in dataFoto:
           listFoto.append(foto)
 
-        self.foto = listFoto                #11
+        self.foto = listFoto                #10
         listLaman.append(self)
 
       # CLOSE AND RETURN
@@ -207,7 +207,7 @@ class Laman():
     else:
       listLaman = []
       for data in dataLaman:
-        idLaman, idAutentikasi, idPenggalang, judul, deskripsi, target, totalDonasi, kategori, deadline, timestamp = data
+        idLaman, idAutentikasi, idPenggalang, judul, deskripsi, target, kategori, deadline, timestamp = data
 
         # SEARCH Foto by IDLaman
         cursor.execute("SELECT Foto \
@@ -224,16 +224,15 @@ class Laman():
         self.judul = judul                  #4
         self.deskripsi = deskripsi          #5
         self.target = target                #6
-        self.totalDonasi = totalDonasi      #7
-        self.kategori = kategori            #8
-        self.deadline = deadline            #9
-        self.timestamp = timestamp          #10
+        self.kategori = kategori            #7
+        self.deadline = deadline            #8
+        self.timestamp = timestamp          #9
 
         listFoto = []
         for foto in dataFoto:
           listFoto.append(foto)
 
-        self.foto = listFoto                #11
+        self.foto = listFoto                #10
         listLaman.append(self)
 
       # CLOSE AND RETURN
@@ -258,7 +257,7 @@ class Laman():
     else:
       listLaman = []
       for data in dataLaman:
-        idLaman, idAutentikasi, idPenggalang, judul, deskripsi, target, totalDonasi, kategori, deadline, timestamp = data
+        idLaman, idAutentikasi, idPenggalang, judul, deskripsi, target, kategori, deadline, timestamp = data
 
         # SEARCH Foto by IDLaman
         cursor.execute("SELECT Foto \
@@ -275,16 +274,15 @@ class Laman():
         self.judul = judul                  #4
         self.deskripsi = deskripsi          #5
         self.target = target                #6
-        self.totalDonasi = totalDonasi      #7
-        self.kategori = kategori            #8
-        self.deadline = deadline            #9
-        self.timestamp = timestamp          #10
+        self.kategori = kategori            #7
+        self.deadline = deadline            #8
+        self.timestamp = timestamp          #9
 
         listFoto = []
         for foto in dataFoto:
           listFoto.append(foto)
 
-        self.foto = listFoto                #11
+        self.foto = listFoto                #10
         listLaman.append(self)
 
       # CLOSE AND RETURN
@@ -310,9 +308,6 @@ class Laman():
   def getTarget(self):
     return self.judul
 
-  def getTotalDonasi(self):
-    return self.totalDonasi
-
   def getKategori(self):
     return self.kategori
 
@@ -326,20 +321,6 @@ class Laman():
     return self.foto
 
   # ATTRIBUTE SETTER
-  def setTotalDonasi(self, totalDonasi):
-    self.totalDonasi = totalDonasi
-
-    # INITIALIZE CURSOR
-    cursor = mysql.connection.cursor()
-
-    # UPDATE TotalDonasi
-    cursor.execute("UPDATE Laman \
-                    SET TotalDonasi = %s \
-                    WHERE IDLaman = %s", (self.totalDonasi, self.idLaman))
-
-    # CLOSE AND COMMIT
-    mysql.connection.commit()
-    cursor.close()
 
   def setFoto(self, dataFoto):
     listFoto = []
@@ -364,4 +345,3 @@ class Laman():
     # CLOSE AND COMMIT
     mysql.connection.commit()
     cursor.close()
-

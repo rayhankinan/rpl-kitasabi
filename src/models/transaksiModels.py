@@ -1,4 +1,6 @@
 from datetime import datetime
+import sys
+from time import time
 
 from models.db import mysql
 
@@ -28,12 +30,13 @@ class Transaksi:
     def getTotalByLaman(idLaman):
         cursor = mysql.connection.cursor()
 
-        cursor.execute("SELECT SUM(JumlahTransaksi) FROM Transaksi WHERE IDLaman = %s AND NOT StatusPencairan GROUP BY IDLaman", (idLaman, ))
+        cursor.execute("SELECT IFNULL(SUM(JumlahTransaksi), 0) FROM Transaksi WHERE IDLaman = %s AND NOT StatusPencairan", (idLaman, ))
         dataTotalTransaksi = cursor.fetchone()
 
         cursor.close()
 
-        totalTransaksi = dataTotalTransaksi
+        totalTransaksi, = dataTotalTransaksi
+
         return totalTransaksi
 
     # CLASS METHOD
@@ -88,17 +91,6 @@ class Transaksi:
 
         return riwayat
 
-    @classmethod
-    def getByDonaturLamanTimestamp(cls, idDonatur, idLaman, timestamp):
-        cursor = mysql.connection.cursor()
-
-        cursor.execute("SELECT * FROM Transaksi WHERE IDDonatur = %s AND IDLaman = %s and Timestamp = %s", (idDonatur, idLaman, timestamp))
-        data = cursor.fetchone()
-
-        cursor.close()
-
-        self = cls.__new__(cls)
-
     # ATTRIBUTE METHOD
     def getIDTransaksi(self):
         return self.idTransaksi
@@ -123,3 +115,10 @@ class Transaksi:
             raise Exception("Transaksi sudah dicairkan!")
         else:
             self.statusPencairan = True
+
+            cursor = mysql.connection.cursor()
+
+            cursor.execute("UPDATE Transaksi SET StatusPencairan = TRUE WHERE IDTransaksi = %s", (self.idTransaksi, ))
+
+            mysql.connection.commit()
+            cursor.close()
