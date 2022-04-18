@@ -1,22 +1,21 @@
 import sys
 import PyQt6 
 from PyQt6.QtWidgets import QApplication
-from lamanPembayaran import LamanPembayaran
-from formLogin import LoginWindow
-from formRegister import RegisterWindow
-from lamanDetail import LamanDetail
-from lamanEksplor import LamanEksplor
-from formKesehatan import FormKesehatan
-from formNonKesehatan import FormNonKesehatan
-from lamanPengelolaanAkun import PengelolaanAkunWindow
-from lamanPenggalangDana import LamanPenggalangDana
-from lamanRiwayatDonasi import RiwayatDonasiWindow
-from lamanRiwayatPenggalanganDana import RiwayatPenggalanganWindow
-from lamanPermintaanDiterima import PermintaanDiterimaWindow
-from mainWindow import MainWindow
-from pageBuilder import PageBuilder
-from lamanPermintaanDiterima import PermintaanDiterimaWindow
-from lamanPermintaanPending import LamanPermintaanPending
+from views.lamanPembayaran import LamanPembayaran
+from views.formLogin import LoginWindow
+from views.formRegister import RegisterWindow
+from views.lamanDetail import LamanDetail
+from views.lamanEksplor import LamanEksplor
+from views.formKesehatan import FormKesehatan
+from views.formNonKesehatan import FormNonKesehatan
+from views.lamanPengelolaanAkun import PengelolaanAkunWindow
+from views.lamanPenggalangDana import LamanPenggalangDana
+from views.lamanRiwayatDonasi import RiwayatDonasiWindow
+from views.lamanRiwayatPenggalanganDana import RiwayatPenggalanganWindow
+from views.lamanPermintaanDiterima import PermintaanDiterimaWindow
+from views.mainWindow import MainWindow
+from views.pageBuilder import PageBuilder
+from views.lamanPermintaanPending import LamanPermintaanPending
 
 
 class PageController:
@@ -56,7 +55,7 @@ class PageController:
 		self.formRegister.channel.connect(self.handleFormRegister)
 		self.lamanRiwayatDonasi.channel.connect(self.handleLamanRiwayatDonasi)
 		self.lamanRiwayatPenggalanganDana.channel.connect(self.handleLamanRiwayatPenggalanganDana)
-		self.LamanPermintaanDiterima.channel.connect(self.handleLamanPermintaanDiterima)
+		self.lamanPermintaanDiterima.channel.connect(self.handleLamanPermintaanDiterima)
 		self.lamanPengelolaanAkun.channel.connect(self.handleLamanPengelolaanAkun)
 		self.lamanPermintaanPending.channel.connect(self.handleLamanPermintaanPending)
 

@@ -1,8 +1,8 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QPushButton
 from PyQt6.QtGui import QCursor
 from PyQt6.QtCore import pyqtSignal, Qt
-from formKesehatan import FormKesehatan
-from formNonKesehatan import FormNonKesehatan
+from views.formKesehatan import FormKesehatan
+from views.formNonKesehatan import FormNonKesehatan
 import sys
 
 class LamanPenggalangDana(QWidget):
