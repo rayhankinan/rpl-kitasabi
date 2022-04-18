@@ -1,5 +1,4 @@
-if __name__ == "__main__":
-  app = QApplication(sys.argv)
-  window = PengelolaanAkunWindow()
-  window.show()
-  sys.exit(app.exec())
+app = QApplication(sys.argv)
+window = FormNonKesehatan()
+window.show()
+sys.exit(app.exec())
