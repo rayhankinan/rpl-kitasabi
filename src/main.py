@@ -1,21 +1,39 @@
+from PyQt6.QtWidgets import QApplication
+from threading import Thread
+import sys
+import time
+
 from application import app
-from views import pageController
 from routes.akunRoutes import akunRoutes
 from routes.permintaanRoutes import permintaanRoutes
 from routes.transaksiRoutes import transaksiRoutes
 from routes.lamanRoutes import lamanRoutes
-from PyQt6.QtWidgets import QApplication
-import sys
-import threading
+from views import pageController
 
-if __name__ == "__main__":
+def loadFrontend():
+    window = QApplication(sys.argv)
+    view = pageController.PageController() # JANGAN HAPUS VARIABLE VIEWNYA YA BEBZ
+    sys.exit(window.exec())
+
+def loadBackend():
     app.register_blueprint(akunRoutes, url_prefix="/akun")
     app.register_blueprint(permintaanRoutes, url_prefix="/permintaan")
     app.register_blueprint(transaksiRoutes, url_prefix="/transaksi")
     app.register_blueprint(lamanRoutes, url_prefix="/laman")
 
-    app.run(port=3000, debug=True)
+    app.run(host="localhost", port=3000, debug=True, use_reloader=False)
 
-    window = QApplication(sys.argv)
-    view = pageController.PageController()
-    sys.exit(window.exec())
+if __name__ == "__main__":
+    threadBackend = Thread(target=loadBackend)
+    threadBackend.setDaemon(True)
+
+    threadFrontend = Thread(target=loadFrontend)
+    threadFrontend.setDaemon(False)
+
+    threadBackend.start()
+    threadFrontend.start()
+
+    while threadFrontend.is_alive():
+        time.sleep(1)
+    else:
+        exit(0)
