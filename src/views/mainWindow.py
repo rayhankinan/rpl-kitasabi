@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QApplication, QWidget, QTextEdit, QLabel, QLineEdit,
 from PyQt6.QtGui import QFont, QPixmap, QCursor, QImage
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import pyqtSignal
-from views.custom_widgets import ClickableLabel
+from custom_widgets import ClickableLabel
 import urllib.request
 
 import sys
@@ -153,14 +153,14 @@ class MainWindow(QWidget):
       ''') 
       self.ubahDataButton.clicked.connect(self.goToPengelolaanAkun)
       
-      # laman riwayat button
-      self.lamanRiwayatButton = QPushButton(self)
-      self.lamanRiwayatButton.setText("Laman Riwayat")
-      self.lamanRiwayatButton.move(634, 680)
-      self.lamanRiwayatButton.setFixedSize(165,52)
-      self.lamanRiwayatButton.setFont(mulish16)
-      self.lamanRiwayatButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-      self.lamanRiwayatButton.setStyleSheet('''
+      # laman riwayat penggalang button
+      self.riwayatPenggalangButton = QPushButton(self)
+      self.riwayatPenggalangButton.setText("Riwayat Penggalang")
+      self.riwayatPenggalangButton.move(634, 680)
+      self.riwayatPenggalangButton.setFixedSize(165,52)
+      self.riwayatPenggalangButton.setFont(mulish16)
+      self.riwayatPenggalangButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+      self.riwayatPenggalangButton.setStyleSheet('''
       QPushButton {
         color: #ffffff;
         background-color: #3643fc;
@@ -171,7 +171,28 @@ class MainWindow(QWidget):
         background-color: #6b75ff;
       }
       ''')   
-      self.lamanRiwayatButton.clicked.connect(self.goToRiwayatPenggalanganDana)
+      self.riwayatPenggalangButton.clicked.connect(self.goToRiwayatPenggalanganDana)
+      
+      # laman riwayat penggalang button
+      self.riwayatDonasiButton = QPushButton(self)
+      self.riwayatDonasiButton.setText("Riwayat Donasi")
+      self.riwayatDonasiButton.move(634-261-261, 680)
+      self.riwayatDonasiButton.setFixedSize(165,52)
+      self.riwayatDonasiButton.setFont(mulish16)
+      self.riwayatDonasiButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+      self.riwayatDonasiButton.setStyleSheet('''
+      QPushButton {
+        color: #ffffff;
+        background-color: #3643fc;
+        border: none;
+        border-radius: 12px;
+      }
+      QPushButton:hover {
+        background-color: #6b75ff;
+      }
+      ''')   
+      self.riwayatDonasiButton.clicked.connect(self.goToRiwayatDonasi)
+ 
       
       # logout button
       self.logoutButton = QPushButton(self)
@@ -192,6 +213,26 @@ class MainWindow(QWidget):
       }
       ''')   
       self.logoutButton.clicked.connect(self.goToLogout)
+      
+      # permintaan button
+      self.permintaanButton = QPushButton(self)
+      self.permintaanButton.setText("Permintaan")
+      self.permintaanButton.move(895+261, 680)
+      self.permintaanButton.setFixedSize(165,52)
+      self.permintaanButton.setFont(mulish16)
+      self.permintaanButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+      self.permintaanButton.setStyleSheet('''
+      QPushButton {
+        color: #ffffff;
+        background-color: #3643fc;
+        border: none;
+        border-radius: 12px;
+      }
+      QPushButton:hover {
+        background-color: #6b75ff;
+      }
+      ''')   
+      self.logoutButton.clicked.connect(self.goToPermintaan)
                                        
       #  Tombol explore lebih banyak penggalangan dana
       self.explore_button = QPushButton(self)
@@ -241,8 +282,8 @@ class MainWindow(QWidget):
   
         
 
-# if __name__ == "__main__":
-#   app = QApplication(sys.argv)
-#   window = MainWindow()
-#   window.show()
-#   sys.exit(app.exec())
+if __name__ == "__main__":
+  app = QApplication(sys.argv)
+  window = MainWindow()
+  window.show()
+  sys.exit(app.exec())
