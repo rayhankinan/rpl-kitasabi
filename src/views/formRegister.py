@@ -248,8 +248,8 @@ class RegisterWindow(QWidget):
       # Emit signal to controller
       self.switch.emit()
 
-if __name__ == "__main__":
-  app = QApplication(sys.argv)
-  window = RegisterWindow()
-  window.show()
-  sys.exit(app.exec())
+# if __name__ == "__main__":
+#   app = QApplication(sys.argv)
+#   window = RegisterWindow()
+#   window.show()
+#   sys.exit(app.exec())

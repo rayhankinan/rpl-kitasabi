@@ -156,8 +156,8 @@ class LoginWindow(QWidget):
     self.passwordEdit.clear()
     self.usernameEdit.clear()
 
-if __name__ == "__main__":
-  app = QApplication(sys.argv)
-  window = LoginWindow()
-  window.show()
-  sys.exit(app.exec())
+# if __name__ == "__main__":
+#   app = QApplication(sys.argv)
+#   window = LoginWindow()
+#   window.show()
+#   sys.exit(app.exec())

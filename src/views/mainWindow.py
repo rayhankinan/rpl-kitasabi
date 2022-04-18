@@ -25,6 +25,7 @@ class MainWindow(QWidget):
     self.setFixedSize(1440, 1024)
     self.setWindowTitle("KITASABI - Laman Utama")
     self.setUpWidgets()
+    
   
   def setUpWidgets(self):
     # Set warna background
@@ -151,7 +152,7 @@ class MainWindow(QWidget):
       # Ubah Data Button
       self.ubahDataButton = QPushButton(self)
       self.ubahDataButton.setText("Ubah Data")
-      self.ubahDataButton.move(379, 900)
+      self.ubahDataButton.move(379, 750)
       self.ubahDataButton.setFixedSize(165,52)
       self.ubahDataButton.setFont(mulish16)
       self.ubahDataButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -170,7 +171,7 @@ class MainWindow(QWidget):
       # laman riwayat button
       self.lamanRiwayatButton = QPushButton(self)
       self.lamanRiwayatButton.setText("Laman Riwayat")
-      self.lamanRiwayatButton.move(634, 900)
+      self.lamanRiwayatButton.move(634, 750)
       self.lamanRiwayatButton.setFixedSize(165,52)
       self.lamanRiwayatButton.setFont(mulish16)
       self.lamanRiwayatButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -189,7 +190,7 @@ class MainWindow(QWidget):
       # logout button
       self.logoutButton = QPushButton(self)
       self.logoutButton.setText("Logout")
-      self.logoutButton.move(895, 900)
+      self.logoutButton.move(895, 750)
       self.logoutButton.setFixedSize(165,52)
       self.logoutButton.setFont(mulish16)
       self.logoutButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -209,7 +210,7 @@ class MainWindow(QWidget):
       self.explore_button = QPushButton(self)
       self.explore_button.setText("Explore Lebih Banyak Penggalangan Dana")
       self.explore_button.setFixedSize(442, 53)
-      self.explore_button.move(499,754)
+      self.explore_button.move(499,654)
       self.explore_button.setFont(mulish16)
       self.explore_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
       self.explore_button.setStyleSheet('''

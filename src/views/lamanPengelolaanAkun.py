@@ -200,8 +200,8 @@ class PengelolaanAkunWindow(QWidget):
     self.perbaruiButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
     # self.perbaruiButton.clicked.connect(self.register)
 
-if __name__ == "__main__":
-  app = QApplication(sys.argv)
-  window = PengelolaanAkunWindow()
-  window.show()
-  sys.exit(app.exec())
+# if __name__ == "__main__":
+#   app = QApplication(sys.argv)
+#   window = PengelolaanAkunWindow()
+#   window.show()
+#   sys.exit(app.exec())

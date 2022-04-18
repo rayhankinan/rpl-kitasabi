@@ -157,8 +157,8 @@ class PageBuilder(QWidget):
         self.setDeadline.setText(date.toString())
 
 
-# UNCOMMENT BELOW FOR TESTING  
-app = QApplication(sys.argv)
-window = PageBuilder()
-window.show()
-sys.exit(app.exec())
+# # UNCOMMENT BELOW FOR TESTING  
+# app = QApplication(sys.argv)
+# window = PageBuilder()
+# window.show()
+# sys.exit(app.exec())
