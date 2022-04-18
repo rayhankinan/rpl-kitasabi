@@ -10,11 +10,6 @@ from routes.transaksiRoutes import transaksiRoutes
 from routes.lamanRoutes import lamanRoutes
 from views import pageController
 
-def loadFrontend():
-    window = QApplication(sys.argv)
-    view = pageController.PageController() # JANGAN HAPUS VARIABLE VIEWNYA YA BEBZ
-    sys.exit(window.exec())
-
 def loadBackend():
     app.register_blueprint(akunRoutes, url_prefix="/akun")
     app.register_blueprint(permintaanRoutes, url_prefix="/permintaan")
@@ -26,14 +21,8 @@ def loadBackend():
 if __name__ == "__main__":
     threadBackend = Thread(target=loadBackend)
     threadBackend.setDaemon(True)
-
-    threadFrontend = Thread(target=loadFrontend)
-    threadFrontend.setDaemon(False)
-
     threadBackend.start()
-    threadFrontend.start()
 
-    while threadFrontend.is_alive():
-        time.sleep(1)
-    else:
-        exit(0)
+    window = QApplication(sys.argv)
+    view = pageController.PageController() # JANGAN HAPUS VARIABLE VIEWNYA YA BEBZ
+    sys.exit(window.exec())
