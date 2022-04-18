@@ -50,7 +50,7 @@ class RegisterWindow(QWidget):
       subheading.setText("Sudah punya akun?")
       subheading.setFont(mulish24)
       subheading.setStyleSheet(f'color: {tulisan}')
-      subheading.move(520, 273)
+      subheading.move(561, 273)
 
       # Masuk label
       masukDisini = ClickableLabel(self)
