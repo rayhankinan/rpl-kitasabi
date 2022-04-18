@@ -98,10 +98,24 @@ class PengelolaanAkunWindow(QWidget):
     self.formBg.setFixedSize(1220, 633)
     self.formBg.move(124, 353)
     self.formBg.setStyleSheet('background-color: rgba(187, 200, 212, 1)')
-    
-    # Full name 
+
+    # nama depan
+    self.nameDepanEdit = QLineEdit(self)
+    self.nameDepanEdit.setPlaceholderText("Nama Depan")
+    self.nameDepanEdit.setDisabled(True)
+    self.nameDepanEdit.setFixedSize(580, 63)
+    self.nameDepanEdit.setFont(mulish16)
+    self.nameDepanEdit.setStyleSheet('''
+    padding: 8px 30px 8px 30px;
+    border: 2px solid rgba(90, 79, 243, 1);
+    color: rgba(37, 49, 60, 1);
+    background-color: rgba(218, 227, 234, 1)
+    ''')
+    self.nameDepanEdit.move(458, 321)
+         
+    # nama belakang 
     self.nameEdit = QLineEdit(self)
-    self.nameEdit.setPlaceholderText("Nama Lengkap")
+    self.nameEdit.setPlaceholderText("Nama Belakang")
     self.nameEdit.setDisabled(True)
     self.nameEdit.setFixedSize(580, 63)
     self.nameEdit.setFont(mulish16)
@@ -209,7 +223,7 @@ class PengelolaanAkunWindow(QWidget):
     self.channel.emit("mainWindow")
 
 # if __name__ == "__main__":
-  # app = QApplication(sys.argv)
-  # window = PengelolaanAkunWindow()
-  # window.show()
-  # sys.exit(app.exec())
+#   app = QApplication(sys.argv)
+#   window = PengelolaanAkunWindow()
+#   window.show()
+#   sys.exit(app.exec())

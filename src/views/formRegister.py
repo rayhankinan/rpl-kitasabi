@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButto
 from PyQt6.QtGui import QFont, QPixmap, QCursor
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import pyqtSignal
-from views.custom_widgets import ClickableLabel
+from custom_widgets import ClickableLabel
 
 graybg = '#F2F4F7'
 ungu = 'rgba(90, 79, 243, 1)'
@@ -84,9 +84,23 @@ class RegisterWindow(QWidget):
     masukDisini.clicked.connect(self.goToLoginWindow)
     masukDisini.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
     
-    # Full name input
+    # nama depan input
+    self.nameDepan = QLineEdit(self)
+    self.nameDepan.setPlaceholderText("Nama Depan")
+    self.nameDepan.setFixedSize(340, 42)
+    self.nameDepan.setFont(mulish16)
+    self.nameDepan.setStyleSheet('''
+    padding: 8px 30px 8px 30px;
+    border: 2px solid rgba(90, 79, 243, 1);
+    color: rgba(37, 49, 60, 1);
+    background-color: rgba(255, 255, 255, 1)
+    ''')
+    self.nameDepan.move(550, 325)
+    self.nameDepan.textChanged.connect(self.setFirsttName)
+    
+    # name Belakang input
     self.nameEdit = QLineEdit(self)
-    self.nameEdit.setPlaceholderText("Nama Lengkap")
+    self.nameEdit.setPlaceholderText("Nama Belakang")
     self.nameEdit.setFixedSize(340, 42)
     self.nameEdit.setFont(mulish16)
     self.nameEdit.setStyleSheet('''
@@ -96,7 +110,7 @@ class RegisterWindow(QWidget):
     background-color: rgba(255, 255, 255, 1)
     ''')
     self.nameEdit.move(550, 384)
-    self.nameEdit.textChanged.connect(self.setName)
+    self.nameEdit.textChanged.connect(self.setLastName)
     
     # email input
     self.emailEdit = QLineEdit(self)
@@ -197,8 +211,10 @@ class RegisterWindow(QWidget):
     else:
       print("GAGAL")
 
-  def setName(self):
-    self.dataText["nama-depan"] = self.nameEdit.text()
+  def setFirstName(self):
+    self.dataText["nama-depan"] = self.nameDepan.text()
+
+  def setLastName(self):
     self.dataText["nama-belakang"] = self.nameEdit.text()
     
   def setEmail(self):
@@ -270,7 +286,7 @@ class RegisterWindow(QWidget):
     self.sendData()
     # Tunjukkan registrasi berhasil
     msgBox = QMessageBox()
-    msgBox.setText(f"""<p>Welcome to Kitasabi, {self.nameEdit.text()}!</p>
+    msgBox.setText(f"""<p>Welcome to Kitasabi, {self.nameDepan.text()}!</p>
     <p>You will now be prompted to log in.</p>""")
     msgBox.setWindowTitle("Registration Successful")
     msgBox.setIcon(QMessageBox.Icon.Information)
@@ -278,6 +294,7 @@ class RegisterWindow(QWidget):
     msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
     msgBox.exec()
     # Clear form inputs
+    self.nameDepan.clear()
     self.nameEdit.clear()
     self.unameEdit.clear()
     self.emailEdit.clear()
@@ -288,8 +305,8 @@ class RegisterWindow(QWidget):
     self.channel.emit()
 
 
-# if __name__ == "__main__":
-#   # app = QApplication(sys.argv)
-#   # window = RegisterWindow()
-#   # window.show()
-#   # sys.exit(app.exec())
+if __name__ == "__main__":
+  app = QApplication(sys.argv)
+  window = RegisterWindow()
+  window.show()
+  sys.exit(app.exec())
