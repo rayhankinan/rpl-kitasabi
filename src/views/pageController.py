@@ -12,8 +12,10 @@ from lamanPengelolaanAkun import PengelolaanAkunWindow
 from lamanPenggalangDana import LamanPenggalangDana
 from lamanRiwayatDonasi import RiwayatDonasiWindow
 from lamanRiwayatPenggalanganDana import RiwayatPenggalanganWindow
+from lamanPermintaanDiterima import PermintaanDiterimaWindow
 from mainWindow import MainWindow
 from pageBuilder import PageBuilder
+from views.lamanPermintaanDiterima import PermintaanDiterimaWindow
 
 
 class PageController:
@@ -35,6 +37,7 @@ class PageController:
 		self.lamanPenggalangDana = LamanPenggalangDana()
 		self.lamanRiwayatDonasi = RiwayatDonasiWindow()
 		self.lamanRiwayatPenggalanganDana = RiwayatPenggalanganWindow()
+		self.lamanPermintaanDiterima = PermintaanDiterimaWindow()
 		self.mainWindow = MainWindow()
 		self.pageBuilder = PageBuilder()
 
@@ -51,7 +54,7 @@ class PageController:
 		self.formRegister.channel.connect(self.handleFormRegister)
 		self.lamanRiwayatDonasi.channel.connect(self.handleLamanRiwayatDonasi)
 		self.lamanRiwayatPenggalanganDana.channel.connect(self.handleLamanRiwayatPenggalanganDana)
-
+		self.LamanPermintaanDiterima.channel.connect(self.handleLamanPermintaanDiterima)
 		self.lamanPengelolaanAkun.channel.connect(self.handleLamanPengelolaanAkun)
 
 	def handleLamanPembayaran(self, nextPage):
@@ -149,6 +152,12 @@ class PageController:
 		if (nextPage == "mainWindow"):
 			self.mainWindow.show()
 
+	def handleLamanPermintaanDiterima(self, nextPage):
+		self.lamanPermintaanDiterima.close()
+		if (nextPage == "pageBuilder"):
+			self.pageBuilder.show()
+
+	
 if __name__ == "__main__":
   app = QApplication(sys.argv)
   window = PageController()
