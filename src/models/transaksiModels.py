@@ -1,6 +1,4 @@
 from datetime import datetime
-import sys
-from time import time
 
 from models.db import mysql
 

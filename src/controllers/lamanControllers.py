@@ -1,10 +1,9 @@
 from flask import jsonify, request, session
 
 from models.lamanModels import Laman
-from models.permintaanModels import Permintaan, PermintaanKesehatan, PermintaanLainnya
+from models.permintaanModels import Permintaan, PermintaanKesehatan
 from models.transaksiModels import Transaksi
 import json
-import sys
 
 class LamanController:
   @staticmethod
@@ -15,8 +14,11 @@ class LamanController:
       dataPermintaan = Permintaan.getByIDPermintaan(idAutentikasi)
       dataAkun = json.loads(session["User"])
 
-      if (dataPermintaan.getStatusAutentikasi() == 0):
+      if dataPermintaan.getStatusAutentikasi() is None:
         return "Permintaan belum disetujui!", 400
+
+      if dataPermintaan.getStatusAutentikasi() == 0:
+        return "Permintaan tidak disetujui!", 400
       
       idPenggalang = int(dataAkun["ID"])
       judul =  dataPermintaan.getJudul()

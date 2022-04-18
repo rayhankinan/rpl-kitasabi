@@ -1,6 +1,8 @@
 from flask import request, session, jsonify
+from datetime import datetime
 import json
 
+from models.lamanModels import Laman
 from models.transaksiModels import Transaksi
 
 class TransaksiController:
@@ -12,8 +14,12 @@ class TransaksiController:
             idDonatur = data["ID"]
             idLaman = int(request.form.get("id-laman"))
             jumlahTransaksi = int(request.form.get("jumlah-transaksi"))
-            
-            Transaksi(idDonatur, idLaman, jumlahTransaksi)
+
+            if Laman.getByIDLaman(idLaman).getDeadline() > datetime.date(datetime.now()):
+                return "Conflict", 409 
+
+            else:
+                Transaksi(idDonatur, idLaman, jumlahTransaksi)
 
             return "Created", 201
 
@@ -48,11 +54,15 @@ class TransaksiController:
         try:
             idLaman = int(request.form.get("id-laman"))
 
-            riwayatTransaksi = Transaksi.getRiwayatLaman(idLaman)
-            for transaksi in riwayatTransaksi:
-                transaksi.cairkanTransaksi()
+            if Laman.getByIDLaman(idLaman).getDeadline() < datetime.date(datetime.now()):
+                return "Conflict", 409
+            
+            else:
+                riwayatTransaksi = Transaksi.getRiwayatLaman(idLaman)
+                for transaksi in riwayatTransaksi:
+                    transaksi.cairkanTransaksi()
 
-            return "OK", 200
+                return "OK", 200
 
         except Exception as e:
             return str(e), 400
