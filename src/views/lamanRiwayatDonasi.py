@@ -90,7 +90,7 @@ class RiwayatDonasiWindow(QWidget):
     ''')
     nextButton.setFont(mulish44)
     nextButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-    nextButton.clicked.connect(self.nextRiwayatDonasi())
+    # nextButton.clicked.connect(self.nextRiwayatDonasi())
     
     # previous button
     previousButton = QPushButton(self)
@@ -110,7 +110,7 @@ class RiwayatDonasiWindow(QWidget):
     ''')
     previousButton.setFont(mulish44)
     previousButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-    previousButton.clicked.connect(self.previousRiwayatDonasi())
+    # previousButton.clicked.connect(self.previousRiwayatDonasi())
       
     # label riwayat donasi
     
@@ -185,7 +185,7 @@ class RiwayatDonasiWindow(QWidget):
       self.riwayatDonasiCard[i]["previewImg2"].setPixmap(self.pixmap2)
 
   def setUpDisplayRiwayatDonasi(self):
-    # start = self.pageRiwayatDonasi * 3
+    start = self.pageRiwayatDonasi * 3
     # for i in range(3):
     #   # if start + i < len(self.databaseRiwayatDonasi):
     #     # Preview penggalangan dana +i *185
@@ -198,7 +198,7 @@ class RiwayatDonasiWindow(QWidget):
   
   def nextRiwayatDonasi(self):
     print("Right button clicked")
-    # if (self.pageRiwayatDonasi + 1 < (len(self.RiwayatDonasi)//3)):
+    # if (self.pageRiwayatDonasi + 1 < (len(self.databaseRiwayatDonasi)//3)):
     #     self.pageRiwayatDonasi += 1
     #     print("page: ", self.pageRiwayatDonasi)
     #     self.setUpDisplayRiwayatDonasi()

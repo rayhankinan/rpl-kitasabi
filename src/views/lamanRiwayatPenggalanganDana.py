@@ -19,6 +19,7 @@ class RiwayatPenggalanganWindow(QWidget):
 
   def __init__(self):
     super().__init__()
+    self.pageRiwayatPenggalangan = 0
     self.setUpRiwayatPenggalanganWindow()
     
   def setUpRiwayatPenggalanganWindow(self):
@@ -68,7 +69,69 @@ class RiwayatPenggalanganWindow(QWidget):
             color: black;
         }
     ''')
+    self.initializeRiwayatPenggalangan()
+    self.setUpDisplayRiwayatPenggalangan()
     
+    # next button
+    nextButton = QPushButton(self)
+    nextButton.setText(">")
+    nextButton.setFixedSize(40, 71)
+    nextButton.move(1339,666)
+    nextButton.setStyleSheet('''
+      QPushButton {
+        color: #ffffff;
+        background-color: #3643fc;
+        border: none;
+        border-radius: 12px;
+      }
+      QPushButton:hover {
+        background-color: #6b75ff;
+      }
+    ''')
+    nextButton.setFont(mulish44)
+    nextButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+    # nextButton.clicked.connect(self.nextRiwayatPenggalangan())
+    
+    # previous button
+    previousButton = QPushButton(self)
+    previousButton.setText("<")
+    previousButton.setFixedSize(40, 71)
+    previousButton.move(84,673)
+    previousButton.setStyleSheet('''
+      QPushButton {
+        color: #ffffff;
+        background-color: #3643fc;
+        border: none;
+        border-radius: 12px;
+      }
+      QPushButton:hover {
+        background-color: #6b75ff;
+      }
+    ''')    
+    previousButton.setFont(mulish44)
+    previousButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+    # previousButton.clicked.connect(self.previousRiwayatPenggalangan())    
+
+  def initializeRiwayatPenggalangan(self):
+    # set up font
+    mulish16 = QFont()
+    mulish16.setFamily("Mulish"); mulish16.setPixelSize(16)
+    
+    mulish24 = QFont()
+    mulish24.setFamily("Mulish"); mulish24.setPixelSize(24)
+    
+    mulish24_bold = QFont()
+    mulish24_bold.setFamily("Mulish"); mulish24.setPixelSize(24)
+    mulish24_bold.setBold(True)
+    
+    mulish33_bold = QFont()
+    mulish33_bold.setFamily("Mulish"); mulish33_bold.setPixelSize(33)
+    mulish33_bold.setBold(True)
+        
+    mulish44 = QFont()
+    mulish44.setFamily("Mulish"); mulish44.setPixelSize(44)
+    mulish44.setBold(True)      
+  
     # label riwayat penggalangan dana
     self.labelRiwayatPenggalanganDana = QLabel(self)
     self.labelRiwayatPenggalanganDana.setText("Riwayat Penggalangan Dana")
@@ -160,7 +223,35 @@ class RiwayatPenggalanganWindow(QWidget):
             }
         ''')
         self.penggalanganDanaCard[i]["cairkan_button"].setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-    
+  def setUpDisplayRiwayatPenggalangan(self):
+    start = self.pageRiwayatPenggalangan * 3
+    # for i in range(3):
+    #   # if start + i < len(self.databaseRiwayatPenggalangan):
+    #     # Preview penggalangan dana +i *185
+    #     self.penggalanganDanaCard[i]["preview_penggalangan_dana"].setText("Judul Penggalangan Dana")
+    #     # nominal penggalangan dana
+    #     self.penggalanganDanaCard[i]["nominal"].setText("Nominal")
+    #     # foto          
+    #     self.url2 = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'   
+      
+  
+  def nextRiwayatPenggalangan(self):
+    print("Right button clicked")
+    # if (self.pageRiwayatPenggalangan + 1 < (len(self.databaseRiwayatPenggalangan)//3)):
+    #     self.pageRiwayatPenggalangan += 1
+    #     print("page: ", self.pageRiwayatPenggalangan)
+    #     self.setUpDisplayRiwayatPenggalangan()
+    # else:
+    #     print("No more RiwayatPenggalangan")
+
+  def previousRiwayatPenggalangan(self):
+    print("Left button clicked")
+    # if (self.pageRiwayatPenggalangan > 0):
+    #     self.pageRiwayatPenggalangan -= 1
+    #     print("page: ", self.pageRiwayatPenggalangan)
+    #     self.setUpDisplayRiwayatPenggalangan()
+    # else:
+    #     print("No more RiwayatPenggalangan")
     
     
 if __name__ == "__main__":
