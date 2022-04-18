@@ -11,4 +11,3 @@ lamanRoutes.route("riwayat-laman", methods=["GET"]) (LamanController.riwayatLama
 lamanRoutes.route("create-laman", methods=["POST"]) (LamanController.createLaman)
 lamanRoutes.route("search-laman", methods=["POST"]) (LamanController.searchlaman)
 lamanRoutes.route("edit-laman", methods=["PUT"]) (LamanController.editLaman)
-

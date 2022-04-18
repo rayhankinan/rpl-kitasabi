@@ -23,7 +23,6 @@ class LamanController:
       judul =  dataPermintaan.getJudul()
       deskripsi = dataPermintaan.getDeskripsi()
       target = dataPermintaan.getTarget()
-      totalDonasi = 0
       deadline = request.form.get("deadline")
       foto = request.files.getlist("foto-laman")
 
@@ -34,7 +33,7 @@ class LamanController:
       else:
         kategori = "Kesehatan"
 
-      laman = Laman(idAutentikasi, idPenggalang, judul, deskripsi, target, totalDonasi, kategori, deadline, foto)
+      laman = Laman(idAutentikasi, idPenggalang, judul, deskripsi, target, kategori, deadline, foto)
       return "Laman Created", 201
 
     except Exception as e:
@@ -66,13 +65,14 @@ class LamanController:
       else:
         result = []
         for l in laman:
+          totalDonasi = Transaksi.getTotalByLaman(l.getIDLaman())
           result.append({"id-laman": l.getIDLaman(),
                         "id-autentikasi": l.getIDAutentikasi(),
                         "id-penggalang": l.getIDPenggalang(),
                         "judul": l.getJudul(),
                         "deskripsi": l.getDeskripsi(),
                         "target": l.getTarget(),
-                        "total-donasi": l.getTotalDonasi(),
+                        "total-donasi": totalDonasi,
                         "kategori": l.getKategori(),
                         "deadline": l.getDeadline(),
                         "timestamp": l.getTimestamp(),
@@ -95,13 +95,14 @@ class LamanController:
       else:
         result = []
         for l in laman:
+          totalDonasi = Transaksi.getTotalByLaman(l.getIDLaman())
           result.append({"id-laman": l.getIDLaman(),
                         "id-autentikasi": l.getIDAutentikasi(),
                         "id-penggalang": l.getIDPenggalang(),
                         "judul": l.getJudul(),
                         "deskripsi": l.getDeskripsi(),
                         "target": l.getTarget(),
-                        "total-donasi": l.getTotalDonasi(),
+                        "total-donasi": totalDonasi,
                         "kategori": l.getKategori(),
                         "deadline": l.getDeadline(),
                         "timestamp": l.getTimestamp(),
@@ -122,13 +123,14 @@ class LamanController:
       else:
         result = []
         for l in laman:
+          totalDonasi = Transaksi.getTotalByLaman(l.getIDLaman())
           result.append({"id-laman": l.getIDLaman(),
                         "id-autentikasi": l.getIDAutentikasi(),
                         "id-penggalang": l.getIDPenggalang(),
                         "judul": l.getJudul(),
                         "deskripsi": l.getDeskripsi(),
                         "target": l.getTarget(),
-                        "total-donasi": l.getTotalDonasi(),
+                        "total-donasi": totalDonasi,
                         "kategori": l.getKategori(),
                         "deadline": l.getDeadline(),
                         "timestamp": l.getTimestamp(),
@@ -146,17 +148,13 @@ class LamanController:
       l = Laman.getByIDLaman(idLaman)
       totalDonasi = Transaksi.getTotalByLaman(idLaman)
 
-      if totalDonasi is None:
-        totalDonasi = 0
-      l.setTotalDonasi(totalDonasi)
-
       data = {"id-laman": l.getIDLaman(),
               "id-autentikasi": l.getIDAutentikasi(),
               "id-penggalang": l.getIDPenggalang(),
               "judul": l.getJudul(),
               "deskripsi": l.getDeskripsi(),
               "target": l.getTarget(),
-              "total-donasi": l.getTotalDonasi(),
+              "total-donasi": totalDonasi,
               "kategori": l.getKategori(),
               "deadline": l.getDeadline(),
               "timestamp": l.getTimestamp(),
@@ -179,13 +177,14 @@ class LamanController:
       else:
         result = []
         for l in laman:
+          totalDonasi = Transaksi.getTotalByLaman(l.getIDLaman())
           result.append({"id-laman": l.getIDLaman(),
                         "id-autentikasi": l.getIDAutentikasi(),
                         "id-penggalang": l.getIDPenggalang(),
                         "judul": l.getJudul(),
                         "deskripsi": l.getDeskripsi(),
                         "target": l.getTarget(),
-                        "total-donasi": l.getTotalDonasi(),
+                        "total-donasi": totalDonasi,
                         "kategori": l.getKategori(),
                         "deadline": l.getDeadline(),
                         "timestamp": l.getTimestamp(),
