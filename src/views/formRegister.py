@@ -172,7 +172,8 @@ class RegisterWindow(QWidget):
       self.switch.emit()
 
   def register(self):
-      if (self.nameEdit.text() == '' or self.unameEdit.text() == '' or self.emailEdit.text() == '' or self.passwordEdit.text() == '' or (not self.rbUser.isChecked() and not self.rbTrainer.isChecked())):
+      # validasi masukan tidak boleh kosong
+      if (self.nameEdit.text() == '' or self.unameEdit.text() == '' or self.emailEdit.text() == '' or self.passwordEdit.text() == '' or self.telphoneEdit.text() == '' or self.confirmPwEdit.text() == ''):
           msgBox = QMessageBox()
           msgBox.setText("<p>Please fill out the form properly!</p>")
           msgBox.setWindowTitle("Registration Failed")
@@ -183,26 +184,51 @@ class RegisterWindow(QWidget):
           return
       c = self.conn.cursor()
       c.execute(f"SELECT * FROM user WHERE username = '{self.unameEdit.text()}'")
+      # validasi username tidak boleh yg sudah terdaftar
       if (c.fetchone() != None):
           msgBox = QMessageBox()
-          msgBox.setText("<p>Username already registered!</p>")
-          msgBox.setWindowTitle("Registration Failed")
+          msgBox.setText("<p>Username Sudah Terdaftar!</p>")
+          msgBox.setWindowTitle("Registrasi Gagal!")
           msgBox.setIcon(QMessageBox.Icon.Warning)
           msgBox.setStyleSheet("background-color: white")
           msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
           msgBox.exec()
           return
       c.execute(f"SELECT * FROM user WHERE email = '{self.emailEdit.text()}'")
+      # validasi email tidak boleh yang sudah terdaftar
       if (c.fetchone() != None):
           msgBox = QMessageBox()
-          msgBox.setText("<p>Email already registered!</p>")
-          msgBox.setWindowTitle("Registration Failed")
+          msgBox.setText("<p>Email sudah terdaftar!</p>")
+          msgBox.setWindowTitle("Registrasi Gagal!")
+          msgBox.setIcon(QMessageBox.Icon.Warning)
+          msgBox.setStyleSheet("background-color: white")
+          msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+          msgBox.exec()
+          return  
+      c.execute(f"SELECT * FROM user WHERE telephone = '{self.telphoneEdit.text()}'")
+      # validasi telephone tidak boleh yang sudah terdaftar
+      if (c.fetchone() != None):
+          msgBox = QMessageBox()
+          msgBox.setText("<p>Telephone sudah terdaftar!</p>")
+          msgBox.setWindowTitle("Registrasi Gagal!")
           msgBox.setIcon(QMessageBox.Icon.Warning)
           msgBox.setStyleSheet("background-color: white")
           msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
           msgBox.exec()
           return
-      self.conn.commit()
+      # validasi konfirmasi password
+      if (self.passwordEdit.text() != self.confirmPwEdit.text()):
+          msgBox = QMessageBox()
+          msgBox.setText("<p>Konfirmasi Password TIdak Sesuai!</p>")
+          msgBox.setWindowTitle("Registrasi Gagal!")
+          msgBox.setIcon(QMessageBox.Icon.Warning)
+          msgBox.setStyleSheet("background-color: white")
+          msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+          msgBox.exec()
+          return 
+      # jika memenuhi syarat maka register, ini masih salah nanti edit lagi
+      c.execute(f"INSERT INTO user VALUES ('{self.nameEdit.text()}', '{self.unameEdit.text()}', '{self.emailEdit.text()}', '{self.passwordEdit.text()}', 'user')")
+      self.conn.commit()   
       # Tunjukkan registrasi berhasil
       msgBox = QMessageBox()
       msgBox.setText(f"""<p>Welcome to Kitasabi, {self.nameEdit.text()}!</p>
@@ -217,6 +243,8 @@ class RegisterWindow(QWidget):
       self.unameEdit.clear()
       self.emailEdit.clear()
       self.passwordEdit.clear()
+      self.telphoneEdit.clear()
+      self.confirmPwEdit.clear()
       # Emit signal to controller
       self.switch.emit()
 

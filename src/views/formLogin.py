@@ -127,7 +127,31 @@ class LoginWindow(QWidget):
     c = self.conn.cursor()
     c.execute(f"SELECT * FROM user WHERE (username = '{self.usernameEdit.text()}' OR email = '{self.usernameEdit.text()}') AND password = '{self.passwordEdit.text()}'")
     res = c.fetchone()
-
+    if res == None:
+        msgBox = QMessageBox()
+        msgBox.setText("<p>Username/email and password combination not found!</p>")
+        msgBox.setWindowTitle("Login Failed")
+        msgBox.setIcon(QMessageBox.Icon.Warning)
+        msgBox.setStyleSheet("background-color: white")
+        msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+        msgBox.exec()
+    else:
+        msgBox = QMessageBox()
+        msgBox.setText(f"<p>Hello, {res[0]}!</p>")
+        msgBox.setWindowTitle("Login Successful")
+        msgBox.setIcon(QMessageBox.Icon.Information)
+        msgBox.setStyleSheet("background-color: white")
+        msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+        msgBox.exec()
+        user = {
+          "fullname": res[0],
+          "username": res[1],
+          "email": res[2],
+          "password": res[3],
+          "type": res[4]
+        }
+    self.clearForm()
+              
   def clearForm(self):
     self.passwordEdit.clear()
     self.usernameEdit.clear()

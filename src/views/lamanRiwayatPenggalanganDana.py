@@ -14,14 +14,14 @@ ungu = 'rgba(90, 79, 243, 1)'
 white = 'rgba(255, 255, 255, 1)'
 tulisan = 'rgba(37, 49, 60, 1)'
 
-class RiwayatDonasiWindow(QWidget):
+class RiwayatPenggalanganWindow(QWidget):
   switch = pyqtSignal(str, dict)
 
   def __init__(self):
     super().__init__()
-    self.setUpRiwayatDonasiWindow()
+    self.setUpRiwayatPenggalanganWindow()
     
-  def setUpRiwayatDonasiWindow(self):
+  def setUpRiwayatPenggalanganWindow(self):
     self.setFixedSize(1440, 1024)
     self.setWindowTitle("KITASABI - Laman Riwayat Donasi")
     self.setUpWidgets()
@@ -165,6 +165,6 @@ class RiwayatDonasiWindow(QWidget):
     
 if __name__ == "__main__":
   app = QApplication(sys.argv)
-  window = RiwayatDonasiWindow()
+  window = RiwayatPenggalanganWindow()
   window.show()
   sys.exit(app.exec())
