@@ -1,4 +1,5 @@
 import sys
+import requests
 from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox
 from PyQt6.QtGui import QFont, QCursor
 from PyQt6.QtCore import Qt
@@ -7,6 +8,11 @@ from views.custom_widgets import ClickableLabel
 
 class LoginWindow(QWidget):
   channel = pyqtSignal(str)
+
+  dataText = {
+    "email-usernme": "",
+    "password": "",
+  }
 
   def __init__(self):
     super().__init__()
@@ -59,6 +65,7 @@ class LoginWindow(QWidget):
       background-color: #FFFFFF
     ''')
     self.usernameEdit.setFont(mulish16)
+    self.usernameEdit.textChanged.connect(self.setUsername)
 
     # Input password
     self.passwordEdit = QLineEdit(self)
@@ -74,6 +81,7 @@ class LoginWindow(QWidget):
     ''')
     self.passwordEdit.setFont(mulish16)
     self.passwordEdit.setEchoMode(QLineEdit.EchoMode.Password)
+    self.passwordEdit.textChanged.connect(self.setPassword)
 
     # Log in push button
     self.loginButton = QPushButton(self)
@@ -120,13 +128,26 @@ class LoginWindow(QWidget):
     registerHere.clicked.connect(self.goToRegisterWindow)
     registerHere.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
+  def setPassword(self):
+    self.dataText["password"] = self.passwordEdit.text()
+  def setUsername(self):
+    self.dataText["email-username"] = self.usernameEdit.text()
+
   def goToRegisterWindow(self):
     self.channel.emit("register")
   
   def goToMainWindow(self):
     self.channel.emit("mainWindow")
 
+  def sendData(self):
+    response = requests.post('http://localhost:3000/akun/login', data=self.dataText)
+    if (response.status_code == 201):
+        print("BERHASIL")
+    else:
+        print("GAGAL")
+
   def login(self):
+    self.sendData()
     # fetch
     self.resetState()
     self.goToMainWindow()

@@ -16,6 +16,6 @@ if __name__ == "__main__":
 
     app.run(port=3000, debug=True)
 
-    window = QApplication(sys.argv)
-    view = pageController.PageController()
-    sys.exit(window.exec())
+    # window = QApplication(sys.argv)
+    # view = pageController.PageController()
+    # sys.exit(window.exec())
