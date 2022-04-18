@@ -1,9 +1,27 @@
 from PyQt6.QtWidgets import QLabel, QTextEdit, QPushButton, QWidget, QFileDialog
 from PyQt6.QtGui import QCursor
 from PyQt6.QtCore import Qt, pyqtSignal
+import base64
+import requests
+
 
 class FormKesehatan(QWidget):
     channel = pyqtSignal()
+    
+    dataText = {
+        "judul": "",
+        "deskripsi": "",
+        "target": "",
+        "tujuan": "",
+        "nama-pasien": ""
+    }
+
+    dataFile = {
+        "foto-ktp": "",
+        "foto-kk": "",
+        "foto-ket-medis": "",
+        "foto-pemeriksaan": "",
+    }
 
     def __init__(self):
         super().__init__()
@@ -36,6 +54,7 @@ class FormKesehatan(QWidget):
             background-color: #FFFFFF;
             padding: 10px 10px 10px 10px;
         ''')
+        self.judul.textChanged.connect(self.setJudul)
 
         # set nama
         self.nama = QTextEdit(self)
@@ -47,6 +66,7 @@ class FormKesehatan(QWidget):
             background-color: #FFFFFF;
             padding: 10px 10px 10px 10px;
         ''')
+        self.nama.textChanged.connect(self.setNama)
 
         # set penyakit yang diderita
         self.penyakit = QTextEdit(self)
@@ -58,6 +78,7 @@ class FormKesehatan(QWidget):
             background-color: #FFFFFF;
             padding: 10px 10px 10px 10px;
         ''')
+        self.penyakit.textChanged.connect(self.setPenyakit)
 
         # set tujuan
         self.tujuan = QTextEdit(self)
@@ -69,6 +90,7 @@ class FormKesehatan(QWidget):
             background-color: #FFFFFF;
             padding: 10px 10px 10px 10px;
         ''')
+        self.tujuan.textChanged.connect(self.setTujuan)
 
         # RIGHTSIDE
         # set upload KTP
@@ -147,24 +169,24 @@ class FormKesehatan(QWidget):
         self.uploadHP.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.uploadHP.clicked.connect(self.openHP)
 
-        # set upload RM
-        self.uploadRM = QPushButton(self)
-        self.uploadRM.setText("Riwayat Medis")
-        self.uploadRM.setFixedSize(320, 46)
-        self.uploadRM.move(773, 429)
-        self.uploadRM.setStyleSheet('''
-            QPushButton {
-                border: 2px solid #5A4FF3;
-                background-color: #FFFFFF;
-                padding: 10px 10px 10px 10px;
-            }
-            QPushButton:hover {
-                background-color: #5A4FF3;
-                color: white;
-            }
-        ''')
-        self.uploadRM.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.uploadRM.clicked.connect(self.openRM)
+        # # set upload RM
+        # self.uploadRM = QPushButton(self)
+        # self.uploadRM.setText("Riwayat Medis")
+        # self.uploadRM.setFixedSize(320, 46)
+        # self.uploadRM.move(773, 429)
+        # self.uploadRM.setStyleSheet('''
+        #     QPushButton {
+        #         border: 2px solid #5A4FF3;
+        #         background-color: #FFFFFF;
+        #         padding: 10px 10px 10px 10px;
+        #     }
+        #     QPushButton:hover {
+        #         background-color: #5A4FF3;
+        #         color: white;
+        #     }
+        # ''')
+        # self.uploadRM.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        # self.uploadRM.clicked.connect(self.openRM)
 
         # LOWER
         self.deskripsi = QTextEdit(self)
@@ -176,6 +198,7 @@ class FormKesehatan(QWidget):
             background-color: #FFFFFF;
             padding: 10px 10px 10px 10px;
         ''')
+        self.deskripsi.textChanged.connect(self.setDeskripsi)
 
         self.target = QTextEdit(self)
         self.target.setPlaceholderText("Target Donasi (Rp)")
@@ -186,6 +209,7 @@ class FormKesehatan(QWidget):
             background-color: #FFFFFF;
             padding: 10px 10px 10px 10px;
         ''')
+        self.target.textChanged.connect(self.setTarget)
 
         # set submit button
         self.submitFormK = QPushButton(self)
@@ -217,41 +241,52 @@ class FormKesehatan(QWidget):
         self.deskripsi.clear()
         self.target.clear()
 
+    def setJudul(self):
+        self.dataText["judul"] = self.judul.toPlainText()
+    def setNama(self):
+        self.dataText["nama"] = self.nama.toPlainText()
+    def setPenyakit(self):
+        self.dataText["penyakit"] = self.penyakit.toPlainText()
+    def setTujuan(self):
+        self.dataText["tujuan"] = self.tujuan.toPlainText()
+    def setDeskripsi(self):
+        self.dataText["deskripsi"] = self.deskripsi.toPlainText()
+    def setTarget(self):
+        self.dataText["target"] = self.target.toPlainText()
+
+    def sendData(self):
+        response = requests.post('http://localhost:3000/permintaan/create-permintaan-kesehatan', data=self.dataText, files=self.dataFile)
+        if (response.status_code == 201):
+            print("BERHASIL")
+        else:
+            print("GAGAL")
+
     def goToRiwayatPenggalangan(self):
+        self.sendData()
         self.resetState()
         self.channel.emit()
 
     def openKTP(self):
-        self.openFile("KTP")
+        self.openFile("foto-ktp")
 
     def openKK(self):
-        self.openFile("KK")
+        self.openFile("foto-kk")
 
     def openSKM(self):
-        self.openFile("SKM")
+        self.openFile("foto-ket-medis")
     
     def openHP(self):
-        self.openFile("HP")
+        self.openFile("foto-pemeriksaan")
     
-    def openRM(self):
-        self.openFile("RM")
+    # def openRM(self):
+    #     self.openFile("foto-riwayat-medis")
 
     def openFile(self, type):
-        if (type == "KTP"):
-            print("KTP")
-        elif (type == "KK"):
-            print("KK")
-        elif (type == "SKM"):
-            print("SKM")
-        elif (type == "HP"):
-            print("HP")
-        else:
-            print("RM")
         file = QFileDialog.getOpenFileName(self, 'Open a file', '', 'Image(*.jpg);;PDF(*.pdf);;Word(*.docx)')
         if file != ('', ''):
             path = file[0]
             print(path)
             # TEST OPEN TXT FILE
-            # with open(path, "r") as f:
-            #     print(f.readline())
+            self.dataFile[type] = open(path, "rb")
+                
             
