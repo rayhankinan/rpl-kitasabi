@@ -96,7 +96,7 @@ class RegisterWindow(QWidget):
     background-color: rgba(255, 255, 255, 1)
     ''')
     self.nameDepan.move(550, 325)
-    self.nameDepan.textChanged.connect(self.setFirsttName)
+    self.nameDepan.textChanged.connect(self.setFirstName)
     
     # name Belakang input
     self.nameEdit = QLineEdit(self)
