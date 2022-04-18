@@ -13,6 +13,7 @@ graybg = '#F2F4F7'
 ungu = 'rgba(90, 79, 243, 1)'
 white = 'rgba(255, 255, 255, 1)'
 tulisan = 'rgba(37, 49, 60, 1)'
+pad =200
 
 class RiwayatDonasiWindow(QWidget):
   channel = pyqtSignal()

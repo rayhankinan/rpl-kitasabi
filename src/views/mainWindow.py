@@ -25,6 +25,7 @@ class MainWindow(QWidget):
     self.setFixedSize(1440, 1024)
     self.setWindowTitle("KITASABI - Laman Utama")
     self.setUpWidgets()
+    
   
   def setUpWidgets(self):
     # Set warna background

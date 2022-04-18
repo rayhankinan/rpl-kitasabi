@@ -9,9 +9,8 @@ class Permintaan:
     self.idPengguna = idPengguna
     self.judul = judul
     self.deskripsi = deskripsi
-    self.statusAutentikasi = False
 
-    if (target <= 0):
+    if target <= 0:
       raise Exception(f"{target} bukanlah target yang valid!")
     else:
       self.target = target

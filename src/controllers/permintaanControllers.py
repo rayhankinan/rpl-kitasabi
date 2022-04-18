@@ -1,6 +1,4 @@
-from os import system
 from flask import jsonify, request, session
-import sys
 import json
 
 from models.permintaanModels import PermintaanKesehatan, PermintaanLainnya
@@ -52,11 +50,13 @@ class PermintaanController:
       return str(e), 400
 
   @staticmethod
-  def setujuiPermintaanKesehatan():
+  def editStatusPermintaanKesehatan():
     try:
       idPermintaanKesehatan = request.form.get("id-permintaan-kesehatan")
+      statusAutentikasi = bool(request.form.get("status-autentikasi"))
+
       permintaanKesehatan = PermintaanKesehatan.getByIDPermintaanKesehatan(idPermintaanKesehatan)
-      permintaanKesehatan.setStatusAutentikasi(True)
+      permintaanKesehatan.setStatusAutentikasi(statusAutentikasi)
 
       return "OK", 200
 
@@ -64,11 +64,13 @@ class PermintaanController:
       return str(e), 400
 
   @staticmethod
-  def setujuiPermintaanLainnya():
+  def editStatusPermintaanLainnya():
     try:
       idPermintaanLainnya = request.form.get("id-permintaan-lainnya")
+      statusAutentikasi = bool(request.form.get("status-autentikasi"))
+
       permintaanLainnya = PermintaanLainnya.getByIDPermintaanLainnya(idPermintaanLainnya)
-      permintaanLainnya.setStatusAutentikasi(True)
+      permintaanLainnya.setStatusAutentikasi(statusAutentikasi)
 
       return "OK", 200
 
