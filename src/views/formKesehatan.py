@@ -4,6 +4,7 @@ from PyQt6.QtCore import Qt, pyqtSignal
 
 class FormKesehatan(QWidget):
     channel = pyqtSignal()
+
     def __init__(self):
         super().__init__()
         
@@ -208,7 +209,16 @@ class FormKesehatan(QWidget):
         self.submitFormK.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.submitFormK.clicked.connect(self.goToRiwayatPenggalangan)
 
+    def resetState(self):
+        self.judul.clear()
+        self.nama.clear()
+        self.penyakit.clear()
+        self.tujuan.clear()
+        self.deskripsi.clear()
+        self.target.clear()
+
     def goToRiwayatPenggalangan(self):
+        self.resetState()
         self.channel.emit()
 
     def openKTP(self):

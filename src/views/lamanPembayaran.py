@@ -84,7 +84,7 @@ class LamanPembayaran(QWidget):
                 color: black;
             }
         ''')
-        self.returnButton.clicked.connect(self.goToRiwayatPenggalang)
+        self.returnButton.clicked.connect(self.goToRiwayatDonasi)
 
         # set preview penggalangan dana
         self.previewBg = QTextEdit(self)
@@ -177,15 +177,22 @@ class LamanPembayaran(QWidget):
             }
         ''')
         self.bayar.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.bayar.clicked.connect(self.goToRiwayatPenggalang)
+        self.bayar.clicked.connect(self.goToRiwayatDonasi)
+
+    def resetState(self):
+        self.nominal.clear()
+        self.jenis.clear()
 
     def goToHome(self):
+        self.resetState()
         self.channel.emit("home")
         
     def goToEditProfile(self):
+        self.resetState()
         self.channel.emit("profile")
 
-    def goToRiwayatPenggalang(self):
+    def goToRiwayatDonasi(self):
+        self.resetState()
         self.channel.emit("riwayat")
 
 # UNCOMMENT BELOW FOR TESTING  

@@ -15,7 +15,8 @@ from lamanRiwayatPenggalanganDana import RiwayatPenggalanganWindow
 from lamanPermintaanDiterima import PermintaanDiterimaWindow
 from mainWindow import MainWindow
 from pageBuilder import PageBuilder
-from views.lamanPermintaanDiterima import PermintaanDiterimaWindow
+from lamanPermintaanDiterima import PermintaanDiterimaWindow
+from lamanPermintaanPending import LamanPermintaanPending
 
 
 class PageController:
@@ -40,6 +41,7 @@ class PageController:
 		self.lamanPermintaanDiterima = PermintaanDiterimaWindow()
 		self.mainWindow = MainWindow()
 		self.pageBuilder = PageBuilder()
+		self.lamanPermintaanPending = LamanPermintaanPending()
 
 	def setListener(self):
 		self.lamanPembayaran.channel.connect(self.handleLamanPembayaran)
@@ -56,6 +58,7 @@ class PageController:
 		self.lamanRiwayatPenggalanganDana.channel.connect(self.handleLamanRiwayatPenggalanganDana)
 		self.LamanPermintaanDiterima.channel.connect(self.handleLamanPermintaanDiterima)
 		self.lamanPengelolaanAkun.channel.connect(self.handleLamanPengelolaanAkun)
+		self.lamanPermintaanPending.channel.connect(self.handleLamanPermintaanPending)
 
 	def handleLamanPembayaran(self, nextPage):
 		self.lamanPembayaran.close()
@@ -64,7 +67,7 @@ class PageController:
 		elif (nextPage == "profile"):
 			self.lamanPengelolaanAkun.show()
 		else:
-			self.lamanRiwayatPenggalanganDana.show()
+			self.lamanRiwayatDonasi.show()
 
 	def handleLamanDetail(self, nextPage):
 		self.lamanDetail.close()
@@ -140,7 +143,7 @@ class PageController:
 		self.lamanEksplor.show()
 
 	def handleLamanRiwayatPenggalanganDana(self, nextPage):
-		self.lamanRiwayatDonasi.close()
+		self.lamanRiwayatPenggalanganDana.close()
 		if (nextPage == "eksplor"):
 			self.lamanEksplor.show()
 		else:
@@ -157,6 +160,10 @@ class PageController:
 		if (nextPage == "pageBuilder"):
 			self.pageBuilder.show()
 
+	def handleLamanPermintaanPending(self, nextPage):
+		self.lamanPermintaanPending.close()
+		if (nextPage == "pageBuilder"):
+			self.pageBuilder.show()
 	
 if __name__ == "__main__":
   app = QApplication(sys.argv)

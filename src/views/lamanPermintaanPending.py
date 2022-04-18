@@ -14,17 +14,17 @@ ungu = 'rgba(90, 79, 243, 1)'
 white = 'rgba(255, 255, 255, 1)'
 tulisan = 'rgba(37, 49, 60, 1)'
 
-class PermintaanDiterimaWindow(QWidget):
+class LamanPermintaanPending(QWidget):
   channel = pyqtSignal(str)
   
   def __init__(self):
     super().__init__()
-    self.pagePermintaanDiterima = 0
-    self.setUpPermintaanDiterimaWindow()
+    self.pagePermintaanPending = 0
+    self.setUpPermintaanPendingWindow()
   
-  def setUpPermintaanDiterimaWindow(self):
+  def setUpPermintaanPendingWindow(self):
     self.setFixedSize(1440, 1024)
-    self.setWindowTitle("KITASABI - Laman Permintaan Diterima")
+    self.setWindowTitle("KITASABI - Laman Permintaan Pending")
     self.setUpWidgets()
   
   def setUpWidgets(self):
@@ -68,8 +68,8 @@ class PermintaanDiterimaWindow(QWidget):
             color: black;
         }
     ''')          
-    self.initializePermintaanDiterima()
-    self.setUpDisplayPermintaanDiterima()
+    self.initializePermintaanPending()
+    self.setUpDisplayPermintaanPending()
     
     # next button
     nextButton = QPushButton(self)
@@ -89,7 +89,7 @@ class PermintaanDiterimaWindow(QWidget):
     ''')
     nextButton.setFont(mulish44)
     nextButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-    # nextButton.clicked.connect(self.nextPermintaanDiterima())    
+    # nextButton.clicked.connect(self.nextPermintaanPending)    
 
     # previous button
     previousButton = QPushButton(self)
@@ -109,9 +109,9 @@ class PermintaanDiterimaWindow(QWidget):
     ''')    
     previousButton.setFont(mulish44)
     previousButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-    # previousButton.clicked.connect(self.previousPermintaanDiterima())                              
+    # previousButton.clicked.connect(self.previousPermintaanPending)                              
   
-  def initializePermintaanDiterima(self):
+  def initializePermintaanPending(self):
         # set up font
     mulish16 = QFont()
     mulish16.setFamily("Mulish"); mulish16.setPixelSize(16)
@@ -231,8 +231,8 @@ class PermintaanDiterimaWindow(QWidget):
   def goToLamanPenggalang(self):
     self.channel.emit("penggalang")
 
-  def setUpDisplayPermintaanDiterima(self):
-    start = self.pagePermintaanDiterima * 3
+  def setUpDisplayPermintaanPending(self):
+    start = self.pagePermintaanPending * 3
     # for i in range(3):
     #   # if start + i < len(self.databaseRiwayatPenggalangan):
     #     # Preview penggalangan dana +i *185
@@ -262,8 +262,9 @@ class PermintaanDiterimaWindow(QWidget):
     #     print("No more RiwayatPenggalangan")
  
 
-# if __name__ == "__main__":
-#   app = QApplication(sys.argv)
-#   window = PermintaanDiterimaWindow()
-#   window.show()
-#   sys.exit(app.exec())
+if __name__ == "__main__":
+  app = QApplication(sys.argv)
+  window = LamanPermintaanPending()
+  window.show()
+  sys.exit(app.exec())
+  

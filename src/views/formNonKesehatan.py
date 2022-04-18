@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QApplication, QLabel, QTextEdit, QPushButton, QWidget
+from PyQt6.QtWidgets import QApplication, QLabel, QPushButton, QTextEdit, QWidget
 from PyQt6.QtGui import QCursor
 from PyQt6.QtCore import Qt, pyqtSignal
 import sys
@@ -58,6 +58,7 @@ class FormNonKesehatan(QWidget):
             padding: 10px 10px 10px 10px;
         ''')
 
+
         # set tujuan
         self.tujuan = QTextEdit(self)
         self.tujuan.setPlaceholderText("Tujuan")
@@ -71,92 +72,62 @@ class FormNonKesehatan(QWidget):
 
         # RIGHTSIDE
         # set no telepon
-        self.noTelp = QPushButton(self)
-        self.noTelp.setText("No Telepon")
+        self.noTelp = QTextEdit(self)
+        self.noTelp.setPlaceholderText("No Telepon")
         self.noTelp.setFixedSize(320, 46)
         self.noTelp.move(773, 179)
         self.noTelp.setStyleSheet('''
-            QPushButton {
-                border: 2px solid #5A4FF3;
-                background-color: #FFFFFF;
-                padding: 10px 10px 10px 10px;
-            }
-            QPushButton:hover {
-                background-color: #5A4FF3;
-                color: white;
-            }
+            border: 2px solid #5A4FF3;
+            background-color: #FFFFFF;
+            padding: 10px 10px 10px 10px;
         ''')
         self.noTelp.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         # set nama penerima
-        self.namaPenerima = QPushButton(self)
-        self.namaPenerima.setText("Nama Penerima")
+        self.namaPenerima = QTextEdit(self)
+        self.namaPenerima.setPlaceholderText("Nama Penerima")
         self.namaPenerima.setFixedSize(320, 46)
         self.namaPenerima.move(773, 249)
         self.namaPenerima.setStyleSheet('''
-            QPushButton {
-                border: 2px solid #5A4FF3;
-                background-color: #FFFFFF;
-                padding: 10px 10px 10px 10px;
-            }
-            QPushButton:hover {
-                background-color: #5A4FF3;
-                color: white;
-            }
+            border: 2px solid #5A4FF3;
+            background-color: #FFFFFF;
+            padding: 10px 10px 10px 10px;
         ''')
         self.namaPenerima.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         # set nama instansi
-        self.namaInstansi = QPushButton(self)
-        self.namaInstansi.setText("Nama Instansi")
+        self.namaInstansi = QTextEdit(self)
+        self.namaInstansi.setPlaceholderText("Nama Instansi")
         self.namaInstansi.setFixedSize(320, 46)
         self.namaInstansi.move(773, 319)
         self.namaInstansi.setStyleSheet('''
-            QPushButton {
-                border: 2px solid #5A4FF3;
-                background-color: #FFFFFF;
-                padding: 10px 10px 10px 10px;
-            }
-            QPushButton:hover {
-                background-color: #5A4FF3;
-                color: white;
-            }
+            border: 2px solid #5A4FF3;
+            background-color: #FFFFFF;
+            padding: 10px 10px 10px 10px;
         ''')
         self.namaInstansi.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         # set akun medsos
-        self.akunMedsos = QPushButton(self)
-        self.akunMedsos.setText("Akun Media Sosial")
+        self.akunMedsos = QTextEdit(self)
+        self.akunMedsos.setPlaceholderText("Akun Media Sosial")
         self.akunMedsos.setFixedSize(320, 46)
         self.akunMedsos.move(773, 389)
         self.akunMedsos.setStyleSheet('''
-            QPushButton {
-                border: 2px solid #5A4FF3;
-                background-color: #FFFFFF;
-                padding: 10px 10px 10px 10px;
-            }
-            QPushButton:hover {
-                background-color: #5A4FF3;
-                color: white;
-            }
+            border: 2px solid #5A4FF3;
+            background-color: #FFFFFF;
+            padding: 10px 10px 10px 10px;
         ''')
         self.akunMedsos.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         # set upload RM
-        self.targetDonasi = QPushButton(self)
-        self.targetDonasi.setText("Target Donasi (Rp)")
+        self.targetDonasi = QTextEdit(self)
+        self.targetDonasi.setPlaceholderText("Target Donasi (Rp)")
         self.targetDonasi.setFixedSize(320, 46)
         self.targetDonasi.move(773, 459)
         self.targetDonasi.setStyleSheet('''
-            QPushButton {
-                border: 2px solid #5A4FF3;
-                background-color: #FFFFFF;
-                padding: 10px 10px 10px 10px;
-            }
-            QPushButton:hover {
-                background-color: #5A4FF3;
-                color: white;
-            }
+            border: 2px solid #5A4FF3;
+            background-color: #FFFFFF;
+            padding: 10px 10px 10px 10px;
         ''')
         self.targetDonasi.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
@@ -193,7 +164,20 @@ class FormNonKesehatan(QWidget):
         self.submitFormNK.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.submitFormNK.clicked.connect(self.goToRiwayatPenggalangan)
 
+    def resetState(self):
+        self.judul.clear()
+        self.nama.clear()
+        self.pekerjaan.clear()
+        self.tujuan.clear()
+        self.noTelp.clear()
+        self.namaPenerima.clear()
+        self.namaInstansi.clear()
+        self.akunMedsos.clear()
+        self.targetDonasi.clear()
+        self.deskripsi.clear()
+
     def goToRiwayatPenggalangan(self):
+        self.resetState()
         self.channel.emit()
 
 

@@ -128,10 +128,10 @@ class LoginWindow(QWidget):
 
   def login(self):
     # fetch
-    self.clearForm()
+    self.resetState()
     self.goToMainWindow()
               
-  def clearForm(self):
+  def resetState(self):
     self.passwordEdit.clear()
     self.usernameEdit.clear()
 
