@@ -1,17 +1,18 @@
-from flask import request, session, jsonify
+from flask import request, jsonify
 from datetime import datetime
-import json
 
 from models.lamanModels import Laman
 from models.transaksiModels import Transaksi
+from application import auth
 
 class TransaksiController:
     @staticmethod
+    @auth.login_required
     def bayar():
         try:
-            data = json.loads(session["User"])
+            data = auth.current_user()
 
-            idDonatur = data["ID"]
+            idDonatur = data.getIDPengguna()
             idLaman = int(request.form.get("id-laman"))
             jumlahTransaksi = int(request.form.get("jumlah-transaksi"))
 
@@ -27,10 +28,11 @@ class TransaksiController:
             return str(e), 400
 
     @staticmethod
+    @auth.login_required
     def riwayatDonatur():
         try:
-            data = json.loads(session["User"])
-            idDonatur = data["ID"]
+            data = auth.current_user()
+            idDonatur = data.getIDPengguna()
 
             result = []
             riwayatTransaksi = Transaksi.getRiwayatDonasi(idDonatur)
@@ -50,6 +52,7 @@ class TransaksiController:
             return str(e), 400
 
     @staticmethod
+    @auth.login_required
     def cair():
         try:
             idLaman = int(request.form.get("id-laman"))
@@ -68,6 +71,7 @@ class TransaksiController:
             return str(e), 400
 
     @staticmethod
+    @auth.login_required
     def riwayatLaman():
         try:
             idLaman = int(request.form.get("id-laman"))

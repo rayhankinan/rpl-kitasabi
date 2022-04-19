@@ -1,7 +1,6 @@
 from email_validator import validate_email, EmailNotValidError
 import phonenumbers
 import bcrypt
-import os
 
 from models.db import mysql
 from models.cdn import bucket

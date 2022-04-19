@@ -1,35 +1,22 @@
-from flask import request, session, jsonify
-import json
+from flask import request, jsonify
 
 from models.akunModels import Akun
+from application import auth
 
 class AkunController:
     @staticmethod
-    def login():
+    @auth.verify_password
+    def authenticate(emailOrUsername, password):
         try:
-            emailOrUsername = request.form.get("email-username")
-            password = request.form.get("password")
-
             akun = Akun.getByEmailOrUsername(emailOrUsername)
 
             if akun.matchPassword(password):
-                session["User"] = json.dumps({"ID": akun.getIDPengguna(), "Email": akun.getEmail(), "Username": akun.getUsername()})
-                return "Created", 201
-                
+                return akun
             else:
-                return "Unauthorized", 401
+                return None
 
-        except Exception as e:
-            return str(e), 400
-
-    @staticmethod
-    def logout():
-        try:
-            session["User"] = None
-            return "Created", 201
-
-        except Exception as e:
-            return str(e), 400
+        except:
+            return None
 
     @staticmethod
     def register():
@@ -50,10 +37,10 @@ class AkunController:
             return str(e), 400
 
     @staticmethod
+    @auth.login_required
     def profile():
         try:
-            data = json.loads(session["User"])
-            akun = Akun.getByEmailOrUsername(data["Email"])
+            akun = auth.current_user()
 
             return jsonify(email=akun.getEmail(), listNoTelp=akun.getListNoTelp(), namaDepan=akun.getNamaDepan(), namaBelakang=akun.getNamaBelakang(), username=akun.getUsername(), foto=akun.getGcloudURL()), 200
 
@@ -61,14 +48,14 @@ class AkunController:
             return str(e), 400
 
     @staticmethod
+    @auth.login_required
     def edit():
         try:
             username = request.form.get("username")
             password = request.form.get("password")
             foto = request.files.get("foto")
 
-            data = json.loads(session["User"])
-            akun = Akun.getByEmailOrUsername(data["Email"])
+            akun = auth.current_user()
 
             akun.setUsername(username)
             akun.setPassword(password)
@@ -80,10 +67,10 @@ class AkunController:
             return str(e), 400
 
     @staticmethod
+    @auth.login_required
     def delete():
         try:
-            data = json.loads(session["User"])
-            akun = Akun.getByEmailOrUsername(data["Email"])
+            akun = auth.current_user()
             akun.delete()
 
             return "OK", 200
