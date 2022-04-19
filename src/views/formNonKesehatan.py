@@ -2,11 +2,22 @@ from PyQt6.QtWidgets import QApplication, QLabel, QPushButton, QTextEdit, QWidge
 from PyQt6.QtGui import QCursor
 from PyQt6.QtCore import Qt, pyqtSignal
 import requests
+from requests.auth import HTTPBasicAuth
 import sys
+import views.session as Session
 
 class FormNonKesehatan(QWidget):
     channel = pyqtSignal()
+
+    session = {
+		"username-email": "",
+		"password": "",
+	}
     
+    def setSession(self, usernameEmail, password):
+        self.session["username-email"] = usernameEmail
+        self.session["password"] = password
+
     dataText = {
         "judul": "",
         "deskripsi": "",
@@ -137,19 +148,16 @@ class FormNonKesehatan(QWidget):
 
     def resetState(self):
         self.judul.clear()
-        self.nama.clear()
-        self.instansi.clear()
-        self.tujuan.clear()
-        self.noTelp.clear()
         self.namaPenerima.clear()
         self.namaInstansi.clear()
-        self.akunMedsos.clear()
+        self.deskripsi.clear()
+        self.fb.clear()
+        self.ig.clear()
+        self.twitter.clear()
         self.targetDonasi.clear()
         self.deskripsi.clear()
         for key in list(self.dataText.keys()):
             self.dataText[key] = ""
-        for key in list(self.dataFile.keys()):
-            self.dataFile[key] = ""
 
     def setJudul(self):
         self.dataText["judul"] = self.judul.toPlainText()
@@ -175,8 +183,11 @@ class FormNonKesehatan(QWidget):
     def setNamaPenerima(self):
         self.dataText["nama-penerima"] = self.namaPenerima.toPlainText()
     
+        
     def sendData(self):
-        response = requests.post('http://localhost:3000/permintaan/create-permintaan-lainnya', data=self.dataText)
+        response = requests.post('http://localhost:3000/permintaan/create-permintaan-lainnya', data=self.dataText,
+            auth=HTTPBasicAuth(self.session["username-email"], self.session["password"])
+        )
         if (response.status_code == 201):
             return True
         else:

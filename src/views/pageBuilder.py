@@ -3,9 +3,20 @@ from PyQt6.QtGui import QFont, QCursor
 from PyQt6.QtCore import Qt, QDate, pyqtSignal
 import sys
 import requests
+from requests.auth import HTTPBasicAuth
+import views.session as Session
 
 class PageBuilder(QWidget):
     channel = pyqtSignal()
+
+    session = {
+		"username-email": "",
+		"password": "",
+	}
+    
+    def setSession(self, usernameEmail, password):
+        self.session["username-email"] = usernameEmail
+        self.session["password"] = password
 
     dataText = {
         "deadline": ""
@@ -123,7 +134,9 @@ class PageBuilder(QWidget):
         self.dataFile["foto-laman"] = ""
 
     def sendData(self):
-        response = requests.post('http://localhost:3000/laman/create-laman', data=self.dataText, files=self.dataFile)
+        response = requests.post('http://localhost:3000/laman/create-laman', data=self.dataText, files=self.dataFile,
+            auth=HTTPBasicAuth(self.session["username-email"], self.session["password"])
+        )
         if (response.status_code == 201):
             return True
         else:

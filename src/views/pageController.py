@@ -12,10 +12,9 @@ from views.lamanPengelolaanAkun import PengelolaanAkunWindow
 from views.lamanPenggalangDana import LamanPenggalangDana
 from views.lamanRiwayatDonasi import RiwayatDonasiWindow
 from views.lamanRiwayatPenggalanganDana import RiwayatPenggalanganWindow
-from views.lamanPermintaanDiterima import PermintaanDiterimaWindow
+from views.lamanPermintaan import LamanPermintaan
 from views.mainWindow import MainWindow
 from views.pageBuilder import PageBuilder
-from views.lamanPermintaanPending import PermintaanPendingWindow
 
 
 class PageController:
@@ -37,10 +36,9 @@ class PageController:
 		self.lamanPenggalangDana = LamanPenggalangDana()
 		self.lamanRiwayatDonasi = RiwayatDonasiWindow()
 		self.lamanRiwayatPenggalanganDana = RiwayatPenggalanganWindow()
-		self.lamanPermintaanDiterima = PermintaanDiterimaWindow()
+		self.lamanPermintaan = LamanPermintaan()
 		self.mainWindow = MainWindow()
 		self.pageBuilder = PageBuilder()
-		self.lamanPermintaanPending = PermintaanPendingWindow()
 
 	def setListener(self):
 		self.lamanPembayaran.channel.connect(self.handleLamanPembayaran)
@@ -55,9 +53,8 @@ class PageController:
 		self.formRegister.channel.connect(self.handleFormRegister)
 		self.lamanRiwayatDonasi.channel.connect(self.handleLamanRiwayatDonasi)
 		self.lamanRiwayatPenggalanganDana.channel.connect(self.handleLamanRiwayatPenggalanganDana)
-		self.lamanPermintaanDiterima.channel.connect(self.handleLamanPermintaanDiterima)
+		self.lamanPermintaan.channel.connect(self.handleLamanPermintaan)
 		self.lamanPengelolaanAkun.channel.connect(self.handleLamanPengelolaanAkun)
-		self.lamanPermintaanPending.channel.connect(self.handleLamanPermintaanPending)
 
 	def handleLamanPembayaran(self, nextPage):
 		if (nextPage == "home"):
@@ -116,11 +113,19 @@ class PageController:
 		self.pageBuilder.close()
 		self.lamanPermintaanDiterima.show()
 
-	def handleFormLogin(self, nextPage):
+	def handleFormLogin(self, nextPage, usernameEmail, password):
 		if (nextPage == "register"):
 			self.formLogin.close()
 			self.formRegister.show()
 		elif(nextPage == "mainWindow"):
+			self.formKesehatan.setSession(usernameEmail, password)
+			self.formNonKesehatan.setSession(usernameEmail, password)
+			self.lamanDetail.setSession(usernameEmail, password)
+			self.lamanEksplor.setSession(usernameEmail, password)
+			self.lamanPembayaran.setSession(usernameEmail, password)
+			self.lamanPermintaan.setSession(usernameEmail, password)
+			self.mainWindow.setSession(usernameEmail, password)
+			self.pageBuilder.setSession(usernameEmail, password)
 			self.mainWindow.setLaman()
 			self.formLogin.close()
 			self.mainWindow.show()
@@ -178,15 +183,11 @@ class PageController:
 		self.lamanPengelolaanAkun.close()
 		self.mainWindow.show()
 
-	def handleLamanPermintaanDiterima(self, nextPage):
+	def handleLamanPermintaan(self, nextPage):
 		self.lamanPermintaanDiterima.close()
 		if (nextPage == "pageBuilder"):
 			self.pageBuilder.show()
 
-	def handleLamanPermintaanPending(self, nextPage):
-		self.lamanPermintaanPending.close()
-		if (nextPage == "pageBuilder"):
-			self.pageBuilder.show()
 	
 if __name__ == "__main__":
   app = QApplication(sys.argv)

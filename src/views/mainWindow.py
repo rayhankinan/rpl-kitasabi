@@ -4,6 +4,7 @@ from PyQt6.QtGui import QFont, QPixmap, QCursor, QImage
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import pyqtSignal
 import urllib.request
+from requests.auth import HTTPBasicAuth
 
 import sys
 import urllib.request
@@ -15,6 +16,15 @@ tulisan = 'rgba(37, 49, 60, 1)'
 
 class MainWindow(QWidget):
   channel = pyqtSignal(str, int)
+
+  session = {
+		"username-email": "",
+		"password": "",
+	}
+    
+  def setSession(self, usernameEmail, password):
+    self.session["username-email"] = usernameEmail
+    self.session["password"] = password
 
   idLaman = {
     "id-laman": -1
@@ -186,7 +196,9 @@ class MainWindow(QWidget):
       self.explore_button.clicked.connect(self.goToLamanEksplor)
 
   def setLaman(self):
-    response = requests.get('http://localhost:3000/laman/eksplor-total-donasi')
+    response = requests.get('http://localhost:3000/laman/eksplor-total-donasi',
+      auth=HTTPBasicAuth(self.session["username-email"], self.session["password"])
+    )
     if (response.status_code == 200):
       # get list of laman (dictionary)
       listRes = json.loads(response.text)

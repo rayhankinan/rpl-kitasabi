@@ -4,9 +4,19 @@ from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtCore import Qt
 import urllib.request
 import sys, requests, json
+from requests.auth import HTTPBasicAuth
 
 class LamanDetail(QWidget):
     channel = pyqtSignal(str, int)
+
+    session = {
+		"username-email": "",
+		"password": "",
+	}
+    
+    def setSession(self, usernameEmail, password):
+        self.session["username-email"] = usernameEmail
+        self.session["password"] = password
 
     idLaman = {
         "id-laman": -1
@@ -160,7 +170,9 @@ class LamanDetail(QWidget):
     def setLaman(self, idLaman):
         # set id laman
         self.idLaman["id-laman"] = idLaman
-        response = requests.get('http://localhost:3000/laman/detail-laman', data=self.idLaman)
+        response = requests.get('http://localhost:3000/laman/detail-laman', data=self.idLaman,
+            auth=HTTPBasicAuth(self.session["username-email"], self.session["password"])
+        )
         if (response.status_code == 200):
             # get list of laman (dictionary)
             listRes = json.loads(response.text)

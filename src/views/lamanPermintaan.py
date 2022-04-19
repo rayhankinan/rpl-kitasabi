@@ -1,30 +1,36 @@
-import sys
+import sys, requests, json
 from PyQt6.QtWidgets import QApplication, QWidget, QTextEdit, QLabel, QLineEdit, QPushButton, QMessageBox
 from PyQt6.QtGui import QFont, QPixmap, QCursor, QImage
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import pyqtSignal
-from views.custom_widgets import ClickableLabel
 import urllib.request
-
-import sys
-import urllib.request
+from requests.auth import HTTPBasicAuth
 
 graybg = '#F2F4F7'
 ungu = 'rgba(90, 79, 243, 1)'
 white = 'rgba(255, 255, 255, 1)'
 tulisan = 'rgba(37, 49, 60, 1)'
 
-class PermintaanPendingWindow(QWidget):
+class LamanPermintaan(QWidget):
   channel = pyqtSignal(str)
+
+  session = {
+		"username-email": "",
+		"password": "",
+	}
+    
+  def setSession(self, usernameEmail, password):
+    self.session["username-email"] = usernameEmail
+    self.session["password"] = password
   
   def __init__(self):
     super().__init__()
-    self.pagePermintaanPending = 0
-    self.setUpPermintaanPendingWindow()
+    self.pagePermintaanDiterima = 0
+    self.setUpPermintaanDiterimaWindow()
   
-  def setUpPermintaanPendingWindow(self):
+  def setUpPermintaanDiterimaWindow(self):
     self.setFixedSize(1440, 1024)
-    self.setWindowTitle("KITASABI - Laman Permintaan Pending")
+    self.setWindowTitle("KITASABI - Laman Permintaan Diterima")
     self.setUpWidgets()
   
   def setUpWidgets(self):
@@ -56,6 +62,9 @@ class PermintaanPendingWindow(QWidget):
             border-radius: 12px;
             font-weight: bold;
         }
+        QPushButton:hover {
+            background-color: #6b75ff;
+        }
     ''')
     
      # set up font
@@ -82,8 +91,8 @@ class PermintaanPendingWindow(QWidget):
     self.returnButton.setText("< Kembali ke Laman Eksplor")
     self.returnButton.setFixedSize(208, 36)
     self.returnButton.move(33, 30)    
-    self.initializePermintaanPending()
-    self.setUpDisplayPermintaanPending()
+    self.initializePermintaanDiterima()
+    self.setUpDisplayPermintaanDiterima()
     
     # next button
     nextButton = QPushButton(self)
@@ -92,7 +101,7 @@ class PermintaanPendingWindow(QWidget):
     nextButton.move(1339,436)
     nextButton.setFont(mulish44)
     nextButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-    # nextButton.clicked.connect(self.nextPermintaanPending())    
+    # nextButton.clicked.connect(self.nextPermintaanDiterima())    
 
     # previous button
     previousButton = QPushButton(self)
@@ -101,9 +110,9 @@ class PermintaanPendingWindow(QWidget):
     previousButton.move(84,436) 
     previousButton.setFont(mulish44)
     previousButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-    # previousButton.clicked.connect(self.previousPermintaanPending())                              
+    # previousButton.clicked.connect(self.previousPermintaanDiterima())                              
   
-  def initializePermintaanPending(self):
+  def initializePermintaanDiterima(self):
         # set up font
     mulish16 = QFont()
     mulish16.setFamily("Mulish"); mulish16.setPixelSize(16)
@@ -148,8 +157,140 @@ class PermintaanPendingWindow(QWidget):
     self.cardBackground.setFixedSize(1220, 506)
     self.cardBackground.move(124, 240)
     self.cardBackground.setStyleSheet('background-color: rgba(187, 200, 212, 1)')
+
+    # set preview penggalangan dana
+    self.previewBg1 = QTextEdit(self)
+    self.previewBg1.setDisabled(True)
+    self.previewBg1.setFixedSize(1010, 227)
+    self.previewBg1.move(233, 212)
+    self.previewBg1.setStyleSheet('background-color: #FFFFFF')
     
-    self.penggalanganDanaCard = []
+    self.previewText1 = QTextEdit(self)
+    self.previewText1.setDisabled(True)
+    self.previewText1.setFixedSize(500, 130)
+    self.previewText1.move(469, 262)
+
+    self.previewImg1 = QLabel(self)
+    self.previewImg1.setFixedSize(176, 176)
+    self.previewImg1.move(268, 238)
+    self.previewImg1.setScaledContents(True)
+
+    # set bayar button
+    self.detail1 = QPushButton(self)
+    self.detail1.setText("Lihat Detail >")
+    self.detail1.setFixedSize(165, 52)
+    self.detail1.move(1020, 301)
+    self.detail1.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+    # self.detail1.clicked.connect(self.goToLamanDetail1)
+
+    # set preview penggalangan dana
+    self.previewBg2 = QTextEdit(self)
+    self.previewBg2.setDisabled(True)
+    self.previewBg2.setFixedSize(1010, 227)
+    self.previewBg2.move(233, 462)
+    self.previewBg2.setStyleSheet('background-color: #FFFFFF')
+    
+    self.previewText2 = QTextEdit(self)
+    self.previewText2.setFixedSize(500, 130)
+    self.previewText2.setDisabled(True)
+    self.previewText2.setText("Judul Penggalangan (ISI PAKE DATA)")
+    self.previewText2.move(469, 512)
+
+    self.previewImg2 = QLabel(self)
+    self.previewImg2.setFixedSize(176, 176)
+    self.previewImg2.move(268, 488)
+    self.previewImg2.setScaledContents(True)
+
+    # set bayar button
+    self.detail2 = QPushButton(self)
+    self.detail2.setText("Lihat Detail >")
+    self.detail2.setFixedSize(165, 52)
+    self.detail2.move(1020, 551)
+    self.detail2.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+    # self.detail2.clicked.connect(self.goToLamanDetail2)
+
+    # set preview penggalangan dana
+    self.previewBg3 = QTextEdit(self)
+    self.previewBg3.setDisabled(True)
+    self.previewBg3.setFixedSize(1010, 227)
+    self.previewBg3.move(233, 212)
+    self.previewBg3.setStyleSheet('background-color: #FFFFFF')
+    
+    self.previewText3 = QTextEdit(self)
+    self.previewText3.setDisabled(True)
+    self.previewText3.setFixedSize(500, 130)
+    self.previewText3.move(469, 262)
+
+    self.previewImg3 = QLabel(self)
+    self.previewImg3.setFixedSize(176, 176)
+    self.previewImg3.move(268, 238)
+    self.previewImg3.setScaledContents(True)
+
+    # set bayar button
+    self.detail3 = QPushButton(self)
+    self.detail3.setText("Lihat Detail >")
+    self.detail3.setFixedSize(165, 52)
+    self.detail3.move(1020, 301)
+    self.detail3.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+    # self.detail3.clicked.connect(self.goToLamanDetail1)
+    
+  def setLaman(self):
+    # response = requests.post('http://localhost:3000/permintaan/riwayat-permintaan',
+    #   auth=HTTPBasicAuth(self.session["username-email"], self.session["password"])
+    # )
+    # if (response.status_code == 200):
+    #     # get list of laman (dictionary)
+    #     listRes = json.loads(response.text)
+    #     # get laman 1
+    #     dictRes1 = (listRes[0])
+    #     # set id laman
+    #     self.idLaman["laman1"] = dictRes1["id-laman"]
+    #     # set judul
+    #     self.previewText1.setText(str(dictRes1["judul"]))
+    #     # set image
+    #     url = dictRes1["foto-laman"][0][0]
+    #     data = urllib.request.urlopen(url).read()
+    #     image = QImage()
+    #     image.loadFromData(data)
+    #     pixmap = QPixmap(image)
+    #     self.previewImg1.setPixmap(pixmap)
+    #     # check for laman 2
+    #     if (len(listRes) >= 2):
+    #         # set id laman
+    #         self.idLaman["laman2"] = dictRes2["id-laman"]
+    #         # get laman 2
+    #         dictRes2 = (listRes[1])
+    #         # set judul
+    #         self.previewText2.setText(dictRes2["judul"])
+    #         # set image
+    #         url = dictRes2["foto-laman"][0][0]
+    #         data = urllib.request.urlopen(url).read()
+    #         image = QImage()
+    #         image.loadFromData(data)
+    #         pixmap = QPixmap(image)
+    #         self.previewImg2.setPixmap(pixmap)
+    #         return True
+    #     else:
+    #         # placeholder data
+    #         self.previewText2.setText("Placeholder Title")
+    #         url = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
+    #         data = urllib.request.urlopen(url).read()
+    #         image = QImage()
+    #         image.loadFromData(data)
+    #         pixmap = QPixmap(image)
+    #         self.previewImg2.setPixmap(pixmap)
+    #         return False
+    # else:
+    #     # placeholder data
+    #     self.previewText1.setText("Placeholder Title")
+    #     url = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
+    #     data = urllib.request.urlopen(url).read()
+    #     image = QImage()
+    #     image.loadFromData(data)
+    #     pixmap = QPixmap(image)
+    #     self.previewImg1.setPixmap(pixmap)
+    #     return False
+  
     for i in range(3):
         self.penggalanganDanaCard.append({})
         # set preview penggalangan dana
@@ -183,14 +324,13 @@ class PermintaanPendingWindow(QWidget):
         pixmap2 = QPixmap(image2)
         self.penggalanganDanaCard[i]["previewImg2"].setPixmap(pixmap2)
         # cairkan button
-        self.penggalanganDanaCard[i]["pending"] = QPushButton(self)
-        self.penggalanganDanaCard[i]["pending"].setText("Pending")
-        self.penggalanganDanaCard[i]["pending"].setDisabled(True)
-        self.penggalanganDanaCard[i]["pending"].setFixedSize(165, 56)
-        self.penggalanganDanaCard[i]["pending"].move(990, 298+ i * 167)
-        self.penggalanganDanaCard[i]["pending"].setFont(mulish16)
-        self.penggalanganDanaCard[i]["pending"].setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.penggalanganDanaCard[i]["pending"].clicked.connect(self.goToBuatLaman)
+        self.penggalanganDanaCard[i]["buat_laman"] = QPushButton(self)
+        self.penggalanganDanaCard[i]["buat_laman"].setText("Buat Laman")
+        self.penggalanganDanaCard[i]["buat_laman"].setFixedSize(165, 56)
+        self.penggalanganDanaCard[i]["buat_laman"].move(990, 298+ i * 167)
+        self.penggalanganDanaCard[i]["buat_laman"].setFont(mulish16)
+        self.penggalanganDanaCard[i]["buat_laman"].setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.penggalanganDanaCard[i]["buat_laman"].clicked.connect(self.goToBuatLaman)
   
   def goToLamanEksplor(self):
     self.channel.emit("eksplor")
@@ -202,8 +342,8 @@ class PermintaanPendingWindow(QWidget):
   def goToLamanPenggalang(self):
     self.channel.emit("penggalang")
 
-  def setUpDisplayPermintaanPending(self):
-    start = self.pagePermintaanPending * 3
+  def setUpDisplayPermintaanDiterima(self):
+    start = self.pagePermintaanDiterima * 3
     # for i in range(3):
     #   # if start + i < len(self.databaseRiwayatPenggalangan):
     #     # Preview penggalangan dana +i *185
@@ -235,6 +375,6 @@ class PermintaanPendingWindow(QWidget):
 
 # if __name__ == "__main__":
 #   app = QApplication(sys.argv)
-#   window = PermintaanPendingWindow()
+#   window = PermintaanDiterimaWindow()
 #   window.show()
 #   sys.exit(app.exec())

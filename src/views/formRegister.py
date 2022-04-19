@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButto
 from PyQt6.QtGui import QFont, QPixmap, QCursor
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import pyqtSignal
+from requests.auth import HTTPBasicAuth
 from views.custom_widgets import ClickableLabel
 
 graybg = '#F2F4F7'

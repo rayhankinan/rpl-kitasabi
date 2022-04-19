@@ -4,9 +4,19 @@ from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtCore import Qt
 import sys, requests, json
 import urllib.request
+from requests.auth import HTTPBasicAuth
 
 class LamanPembayaran(QWidget):
     channel = pyqtSignal(str)
+
+    session = {
+		"username-email": "",
+		"password": "",
+	}
+    
+    def setSession(self, usernameEmail, password):
+        self.session["username-email"] = usernameEmail
+        self.session["password"] = password
 
     dataText = {
         "id-laman": "",
@@ -192,11 +202,12 @@ class LamanPembayaran(QWidget):
     
     def setLaman(self, idLaman):
         self.dataText["id-laman"] = idLaman
-        response = requests.get('http://localhost:3000/laman/detail-laman', data={"id-laman": idLaman})
+        response = requests.get('http://localhost:3000/laman/detail-laman', data={"id-laman": idLaman},
+            auth=HTTPBasicAuth(self.session["username-email"], self.session["password"])
+        )
         if (response.status_code == 200):
             # get list of laman (dictionary)
             listRes = json.loads(response.text)
-            print(listRes)
             # set judul
             self.previewText.setText(listRes["judul"])
             # set image
@@ -230,7 +241,9 @@ class LamanPembayaran(QWidget):
             self.dataText[key] = ""
     
     def sendData(self):
-        response = requests.post('http://localhost:3000/transaksi/bayar', data=self.dataText)
+        response = requests.post('http://localhost:3000/transaksi/bayar', data=self.dataText,
+            auth=HTTPBasicAuth(self.session["username-email"], self.session["password"])
+        )
         if (response.status_code == 201):
             return True
         else:

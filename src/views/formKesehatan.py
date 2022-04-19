@@ -1,12 +1,21 @@
 from PyQt6.QtWidgets import QLabel, QTextEdit, QPushButton, QWidget, QFileDialog, QMessageBox
 from PyQt6.QtGui import QCursor
 from PyQt6.QtCore import Qt, pyqtSignal
+from requests.auth import HTTPBasicAuth
 import requests
-
 
 class FormKesehatan(QWidget):
     channel = pyqtSignal()
     
+    session = {
+		"username-email": "",
+		"password": "",
+	}
+
+    def setSession(self, usernameEmail, password):
+        self.session["username-email"] = usernameEmail
+        self.session["password"] = password
+
     dataText = {
         "judul": "",
         "deskripsi": "",
@@ -172,7 +181,9 @@ class FormKesehatan(QWidget):
         self.dataText["target"] = self.target.toPlainText()
 
     def sendData(self):
-        response = requests.post('http://localhost:3000/permintaan/create-permintaan-kesehatan', data=self.dataText, files=self.dataFile)
+        response = requests.post('http://localhost:3000/permintaan/create-permintaan-kesehatan', data=self.dataText, files=self.dataFile,
+            auth=HTTPBasicAuth(self.session["username-email"], self.session["password"])
+        )
         if (response.status_code == 201):
             return True
         else:

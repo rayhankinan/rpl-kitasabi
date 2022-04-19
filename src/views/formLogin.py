@@ -1,24 +1,23 @@
-import sys
-import requests
+import sys, requests
+from requests.auth import HTTPBasicAuth
 from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox
 from PyQt6.QtGui import QFont, QCursor
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import pyqtSignal
 from views.custom_widgets import ClickableLabel
 
-class LoginWindow(QWidget):
-  channel = pyqtSignal(str)
 
-  dataText = {
-    "email-username": "",
-    "password": "",
-  }
+class LoginWindow(QWidget):
+  channel = pyqtSignal(str, str, str)
+
+  session = {
+		"username-email": "",
+		"password": "",
+	}
 
   def __init__(self):
     super().__init__()
     self.setUpLoginWindow()
-    # connect ke database
-    # self.conn
 
   def setUpLoginWindow(self):
     self.setFixedSize(1440, 1024)
@@ -121,41 +120,39 @@ class LoginWindow(QWidget):
     registerHere.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
   def setPassword(self):
-    self.dataText["password"] = self.passwordEdit.text()
+    self.session["password"] = self.passwordEdit.text()
+
   def setUsername(self):
-    self.dataText["email-username"] = self.usernameEdit.text()
+    self.session["username-email"] = self.usernameEdit.text()
 
   def goToRegisterWindow(self):
-    self.channel.emit("register")
+    self.channel.emit("register", "", "")
   
   def goToMainWindow(self):
-    self.channel.emit("mainWindow")
+    self.channel.emit("mainWindow", self.session["username-email"], self.session["password"])
 
   def sendData(self):
-    response = requests.post('http://localhost:3000/akun/login', data=self.dataText)
-    if (response.status_code == 201):
+    response = requests.get('http://localhost:3000/akun/login',
+      auth=HTTPBasicAuth(self.session["username-email"], self.session["password"])
+    )
+    if (response.status_code == 200):
       return True
     else:
       return False
 
   def login(self):
-    for key, value in self.dataText.items():
-      if (value == ""):
-        msgBox = QMessageBox()
-        msgBox.setText("<p>Please fill out the form properly!</p>")
-        msgBox.setWindowTitle("Login Failed")
-        msgBox.setIcon(QMessageBox.Icon.Warning)
-        msgBox.setStyleSheet("background-color: white")
-        msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
-        msgBox.exec()
-        return
+    if (self.session["password"] == "" or self.session["username-email"] == ""):
+      msgBox = QMessageBox()
+      msgBox.setText("<p>Please fill out the form properly!</p>")
+      msgBox.setWindowTitle("Login Failed")
+      msgBox.setIcon(QMessageBox.Icon.Warning)
+      msgBox.setStyleSheet("background-color: white")
+      msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+      msgBox.exec()
+      return
     success = self.sendData()
     if (success):
-      # fetch
-      self.resetState()
       self.goToMainWindow()
-      for key in list(self.dataText.keys()):
-        self.dataText[key] = ""
     else:
       msgBox = QMessageBox()
       msgBox.setText("<p>Account not registered, register first!</p>")
@@ -165,10 +162,7 @@ class LoginWindow(QWidget):
       msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
       msgBox.exec()
       return
-              
-  def resetState(self):
-    self.passwordEdit.clear()
-    self.usernameEdit.clear()
+
 
 # if __name__ == "__main__":
 #   # app = QApplication(sys.argv)
