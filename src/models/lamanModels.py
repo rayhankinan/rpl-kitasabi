@@ -187,13 +187,12 @@ class Laman():
 
   # CONSTRUCTOR BY TotalDonasi
   @classmethod
-  def getByTotalDonasi(cls):
+  def getAll(cls):
     # INITIALIZE CURSOR
     cursor = mysql.connection.cursor()
     # SEACH TOTAL DONASI SORTED
     cursor.execute("SELECT * \
-                    FROM Laman \
-                    ORDER BY TotalDonasi DESC")
+                    FROM Laman ")
 
     dataLaman = cursor.fetchall()
 
