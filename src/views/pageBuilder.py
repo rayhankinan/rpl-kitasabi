@@ -4,7 +4,6 @@ from PyQt6.QtCore import Qt, QDate, pyqtSignal
 import sys
 import requests
 from requests.auth import HTTPBasicAuth
-import views.session as Session
 
 class PageBuilder(QWidget):
     channel = pyqtSignal()

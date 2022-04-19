@@ -54,16 +54,29 @@ class AkunController:
 
     @staticmethod
     @userAuth.login_required
-    def edit():
+    def editUsernamePassword():
         try:
             username = request.form.get("username")
             password = request.form.get("password")
-            foto = request.files.get("foto")
 
             akun = userAuth.current_user()
 
             akun.setUsername(username)
             akun.setPassword(password)
+
+            return "OK", 200
+
+        except Exception as e:
+            return str(e), 400
+
+    @staticmethod
+    @userAuth.login_required
+    def editFoto():
+        try:
+            foto = request.files.get("foto")
+
+            akun = userAuth.current_user()
+
             akun.setFoto(foto)
 
             return "OK", 200
