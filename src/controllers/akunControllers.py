@@ -1,11 +1,11 @@
 from flask import request, jsonify
 
 from models.akunModels import Akun
-from application import auth
+from application import userAuth
 
 class AkunController:
     @staticmethod
-    @auth.verify_password
+    @userAuth.verify_password
     def authenticate(emailOrUsername, password):
         try:
             akun = Akun.getByEmailOrUsername(emailOrUsername)
@@ -37,15 +37,15 @@ class AkunController:
             return str(e), 400
 
     @staticmethod
-    @auth.login_required
+    @userAuth.login_required
     def login():
         return "OK", 200
 
     @staticmethod
-    @auth.login_required
+    @userAuth.login_required
     def profile():
         try:
-            akun = auth.current_user()
+            akun = userAuth.current_user()
 
             return jsonify(email=akun.getEmail(), listNoTelp=akun.getListNoTelp(), namaDepan=akun.getNamaDepan(), namaBelakang=akun.getNamaBelakang(), username=akun.getUsername(), foto=akun.getGcloudURL()), 200
 
@@ -53,14 +53,14 @@ class AkunController:
             return str(e), 400
 
     @staticmethod
-    @auth.login_required
+    @userAuth.login_required
     def edit():
         try:
             username = request.form.get("username")
             password = request.form.get("password")
             foto = request.files.get("foto")
 
-            akun = auth.current_user()
+            akun = userAuth.current_user()
 
             akun.setUsername(username)
             akun.setPassword(password)
@@ -72,10 +72,10 @@ class AkunController:
             return str(e), 400
 
     @staticmethod
-    @auth.login_required
+    @userAuth.login_required
     def delete():
         try:
-            akun = auth.current_user()
+            akun = userAuth.current_user()
             akun.delete()
 
             return "OK", 200

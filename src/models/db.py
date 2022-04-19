@@ -42,73 +42,73 @@ with app.app_context():
                     FOREIGN KEY (IDPengguna) REFERENCES Akun (IDPengguna) ON DELETE CASCADE)")
 
     # TABLE Permintaan
-    cursor.execute("CREATE TABLE Permintaan (\
+    cursor.execute("CREATE TABLE Permintaan ( \
                     IDPermintaan INT UNSIGNED AUTO_INCREMENT,\
                     IDPengguna INT UNSIGNED,\
                     Judul VARCHAR(255) NOT NULL, \
-                    Deskripsi VARCHAR(255) NOT NULL,\
-                    Target BIGINT UNSIGNED NOT NULL,\
+                    Deskripsi VARCHAR(255) NOT NULL, \
+                    Target BIGINT UNSIGNED NOT NULL, \
                     StatusAutentikasi BOOLEAN DEFAULT NULL, \
                     UNIQUE (Judul, Deskripsi), \
-                    PRIMARY KEY (IDPermintaan),\
+                    PRIMARY KEY (IDPermintaan), \
                     FOREIGN KEY (IDPengguna) REFERENCES Akun (IDPengguna) ON DELETE CASCADE)")
 
     # TABLE PermintaanKesehatan
-    cursor.execute("CREATE TABLE PermintaanKesehatan (\
-                    IDPermintaanKesehatan INT UNSIGNED,\
-                    FotoKTP VARCHAR(255) NOT NULL,\
-                    FotoKK VARCHAR(255) NOT NULL,\
-                    FotoSuratKeteranganMedis VARCHAR(255) NOT NULL,\
-                    FotoHasilPemeriksaan VARCHAR(255) NOT NULL,\
-                    Tujuan VARCHAR(255) NOT NULL,\
-                    NamaPasien VARCHAR(255) NOT NULL,\
-                    PRIMARY KEY (IDPermintaanKesehatan),\
+    cursor.execute("CREATE TABLE PermintaanKesehatan ( \
+                    IDPermintaanKesehatan INT UNSIGNED, \
+                    FotoKTP VARCHAR(255) NOT NULL, \
+                    FotoKK VARCHAR(255) NOT NULL, \
+                    FotoSuratKeteranganMedis VARCHAR(255) NOT NULL, \
+                    FotoHasilPemeriksaan VARCHAR(255) NOT NULL, \
+                    Tujuan VARCHAR(255) NOT NULL, \
+                    NamaPasien VARCHAR(255) NOT NULL, \
+                    PRIMARY KEY (IDPermintaanKesehatan), \
                     FOREIGN KEY (IDPermintaanKesehatan) REFERENCES Permintaan (IDPermintaan) ON DELETE CASCADE)")
 
     # TABLE PermintaanLainnya
-    cursor.execute("CREATE TABLE PermintaanLainnya (\
-                    IDPermintaanLainnya INT UNSIGNED,\
-                    Instansi VARCHAR(255) NOT NULL,\
-                    AkunInstagram VARCHAR(255),\
-                    AkunTwitter VARCHAR(255),\
-                    AkunFacebook VARCHAR(255),\
+    cursor.execute("CREATE TABLE PermintaanLainnya ( \
+                    IDPermintaanLainnya INT UNSIGNED, \
+                    Instansi VARCHAR(255) NOT NULL, \
+                    AkunInstagram VARCHAR(255), \
+                    AkunTwitter VARCHAR(255), \
+                    AkunFacebook VARCHAR(255), \
                     NamaPenerima VARCHAR(255), \
-                    PRIMARY KEY (IDPermintaanLainnya),\
+                    PRIMARY KEY (IDPermintaanLainnya), \
                     FOREIGN KEY (IDPermintaanLainnya) REFERENCES Permintaan (IDPermintaan) ON DELETE CASCADE)")
                     
     # TABLE Laman
-    cursor.execute("CREATE TABLE Laman (\
-                    IDLaman INT UNSIGNED AUTO_INCREMENT,\
-                    IDAutentikasi INT UNSIGNED,\
-                    IDPenggalang INT UNSIGNED,\
-                    Judul VARCHAR(255) NOT NULL,\
-                    Deskripsi VARCHAR(255) NOT NULL,\
-                    Target  BIGINT UNSIGNED,\
-                    Kategori ENUM('Kesehatan', 'Lainnya') NOT NULL,\
-                    Deadline DATE NOT NULL,\
-                    Timestamp DATETIME NOT NULL,\
-                    PRIMARY KEY (IDLaman),\
-                    FOREIGN KEY (IDPenggalang) REFERENCES Akun (IDPengguna) ON DELETE CASCADE,\
+    cursor.execute("CREATE TABLE Laman ( \
+                    IDLaman INT UNSIGNED AUTO_INCREMENT, \
+                    IDAutentikasi INT UNSIGNED, \
+                    IDPenggalang INT UNSIGNED, \
+                    Judul VARCHAR(255) NOT NULL, \
+                    Deskripsi VARCHAR(255) NOT NULL, \
+                    Target  BIGINT UNSIGNED, \
+                    Kategori ENUM('Kesehatan', 'Lainnya') NOT NULL, \
+                    Deadline DATE NOT NULL, \
+                    Timestamp DATETIME NOT NULL, \
+                    PRIMARY KEY (IDLaman), \
+                    FOREIGN KEY (IDPenggalang) REFERENCES Akun (IDPengguna) ON DELETE CASCADE, \
                     FOREIGN KEY (IDAutentikasi) REFERENCES Permintaan (IDPermintaan) ON DELETE CASCADE)")
 
     # TABLE FotoLaman
-    cursor.execute("CREATE TABLE LamanFoto (\
-                    IDLaman INT UNSIGNED,\
-                    Foto VARCHAR(255) NOT NULL,\
-                    PRIMARY KEY (IDLaman, Foto),\
+    cursor.execute("CREATE TABLE LamanFoto ( \
+                    IDLaman INT UNSIGNED, \
+                    Foto VARCHAR(255) NOT NULL, \
+                    PRIMARY KEY (IDLaman, Foto), \
                     FOREIGN KEY (IDLaman) REFERENCES Laman (IDLaman) ON DELETE CASCADE)")
 
     # TABLE Transaksi
-    cursor.execute("CREATE TABLE Transaksi (\
-                    IDTransaksi INT UNSIGNED AUTO_INCREMENT,\
-                    IDDonatur INT UNSIGNED,\
-                    IDLaman INT UNSIGNED,\
-                    JumlahTransaksi BIGINT UNSIGNED NOT NULL,\
-                    Timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP() NOT NULL,\
-                    StatusPencairan BOOLEAN DEFAULT FALSE NOT NULL,\
-                    PRIMARY KEY (IDTransaksi),\
-                    FOREIGN KEY (IDDonatur) REFERENCES Akun (IDPengguna) ON DELETE SET NULL,\
-                    FOREIGN KEY (IDLaman) REFERENCES Laman (IDLaman) ON DELETE SET NULL,\
+    cursor.execute("CREATE TABLE Transaksi ( \
+                    IDTransaksi INT UNSIGNED AUTO_INCREMENT, \
+                    IDDonatur INT UNSIGNED, \
+                    IDLaman INT UNSIGNED, \
+                    JumlahTransaksi BIGINT UNSIGNED NOT NULL, \
+                    Timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP() NOT NULL, \
+                    StatusPencairan BOOLEAN DEFAULT FALSE NOT NULL, \
+                    PRIMARY KEY (IDTransaksi), \
+                    FOREIGN KEY (IDDonatur) REFERENCES Akun (IDPengguna) ON DELETE SET NULL, \
+                    FOREIGN KEY (IDLaman) REFERENCES Laman (IDLaman) ON DELETE SET NULL, \
                     UNIQUE (IDDonatur, IDLaman, Timestamp))")
 
     mysql.connection.commit()

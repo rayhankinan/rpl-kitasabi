@@ -4,17 +4,17 @@ from flask import jsonify, request
 from models.lamanModels import Laman
 from models.permintaanModels import Permintaan, PermintaanKesehatan
 from models.transaksiModels import Transaksi
-from application import auth
+from application import userAuth
 
 class LamanController:
   @staticmethod
-  @auth.login_required
+  @userAuth.login_required
   def createLaman():
     try:
       idAutentikasi = request.form.get("id-autentikasi")
 
       dataPermintaan = Permintaan.getByIDPermintaan(idAutentikasi)
-      dataAkun = auth.current_user()
+      dataAkun = userAuth.current_user()
 
       if dataPermintaan.getStatusAutentikasi() is None:
         return "Permintaan belum disetujui!", 400
@@ -44,7 +44,7 @@ class LamanController:
       return str(e), 400
 
   @staticmethod
-  @auth.login_required
+  @userAuth.login_required
   def editLaman():
     try:
       idLaman = request.form.get("id-laman")
@@ -59,7 +59,7 @@ class LamanController:
       return str(e), 400
 
   @staticmethod
-  @auth.login_required
+  @userAuth.login_required
   def searchlaman():
     # SEARCH BY JUDUL
     try:
@@ -90,7 +90,7 @@ class LamanController:
       return str(e), 400
 
   @staticmethod
-  @auth.login_required
+  @userAuth.login_required
   def eksplorKategoriLaman():
     # EKSPLOR BY KATEGORI
     try:
@@ -121,7 +121,7 @@ class LamanController:
       return str(e), 400
 
   @staticmethod
-  @auth.login_required
+  @userAuth.login_required
   def eksplorTotalDonasiLaman():
     # EKSPLOR BY TOTAL DONASI
     try:
@@ -151,7 +151,7 @@ class LamanController:
       return str(e), 400
 
   @staticmethod
-  @auth.login_required
+  @userAuth.login_required
   def detailLaman():
     # FIND BY IDLaman
     try:
@@ -177,10 +177,10 @@ class LamanController:
       return str(e), 400
 
   @staticmethod
-  @auth.login_required
+  @userAuth.login_required
   def riwayatLaman():
     try:
-      dataAkun = auth.current_user()
+      dataAkun = userAuth.current_user()
       idPenggalang = dataAkun.getIDPengguna()
       laman = Laman.riwayatLaman(idPenggalang)
 

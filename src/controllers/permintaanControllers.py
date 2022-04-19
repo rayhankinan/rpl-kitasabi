@@ -1,11 +1,21 @@
 from flask import jsonify, request
+import bcrypt
 
 from models.permintaanModels import PermintaanKesehatan, PermintaanLainnya
-from application import auth
+from application import userAuth, auditorAuth
+from config.auditorConfig import AUDITOR_USERNAME, AUDITOR_HASHED_PASSWORD
 
 class PermintaanController:
   @staticmethod
-  @auth.login_required
+  @auditorAuth.verify_password
+  def authenticate(username, password):
+    if username == AUDITOR_USERNAME and bcrypt.checkpw(password.encode("utf-8"), AUDITOR_HASHED_PASSWORD):
+      return True
+    else:
+      return False
+
+  @staticmethod
+  @userAuth.login_required
   def createPermintaanKesehatan():
     try:
       judul = request.form.get("judul")
@@ -18,7 +28,7 @@ class PermintaanController:
       tujuan = request.form.get("tujuan")
       namaPasien = request.form.get("nama-pasien")
 
-      dataAkun = auth.current_user()
+      dataAkun = userAuth.current_user()
       idPengguna = dataAkun.getIDPengguna()
 
       # TODO : get IDPengguna
@@ -29,7 +39,7 @@ class PermintaanController:
       return str(e), 400
 
   @staticmethod
-  @auth.login_required
+  @userAuth.login_required
   def createPermintaanLainnya():
     try:
       judul = request.form.get("judul")
@@ -41,7 +51,7 @@ class PermintaanController:
       fb = request.form.get("akun-facebook")
       penerima = request.form.get("nama-penerima")
 
-      dataAkun = auth.current_user()
+      dataAkun = userAuth.current_user()
       idPengguna = dataAkun.getIDPengguna()
 
       # TODO : get IDPengguna
@@ -52,7 +62,7 @@ class PermintaanController:
       return str(e), 400
 
   @staticmethod
-  @auth.login_required
+  @auditorAuth.login_required
   def editStatusPermintaanKesehatan():
     try:
       idPermintaanKesehatan = request.form.get("id-permintaan-kesehatan")
@@ -67,7 +77,7 @@ class PermintaanController:
       return str(e), 400
 
   @staticmethod
-  @auth.login_required
+  @auditorAuth.login_required
   def editStatusPermintaanLainnya():
     try:
       idPermintaanLainnya = request.form.get("id-permintaan-lainnya")
@@ -82,10 +92,10 @@ class PermintaanController:
       return str(e), 400
 
   @staticmethod
-  @auth.login_required
+  @userAuth.login_required
   def riwayatPermintaan():
     try:
-      dataAkun = auth.current_user()
+      dataAkun = userAuth.current_user()
       idPengguna = dataAkun.getIDPengguna()
 
       result = []
@@ -94,11 +104,36 @@ class PermintaanController:
 
       if riwayatKesehatan is not None:
         for kes in riwayatKesehatan:
-          result.append({"id-permintaan" : kes.getIDPermintaan(), "id-pengguna": kes.getIDPengguna(), "judul": kes.getJudul(), "deskripsi": kes.getDeskripsi(), "target": kes.getTarget(), "status-autentikasi": kes.getStatusAutentikasi(), "foto-ktp": kes.getFotoKTP(), "foto-kk": kes.getFotoKK(), "foto-ket-medis": kes.getFotoKetMedis(), "foto-pemeriksaan": kes.getFotoPemeriksaan(), "tujuan": kes.getTujuan(), "nama-pasien": kes.getNamaPasien()})
+          result.append({
+            "id-permintaan" : kes.getIDPermintaan(), 
+            "id-pengguna": kes.getIDPengguna(), 
+            "judul": kes.getJudul(), 
+            "deskripsi": kes.getDeskripsi(), 
+            "target": kes.getTarget(), 
+            "status-autentikasi": kes.getStatusAutentikasi(), 
+            "foto-ktp": kes.getFotoKTP(), 
+            "foto-kk": kes.getFotoKK(), 
+            "foto-ket-medis": kes.getFotoKetMedis(), 
+            "foto-pemeriksaan": kes.getFotoPemeriksaan(), 
+            "tujuan": kes.getTujuan(), 
+            "nama-pasien": kes.getNamaPasien()
+          })
 
       if riwayatLainnya is not None:
         for lain in riwayatLainnya:
-          result.append({"id-permintaan" : lain.getIDPermintaan(), "id-pengguna": lain.getIDPengguna(), "judul": lain.getJudul(), "deskripsi": lain.getDeskripsi(), "target": lain.getTarget(), "status-autentikasi": lain.getStatusAutentikasi(), "instansi" : lain.getInstansi(), "akun-instagram": lain.getAkunInstagram(), "akun-twitter": lain.getAkunTwitter(), "akun-facebook": lain.getAkunFacebook(), "nama-penerima": lain.getNamaPenerima()})
+          result.append({
+            "id-permintaan" : lain.getIDPermintaan(), 
+            "id-pengguna": lain.getIDPengguna(), 
+            "judul": lain.getJudul(), 
+            "deskripsi": lain.getDeskripsi(), 
+            "target": lain.getTarget(), 
+            "status-autentikasi": lain.getStatusAutentikasi(), 
+            "instansi" : lain.getInstansi(), 
+            "akun-instagram": lain.getAkunInstagram(), 
+            "akun-twitter": lain.getAkunTwitter(), 
+            "akun-facebook": lain.getAkunFacebook(), 
+            "nama-penerima": lain.getNamaPenerima()
+          })
 
       if riwayatKesehatan is None and riwayatLainnya is None:
         return "Not Found", 404

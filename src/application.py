@@ -9,4 +9,5 @@ load_dotenv()
 app = Flask(__name__)
 app.config.from_object(applicationConfig)
 
-auth = HTTPBasicAuth()
+userAuth = HTTPBasicAuth()
+auditorAuth = HTTPBasicAuth()

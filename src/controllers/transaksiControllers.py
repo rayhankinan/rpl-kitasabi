@@ -3,14 +3,14 @@ from datetime import datetime
 
 from models.lamanModels import Laman
 from models.transaksiModels import Transaksi
-from application import auth
+from application import userAuth
 
 class TransaksiController:
     @staticmethod
-    @auth.login_required
+    @userAuth.login_required
     def bayar():
         try:
-            data = auth.current_user()
+            data = userAuth.current_user()
 
             idDonatur = data.getIDPengguna()
             idLaman = int(request.form.get("id-laman"))
@@ -28,10 +28,10 @@ class TransaksiController:
             return str(e), 400
 
     @staticmethod
-    @auth.login_required
+    @userAuth.login_required
     def riwayatDonatur():
         try:
-            data = auth.current_user()
+            data = userAuth.current_user()
             idDonatur = data.getIDPengguna()
 
             result = []
@@ -52,7 +52,7 @@ class TransaksiController:
             return str(e), 400
 
     @staticmethod
-    @auth.login_required
+    @userAuth.login_required
     def cair():
         try:
             idLaman = int(request.form.get("id-laman"))
@@ -71,7 +71,7 @@ class TransaksiController:
             return str(e), 400
 
     @staticmethod
-    @auth.login_required
+    @userAuth.login_required
     def riwayatLaman():
         try:
             idLaman = int(request.form.get("id-laman"))
