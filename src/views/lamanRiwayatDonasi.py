@@ -5,6 +5,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtCore import pyqtSignal
 import sys, requests, json
 from views.custom_widgets import ClickableLabel
+from requests.auth import HTTPBasicAuth
 import urllib.request
 
 import sys
@@ -18,9 +19,18 @@ pad =200
 
 class RiwayatDonasiWindow(QWidget):
   channel = pyqtSignal()
+
+  session = {
+		"username-email": "",
+		"password": "",
+	}
+    
+  def setSession(self, usernameEmail, password):
+    self.session["username-email"] = usernameEmail
+    self.session["password"] = password
   
   idLaman = {
-    "laman": -1,
+    "laman1": -1,
     "laman2": -1,
   }
 
@@ -222,55 +232,22 @@ class RiwayatDonasiWindow(QWidget):
     self.pixmap2 = QPixmap(self.image2)
     self.previewImg2.setPixmap(self.pixmap2)
 
-  def setUpDisplayRiwayatDonasi(self):
-    start = self.pageRiwayatDonasi * 3
-    # for i in range(3):
-    #   # if start + i < len(self.databaseRiwayatDonasi):
-    #     # Preview penggalangan dana +i *185
-    #     self.riwayatDonasiCard[i]["preview_penggalangan_dana"].setText("Judul Penggalangan Dana")
-    #     # nominal penggalangan dana
-    #     self.riwayatDonasiCard[i]["nominal"].setText("Nominal")
-    #     # foto          
-    #     self.url2 = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'   
-      
-  
-  def nextRiwayatDonasi(self):
-    print("Right button clicked")
-    # if (self.pageRiwayatDonasi + 1 < (len(self.databaseRiwayatDonasi)//3)):
-    #     self.pageRiwayatDonasi += 1
-    #     print("page: ", self.pageRiwayatDonasi)
-    #     self.setUpDisplayRiwayatDonasi()
-    # else:
-    #     print("No more RiwayatDonasi")
-
-  def previousRiwayatDonasi(self):
-    print("Left button clicked")
-    # if (self.pageRiwayatDonasi > 0):
-    #     self.pageRiwayatDonasi -= 1
-    #     print("page: ", self.pageRiwayatDonasi)
-    #     self.setUpDisplayRiwayatDonasi()
-    # else:
-    #     print("No more RiwayatDonasi")
-
   def setLaman(self):
-    response = requests.get('http://localhost:3000/transaksi/riwayat-donatur')
+    response = requests.get('http://localhost:3000/transaksi/riwayat-donatur',
+      auth=HTTPBasicAuth(self.session["username-email"], self.session["password"])
+    )
     if (response.status_code == 200):
       listRes = json.loads(response.text)
       dictRes1 = (listRes[0])
       
-      self.idLaman["laman1"] = dictRes1["idLaman"]
-      i = 1
-      response_laman = requests.get('http://localhost:3000/laman')
+      self.idLaman["laman1"] = dictRes1["id-laman"]
+      response_laman = requests.get('http://localhost:3000/laman/detail-laman', data={"id-laman": dictRes1["id-laman"]},
+        auth=HTTPBasicAuth(self.session["username-email"], self.session["password"])
+      )
       lamanRes = json.loads(response_laman.text)
-      # tolong benerin ini masih salah karenga gapaham
-      for i in range(len(listRes)):
-        if (self.idLaman["laman1"] == lamanRes[i]["idLaman"]):
-          judul_laman = lamanRes[i]["judul"]
-          urlFoto = lamanRes[i]["foto-laman"]
-          break
-      self.preview_penggalangan_dana1.setText(str(judul_laman))
-      self.nominal1.setText(str(dictRes1["jumlahTransaksi"]))
-      self.url1 = urlFoto
+      self.preview_penggalangan_dana1.setText(lamanRes["judul"])
+      self.nominal1.setText(str(lamanRes["target"]))
+      self.url1 = lamanRes["foto-laman"][0][0]
       self.data1 = urllib.request.urlopen(self.url1).read()
       self.image1 = QImage()
       self.image1.loadFromData(self.data1)
@@ -281,29 +258,25 @@ class RiwayatDonasiWindow(QWidget):
       self.pixmap1 = QPixmap(self.image1)
       self.previewImg1.setPixmap(self.pixmap1)
        
-      if(len(listRes) >= 2):
+      if (len(listRes) >= 2):
         dictRes2 = (listRes[1])    
-        self.idLaman["laman2"] = dictRes2["idLaman"]
-        i = 1
-        for i in range(len(listRes)):
-          if (self.idLaman["laman2"] == lamanRes[i]["idLaman"]):
-            judul_laman = lamanRes[i]["judul"]
-            urlFoto = lamanRes[i]["foto-laman"][0][0]
-            break
-        self.preview_penggalangan_dana2.setText(str(judul_laman))
-        self.nominal1.setText(str(dictRes2["jumlahTransaksi"]))
-        self.url2 = urlFoto
+        self.idLaman["laman2"] = dictRes2["id-laman"]
+        response_laman = requests.get('http://localhost:3000/laman/detail-laman', data={"id-laman": dictRes2["id-laman"]},
+          auth=HTTPBasicAuth(self.session["username-email"], self.session["password"])
+        )
+        lamanRes = json.loads(response_laman.text)
+        self.preview_penggalangan_dana2.setText(lamanRes["judul"])
+        self.nominal2.setText(str(lamanRes["target"]))
+        self.url2 = lamanRes["foto-laman"][0][0]
         self.data2 = urllib.request.urlopen(self.url2).read()
         self.image2 = QImage()
-        self.image2.loadFromData(self.data2)
+        self.image2.loadFromData(self.data1)
         self.previewImg2 = QLabel(self)
         self.previewImg2.setFixedSize(117, 98)
         self.previewImg2.move(269, 253)
         self.previewImg2.setScaledContents(True)
-        self.pixmap2 = QPixmap(self.image2)
-        self.previewImg2.setPixmap(self.pixmap2)             
-              
-      
+        self.pixmap2 = QPixmap(self.image1)
+        self.previewImg2.setPixmap(self.pixmap1)         
 
   def goToLamanEksplor(self):
     self.channel.emit()

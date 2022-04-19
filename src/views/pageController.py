@@ -65,6 +65,7 @@ class PageController:
 			self.lamanPembayaran.close()
 			self.lamanPengelolaanAkun.show()
 		else:
+			self.lamanRiwayatDonasi.setLaman()
 			self.lamanPembayaran.close()
 			self.lamanRiwayatDonasi.show()
 
@@ -126,6 +127,8 @@ class PageController:
 			self.lamanPermintaan.setSession(usernameEmail, password)
 			self.mainWindow.setSession(usernameEmail, password)
 			self.pageBuilder.setSession(usernameEmail, password)
+			self.lamanRiwayatPenggalanganDana.setSession(usernameEmail, password)
+			self.lamanRiwayatDonasi.setSession(usernameEmail, password)
 			self.mainWindow.setLaman()
 			self.formLogin.close()
 			self.mainWindow.show()
@@ -136,6 +139,7 @@ class PageController:
 
 	def handleMainWindow(self, nextPage, idLaman):
 		if (nextPage == "riwayat_penggalangan_dana"):
+			self.lamanRiwayatPenggalanganDana.setLaman()
 			self.mainWindow.close()
 			self.lamanRiwayatPenggalanganDana.show()
 		elif (nextPage == "lihat_detail"):
@@ -149,9 +153,11 @@ class PageController:
 			self.mainWindow.close()
 			self.lamanPenggalangDana.show()
 		elif (nextPage == "riwayat_donasi"):
+			self.lamanRiwayatDonasi.setLaman()
 			self.mainWindow.close()
 			self.lamanRiwayatDonasi.show()
 		elif (nextPage == "riwayat_penggalangan_dana"):
+			self.lamanRiwayatPenggalanganDana.setLaman()
 			self.mainWindow.close()
 			self.lamanRiwayatPenggalanganDana.show()
 		elif (nextPage == "eksplor"):
@@ -189,8 +195,8 @@ class PageController:
 			self.pageBuilder.show()
 
 	
-if __name__ == "__main__":
-  app = QApplication(sys.argv)
-  window = PageController()
-#   window.show()
-  sys.exit(app.exec())
+# if __name__ == "__main__":
+#   app = QApplication(sys.argv)
+#   window = PageController()
+# #   window.show()
+#   sys.exit(app.exec())

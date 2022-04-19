@@ -4,7 +4,6 @@ from PyQt6.QtCore import Qt, pyqtSignal
 import requests
 from requests.auth import HTTPBasicAuth
 import sys
-import views.session as Session
 
 class FormNonKesehatan(QWidget):
     channel = pyqtSignal()
@@ -209,8 +208,8 @@ class FormNonKesehatan(QWidget):
             return
 
 
-if(__name__ == "__main__"):
-    app = QApplication(sys.argv)
-    window = FormNonKesehatan()
-    window.show()
-    sys.exit(app.exec())
+# if(__name__ == "__main__"):
+#     app = QApplication(sys.argv)
+#     window = FormNonKesehatan()
+#     window.show()
+#     sys.exit(app.exec())

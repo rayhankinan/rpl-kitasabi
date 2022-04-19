@@ -7,7 +7,7 @@ from PyQt6.QtCore import pyqtSignal
 from views.custom_widgets import ClickableLabel
 import urllib.request
 import sys, requests, json
-import sys
+from requests.auth import HTTPBasicAuth
 import urllib.request
 
 graybg = '#F2F4F7'
@@ -17,6 +17,15 @@ tulisan = 'rgba(37, 49, 60, 1)'
 
 class RiwayatPenggalanganWindow(QWidget):
   channel = pyqtSignal(str)
+
+  session = {
+		"username-email": "",
+		"password": "",
+	}
+    
+  def setSession(self, usernameEmail, password):
+    self.session["username-email"] = usernameEmail
+    self.session["password"] = password
   
   idLaman = {
     "laman1": -1,
@@ -239,8 +248,12 @@ class RiwayatPenggalanganWindow(QWidget):
     self.cairkan_button2.clicked.connect(self.cairkan2)    
 
   def setLaman(self):
-      response = requests.get('http://localhost:3000/riwayat-laman')
+      response = requests.get('http://localhost:3000/laman/riwayat-laman',
+        auth=HTTPBasicAuth(self.session["username-email"], self.session["password"])
+      )
+      print("GAMASUK")
       if (response.status_code == 200):
+          print("MASUK")
           listRes = json.loads(response.text)
           dictRes1 = (listRes[0])
           
