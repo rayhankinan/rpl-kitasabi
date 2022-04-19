@@ -301,7 +301,7 @@ class Laman():
     return self.deskripsi
 
   def getTarget(self):
-    return self.judul
+    return self.target
 
   def getKategori(self):
     return self.kategori
