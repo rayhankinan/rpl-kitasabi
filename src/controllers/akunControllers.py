@@ -39,7 +39,7 @@ class AkunController:
     @staticmethod
     @auth.login_required
     def login():
-        return "OK", 200 
+        return "OK", 200
 
     @staticmethod
     @auth.login_required

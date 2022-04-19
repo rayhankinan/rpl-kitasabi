@@ -31,7 +31,7 @@ with app.app_context():
                     NamaBelakang VARCHAR(255) NOT NULL, \
                     Username VARCHAR(255) UNIQUE NOT NULL, \
                     Password VARBINARY(60) NOT NULL, \
-                    Foto VARCHAR(255) DEFAULT NULL, \
+                    Foto VARCHAR(255) NOT NULL, \
                     PRIMARY KEY (IDPengguna))")
 
     # TABLE AkunNoTelp
