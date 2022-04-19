@@ -17,7 +17,7 @@ class TransaksiController:
             jumlahTransaksi = int(request.form.get("jumlah-transaksi"))
 
             if Laman.getByIDLaman(idLaman).getDeadline() > datetime.date(datetime.now()):
-                return "Conflict", 409 
+                return "Conflict", 409
 
             else:
                 Transaksi(idDonatur, idLaman, jumlahTransaksi)
@@ -38,12 +38,12 @@ class TransaksiController:
             riwayatTransaksi = Transaksi.getRiwayatDonasi(idDonatur)
             for transaksi in riwayatTransaksi:
                 result.append({
-                    "idTransaksi": transaksi.getIDTransaksi(), 
-                    "idDonatur": transaksi.getIDDonatur(), 
-                    "idLaman": transaksi.getIDLaman(), 
-                    "jumlahTransaksi": transaksi.getJumlahTransaksi(), 
+                    "id-transaksi": transaksi.getIDTransaksi(), 
+                    "id-donatur": transaksi.getIDDonatur(), 
+                    "id-daman": transaksi.getIDLaman(), 
+                    "jumlah-transaksi": transaksi.getJumlahTransaksi(), 
                     "timestamp": transaksi.getTimestamp(), 
-                    "statusPencairan": transaksi.getStatusPencairan()
+                    "status-pencairan": transaksi.getStatusPencairan()
                 })
 
             return jsonify(result), 200

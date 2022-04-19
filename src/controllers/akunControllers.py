@@ -38,6 +38,11 @@ class AkunController:
 
     @staticmethod
     @auth.login_required
+    def login():
+        return "OK", 200 
+
+    @staticmethod
+    @auth.login_required
     def profile():
         try:
             akun = auth.current_user()
