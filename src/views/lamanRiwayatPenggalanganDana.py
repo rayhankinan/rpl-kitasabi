@@ -97,31 +97,13 @@ class RiwayatPenggalanganWindow(QWidget):
     
     # return button
     self.returnButton = QPushButton(self)
-    self.returnButton.setText("< Kembali ke Laman Eksplor")
+    self.returnButton.setText("< Kembali ke Laman Utama")
     self.returnButton.setFixedSize(208, 36)
     self.returnButton.move(33, 30)  
 
     self.initializeRiwayatPenggalangan()
-    self.setUpDisplayRiwayatPenggalangan()
-    self.returnButton.clicked.connect(self.goToLamanEksplor)
-    
-    # next button
-    nextButton = QPushButton(self)
-    nextButton.setText(">")
-    nextButton.setFixedSize(40, 71)
-    nextButton.move(1339,466)
-    nextButton.setFont(mulish44)
-    nextButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-    # nextButton.clicked.connect(self.nextRiwayatPenggalangan())
-    
-    # previous button
-    previousButton = QPushButton(self)
-    previousButton.setText("<")
-    previousButton.setFixedSize(40, 71)
-    previousButton.move(84,466)  
-    previousButton.setFont(mulish44)
-    previousButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-    # previousButton.clicked.connect(self.previousRiwayatPenggalangan())    
+    self.returnButton.clicked.connect(self.goToLamanUtama)
+      
 
   def initializeRiwayatPenggalangan(self):
     # set up font
@@ -251,15 +233,13 @@ class RiwayatPenggalanganWindow(QWidget):
       response = requests.get('http://localhost:3000/laman/riwayat-laman',
         auth=HTTPBasicAuth(self.session["username-email"], self.session["password"])
       )
-      print("GAMASUK")
       if (response.status_code == 200):
-          print("MASUK")
           listRes = json.loads(response.text)
           dictRes1 = (listRes[0])
           
           self.idLaman["laman1"] = dictRes1["id-laman"]
           self.judul_penggalangan_dana1.setText(dictRes1["judul"])
-          self.nominal1.setText(dictRes1["target"])
+          self.nominal1.setText(str(dictRes1["target"]))
           self.url1 = dictRes1["foto-laman"][0][0]
           self.data1 = urllib.request.urlopen(self.url1).read()
           self.image1 = QImage()
@@ -293,8 +273,8 @@ class RiwayatPenggalanganWindow(QWidget):
     
     
     
-  def goToLamanEksplor(self):
-    self.channel.emit("eksplor")
+  def goToLamanUtama(self):
+    self.channel.emit("utama")
   
   
   def cairkan1(self):
@@ -306,37 +286,7 @@ class RiwayatPenggalanganWindow(QWidget):
 
   def goToLamanPenggalang(self):
     self.channel.emit("penggalang")
-  
-  def setUpDisplayRiwayatPenggalangan(self):
-    start = self.pageRiwayatPenggalangan * 3
-    # for i in range(3):
-    #   # if start + i < len(self.databaseRiwayatPenggalangan):
-    #     # Preview penggalangan dana +i *185
-    #     self.penggalanganDanaCard[i]["preview_penggalangan_dana"].setText("Judul Penggalangan Dana")
-    #     # nominal penggalangan dana
-    #     self.penggalanganDanaCard[i]["nominal"].setText("Nominal")
-    #     # foto          
-    #     self.url2 = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'   
-      
-  
-  def nextRiwayatPenggalangan(self):
-    print("Right button clicked")
-    # if (self.pageRiwayatPenggalangan + 1 < (len(self.databaseRiwayatPenggalangan)//3)):
-    #     self.pageRiwayatPenggalangan += 1
-    #     print("page: ", self.pageRiwayatPenggalangan)
-    #     self.setUpDisplayRiwayatPenggalangan()
-    # else:
-    #     print("No more RiwayatPenggalangan")
 
-  def previousRiwayatPenggalangan(self):
-    print("Left button clicked")
-    # if (self.pageRiwayatPenggalangan > 0):
-    #     self.pageRiwayatPenggalangan -= 1
-    #     print("page: ", self.pageRiwayatPenggalangan)
-    #     self.setUpDisplayRiwayatPenggalangan()
-    # else:
-    #     print("No more RiwayatPenggalangan")
-    
     
 # if __name__ == "__main__":
 #   app = QApplication(sys.argv)

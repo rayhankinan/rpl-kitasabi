@@ -99,31 +99,12 @@ class RiwayatDonasiWindow(QWidget):
     
     # return button
     self.returnButton = QPushButton(self)
-    self.returnButton.setText("< Kembali ke Laman Eksplor")
+    self.returnButton.setText("< Kembali ke Laman Utama")
     self.returnButton.setFixedSize(208, 36)
     self.returnButton.move(33, 30)  
+    self.returnButton.clicked.connect(self.goToLamanEksplor)
 
     self.initializeRiwayatDonasi()
-    # self.setUpDisplayRiwayatDonasi()
-    self.returnButton.clicked.connect(self.goToLamanEksplor)
-    
-    # next button
-    nextButton = QPushButton(self)
-    nextButton.setText(">")
-    nextButton.setFixedSize(40, 71)
-    nextButton.move(1336,426)
-    nextButton.setFont(mulish44)
-    nextButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-    # nextButton.clicked.connect(self.nextRiwayatDonasi())
-    
-    # previous button
-    previousButton = QPushButton(self)
-    previousButton.setText("<")
-    previousButton.setFixedSize(40, 71)
-    previousButton.move(76,426)
-    previousButton.setFont(mulish44)
-    previousButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-    # previousButton.clicked.connect(self.previousRiwayatDonasi())
       
     # label riwayat donasi
     

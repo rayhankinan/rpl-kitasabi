@@ -184,7 +184,7 @@ class MainWindow(QWidget):
       self.permintaanButton.setFixedSize(165,52)
       self.permintaanButton.setFont(mulish16)
       self.permintaanButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-      self.logoutButton.clicked.connect(self.goToPermintaan)
+      self.permintaanButton.clicked.connect(self.goToPermintaan)
                                        
       #  Tombol explore lebih banyak penggalangan dana
       self.explore_button = QPushButton(self)

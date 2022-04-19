@@ -264,12 +264,14 @@ class LamanEksplor(QWidget):
         else:
             # placeholder data
             self.previewText1.setText("Placeholder Title")
+            self.previewText2.setText("Placeholder Title")
             url = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
             data = urllib.request.urlopen(url).read()
             image = QImage()
             image.loadFromData(data)
             pixmap = QPixmap(image)
             self.previewImg1.setPixmap(pixmap)
+            self.previewImg2.setPixmap(pixmap)
             return False
 
         self.searchbar.clear()

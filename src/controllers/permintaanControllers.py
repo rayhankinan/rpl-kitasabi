@@ -167,7 +167,8 @@ class PermintaanController:
             "foto-ket-medis": riwayatKesehatan.getFotoKetMedis(), 
             "foto-pemeriksaan": riwayatKesehatan.getFotoPemeriksaan(), 
             "tujuan": riwayatKesehatan.getTujuan(), 
-            "nama-pasien": riwayatKesehatan.getNamaPasien()
+            "nama-pasien": riwayatKesehatan.getNamaPasien(),
+            "kategori": "Kesehatan"
           })
 
       else:
@@ -182,7 +183,8 @@ class PermintaanController:
             "akun-instagram": riwayatLainnya.getAkunInstagram(), 
             "akun-twitter": riwayatLainnya.getAkunTwitter(), 
             "akun-facebook": riwayatLainnya.getAkunFacebook(), 
-            "nama-penerima": riwayatLainnya.getNamaPenerima()
+            "nama-penerima": riwayatLainnya.getNamaPenerima(),
+            "kategori": "Lainnya"
           })
 
       if riwayatKesehatan is None and riwayatLainnya is None:
@@ -193,3 +195,4 @@ class PermintaanController:
 
     except Exception as e:
       return str(e), 400
+      

@@ -1,9 +1,8 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QTextEdit, QPushButton, QFileDialog, QCalendarWidget, QHBoxLayout, QMessageBox
 from PyQt6.QtGui import QFont, QCursor
 from PyQt6.QtCore import Qt, QDate, pyqtSignal
-import sys
-import requests
-from requests.auth import HTTPBasicAuth
+import sys, json, requests
+from requests.auth import HTTPBasicAuth 
 
 class PageBuilder(QWidget):
     channel = pyqtSignal()
@@ -18,6 +17,7 @@ class PageBuilder(QWidget):
         self.session["password"] = password
 
     dataText = {
+        "id-autentikasi": "",
         "deadline": ""
     }
 
@@ -77,16 +77,14 @@ class PageBuilder(QWidget):
         text.move(359, 53)
 
         # set fixed judul box
-        self.judulFixed = QLineEdit(self)
-        self.judulFixed.setEnabled(False)
-        self.judulFixed.setPlaceholderText("Kategori: Kesehatan")
-        self.judulFixed.setFixedSize(427, 47)
-        self.judulFixed.move(481, 142)
+        self.kategori = QLineEdit(self)
+        self.kategori.setEnabled(False)
+        self.kategori.setFixedSize(427, 47)
+        self.kategori.move(481, 142)
 
         # set fixed judul box
         self.judulFixed = QLineEdit(self)
         self.judulFixed.setEnabled(False)
-        self.judulFixed.setPlaceholderText("Judul: tolong keluarga ini membeli beras (ISI PAKE DATA DR DATABASE)")
         self.judulFixed.setFixedSize(427, 47)
         self.judulFixed.move(481, 208)
 
@@ -101,14 +99,12 @@ class PageBuilder(QWidget):
         # set fixed deskripsi box
         self.descFixed = QTextEdit(self)
         self.descFixed.setEnabled(False)
-        self.descFixed.setPlaceholderText("Deskripsi: ibu jubaidah dan anaknya ilham ingin membeli beras tolonglah mereka membeli segelintir beras (ISI PAKE DATA DR DATABASE)")
         self.descFixed.setFixedSize(427, 163)
         self.descFixed.move(481, 339)
 
         # set fixed target donasi box
         self.targetFixed = QLineEdit(self)
         self.targetFixed.setEnabled(False)
-        self.targetFixed.setPlaceholderText("Target: 10 juta (ISI PAKE DATA DR DATABASE)")
         self.targetFixed.setFixedSize(427, 47)
         self.targetFixed.move(481, 274)
 
@@ -127,6 +123,27 @@ class PageBuilder(QWidget):
         self.submitPage.move(603, 664)
         self.submitPage.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.submitPage.clicked.connect(self.goToRiwayatPenggalang)
+    
+    def setLaman(self, idPermintaan):
+        self.dataText["id-autentikasi"] = idPermintaan
+        # set id laman
+        response = requests.get('http://localhost:3000/permintaan/detail-permintaan', data={"id-permintaan": idPermintaan},
+            auth=HTTPBasicAuth(self.session["username-email"], self.session["password"])
+        )
+        if (response.status_code == 200):
+            # get list of laman (dictionary)
+            listRes = json.loads(response.text)
+            self.kategori.setPlaceholderText(listRes["kategori"])
+            self.judulFixed.setPlaceholderText(listRes["judul"])
+            self.descFixed.setPlaceholderText(listRes["deskripsi"])
+            self.targetFixed.setPlaceholderText(str(listRes["target"]))
+            return True
+        else:
+            self.kategori.setPlaceholderText("Kategori: placeholder category")
+            self.judulFixed.setPlaceholderText("Judul: placeholder title")
+            self.descFixed.setPlaceholderText("Deskripsi: placeholder description")
+            self.targetFixed.setPlaceholderText("Target: placeholder target")
+            return False
 
     def resetState(self):
         self.dataText["deadline"] = ""
@@ -161,7 +178,7 @@ class PageBuilder(QWidget):
         file = QFileDialog.getOpenFileName(self, 'Open a file', '', 'Image (*.jpg*)')
         if file != ('', ''):
             path = file[0]
-            self.dataFile[type] = open(path, "rb")
+            self.dataFile["foto-laman"] = open(path, "rb")
             
     # get date
     def pickDate(self):
@@ -181,8 +198,8 @@ class PageBuilder(QWidget):
 
     # set input as selected date
     def setDate(self, date):
-        self.setDeadline.setText(date.toString())
-        self.dataText["deadline"] = date.toString()
+        self.setDeadline.setText(date.toPyDate().strftime("%Y-%m-%d"))
+        self.dataText["deadline"] = date.toPyDate().strftime("%Y-%m-%d")
 
 
 # # UNCOMMENT BELOW FOR TESTING  

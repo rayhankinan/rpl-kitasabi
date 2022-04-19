@@ -4,10 +4,7 @@ from PyQt6.QtGui import QFont, QPixmap, QCursor, QImage
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import pyqtSignal
 from views.custom_widgets import ClickableLabel
-import urllib.request
-
-import sys
-import urllib.request
+from requests.auth import HTTPBasicAuth
 
 graybg = '#F2F4F7'
 ungu = 'rgba(90, 79, 243, 1)'
@@ -16,6 +13,15 @@ tulisan = 'rgba(37, 49, 60, 1)'
 
 class PengelolaanAkunWindow(QWidget):
   channel = pyqtSignal(str)
+
+  session = {
+		"username-email": "",
+		"password": "",
+	}
+    
+  def setSession(self, usernameEmail, password):
+      self.session["username-email"] = usernameEmail
+      self.session["password"] = password
   
   def __init__ (self):
     super().__init__()
@@ -71,19 +77,19 @@ class PengelolaanAkunWindow(QWidget):
     self.returnButton.setText("< Kembali ke Laman Utama")
     self.returnButton.setFixedSize(258, 36)
     self.returnButton.move(53, 32)
-    # self.returnButton.clicked.connect(go to laman utama)
+    self.returnButton.clicked.connect(self.goToMainWindow)
 
     # # profile
-    # self.profilePicture = QLabel(self)
-    # self.profilePicture.setFixedSize(183,183)
-    # self.profilePicture.move(642,42)
-    # self.profilePicture.setStyleSheet('''
-    #   padding-right: 50px;
-    #   padding-top: 25px;
-    #   background: #DAE3EA;
-    #   border: 20px;
-    #   border-radius: 30;
-    # ''')
+    self.profilePicture = QLabel(self)
+    self.profilePicture.setFixedSize(183,183)
+    self.profilePicture.move(642,42)
+    self.profilePicture.setStyleSheet('''
+      padding-right: 50px;
+      padding-top: 25px;
+      background: #DAE3EA;
+      border: 20px;
+      border-radius: 30;
+    ''')
     
     # username label
     self.usernameBg = QLabel(self)
