@@ -1,4 +1,4 @@
-import sys
+import sys, requests, json
 from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QPushButton
 from PyQt6.QtGui import QFont, QPixmap, QCursor, QImage
 from PyQt6.QtCore import Qt
@@ -14,7 +14,11 @@ white = 'rgba(255, 255, 255, 1)'
 tulisan = 'rgba(37, 49, 60, 1)'
 
 class MainWindow(QWidget):
-  channel = pyqtSignal(str)
+  channel = pyqtSignal(str, int)
+
+  idLaman = {
+    "id-laman": -1
+  }
   
   def __init__ (self):
     super().__init__()
@@ -110,12 +114,12 @@ class MainWindow(QWidget):
       data2 = urllib.request.urlopen(url2).read()
       image2 = QImage()
       image2.loadFromData(data2)
-      self.previewImg2 = QLabel(self)
-      self.previewImg2.setFixedSize(140, 132)
-      self.previewImg2.move(160, 379)
-      self.previewImg2.setScaledContents(True)
+      self.preview_image = QLabel(self)
+      self.preview_image.setFixedSize(140, 132)
+      self.preview_image.move(160, 379)
+      self.preview_image.setScaledContents(True)
       pixmap2 = QPixmap(image2)
-      self.previewImg2.setPixmap(pixmap2)
+      self.preview_image.setPixmap(pixmap2)
       
       # tombol lihat detail
       self.lihat_detail_button = QPushButton(self)
@@ -180,30 +184,62 @@ class MainWindow(QWidget):
       self.explore_button.setFont(mulish16)
       self.explore_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
       self.explore_button.clicked.connect(self.goToLamanEksplor)
+
+  def setLaman(self):
+    response = requests.get('http://localhost:3000/laman/eksplor-total-donasi')
+    if (response.status_code == 200):
+      # get list of laman (dictionary)
+      listRes = json.loads(response.text)
+      # get laman 1
+      dictRes1 = (listRes[0])
+      # set id laman
+      self.idLaman["id-laman"] = dictRes1["id-laman"]
+      # set judul
+      self.preview_penggalangan_dana.setText(dictRes1["judul"])
+      # set image
+      url = dictRes1["foto-laman"][0][0]
+      data = urllib.request.urlopen(url).read()
+      image = QImage()
+      image.loadFromData(data)
+      pixmap = QPixmap(image)
+      self.preview_image.setPixmap(pixmap)
+      # set target
+      self.target_penggalangan.setText(str(dictRes1["target"]))
+    else:
+      # placeholder data
+      self.preview_penggalangan_dana.setText("Placeholder Title")
+      url = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
+      data = urllib.request.urlopen(url).read()
+      image = QImage()
+      image.loadFromData(data)
+      pixmap = QPixmap(image)
+      self.preview_image.setPixmap(pixmap)
+      self.target_penggalangan.setText("Placeholder Target")
+      return False
   
   def goToLamanEksplor(self):
-    self.channel.emit("eksplor")
+    self.channel.emit("eksplor", -1)
   
   def goToLihatDetail(self):
-    self.channel.emit("lihat_detail")
+    self.channel.emit("lihat_detail", self.idLaman["id-laman"])
   
   def goToPengelolaanAkun(self):
-    self.channel.emit("pengelolaan_akun")
+    self.channel.emit("pengelolaan_akun", -1)
 
   def goToPenggalanganDana(self):
-    self.channel.emit("mulai_penggalang")
+    self.channel.emit("mulai_penggalang", -1)
     
   def goToRiwayatDonasi(self):
-    self.channel.emit("riwayat_donasi")
+    self.channel.emit("riwayat_donasi", -1)
     
   def goToRiwayatPenggalanganDana(self):
-    self.channel.emit("riwayat_penggalangan_dana")
+    self.channel.emit("riwayat_penggalangan_dana", -1)
 
   def goToLogout(self):
-    self.channel.emit("logout")
+    self.channel.emit("logout", -1)
   
   def goToPermintaan(self):
-    self.channel.emit("permintaan")
+    self.channel.emit("permintaan", -1)
     
   
   

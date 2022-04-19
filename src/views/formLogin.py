@@ -141,7 +141,6 @@ class LoginWindow(QWidget):
   def login(self):
     for key, value in self.dataText.items():
       if (value == ""):
-        print(key + value)
         msgBox = QMessageBox()
         msgBox.setText("<p>Please fill out the form properly!</p>")
         msgBox.setWindowTitle("Login Failed")
@@ -155,10 +154,9 @@ class LoginWindow(QWidget):
       # fetch
       self.resetState()
       self.goToMainWindow()
-      for key in self.dataText.items():
+      for key in list(self.dataText.keys()):
         self.dataText[key] = ""
     else:
-      print(key + value)
       msgBox = QMessageBox()
       msgBox.setText("<p>Account not registered, register first!</p>")
       msgBox.setWindowTitle("Login Failed")

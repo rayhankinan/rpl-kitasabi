@@ -3,10 +3,15 @@ from PyQt6.QtGui import QFont, QCursor, QImage, QPixmap
 from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtCore import Qt
 import urllib.request
-import sys
+import sys, requests, json
 
 class LamanDetail(QWidget):
-    channel = pyqtSignal(str)
+    channel = pyqtSignal(str, int)
+
+    idLaman = {
+        "id-laman": -1
+    }
+
     def __init__(self):
         super().__init__()
         
@@ -97,30 +102,22 @@ class LamanDetail(QWidget):
         self.previewPg.setFixedSize(808, 613)
         self.previewPg.move(45, 133)
         self.previewPg.setStyleSheet('background-color: #BBC8D4')
+
         self.judulPg = QTextEdit(self)
         self.judulPg.setDisabled(True)
         self.judulPg.setFixedSize(754, 70)
         self.judulPg.move(72, 171)
-        self.judulPg.setText("BANTU SAYA REFORMASI CIREBON")
+
         self.descPg = QTextEdit(self)
         self.descPg.setDisabled(True)
         self.descPg.setFixedSize(754, 225)
         self.descPg.move(72, 485)
-        self.descPg.setText("Deskripsi Penggalangan Dana (ISI PAKE DATA)")
         self.descPg.setStyleSheet('padding: 10 10 10 10')
-        # temporary for image
-        url = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
-        data = urllib.request.urlopen(url).read()
-
-        image = QImage()
-        image.loadFromData(data)
 
         self.imagePg = QLabel(self)
         self.imagePg.setFixedSize(754, 228)
         self.imagePg.move(72, 248)
         self.imagePg.setScaledContents(True)
-        pixmap = QPixmap(image)
-        self.imagePg.setPixmap(pixmap)
         
         # set timeline donatur
         self.donaturTimeline = QTextEdit(self)
@@ -137,18 +134,18 @@ class LamanDetail(QWidget):
         self.infoPenggalang.setFixedSize(527, 293)
         self.infoPenggalang.move(868, 453)
         self.infoPenggalang.setStyleSheet('background-color: #DAE3EA')
-        self.infoPenggalang.setText("Info Penggalang Dana")
+        self.infoPenggalang.setText("Info Penggalangan Dana")
         self.infoPenggalang.setStyleSheet('padding: 20 20 10 10; color: #25313C; font-weight: bold; font-size: 18px')
-        self.identitas = QLabel(self)
-        self.identitas.setText("Nama (ISI DATA PENGGALANG)")
-        self.identitas.move(888, 523)
-        self.identitas.setStyleSheet('color: #25313C; font-size: 14px')
+        
+        self.deadline = QLabel(self)
+        self.deadline.move(888, 523)
+        self.deadline.setStyleSheet('color: #25313C; font-size: 14px')
+
         self.kategori = QLabel(self)
-        self.kategori.setText("Kategori (ISI DATA PENGGALANG)")
         self.kategori.move(888, 563)
         self.kategori.setStyleSheet('color: #25313C; font-size: 14px')
+
         self.target = QLabel(self)
-        self.target.setText("Target (ISI DATA PENGGALANG)")
         self.target.move(888, 603)
         self.target.setStyleSheet('color: #25313C; font-size: 14px')
         
@@ -159,15 +156,53 @@ class LamanDetail(QWidget):
         self.bayar.move(1055, 671)
         self.bayar.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.bayar.clicked.connect(self.goToLamanPembayaran)
+    
+    def setLaman(self, idLaman):
+        # set id laman
+        self.idLaman["id-laman"] = idLaman
+        response = requests.get('http://localhost:3000/laman/detail-laman', data=self.idLaman)
+        if (response.status_code == 200):
+            # get list of laman (dictionary)
+            listRes = json.loads(response.text)
+            # set judul
+            self.judulPg.setText(listRes["judul"])
+            # set deskripsi
+            self.descPg.setText(listRes["deskripsi"])
+            # set image
+            url = listRes["foto-laman"][0][0]
+            data = urllib.request.urlopen(url).read()
+            image = QImage()
+            image.loadFromData(data)
+            pixmap = QPixmap(image)
+            self.imagePg.setPixmap(pixmap)
+            # set kategori
+            self.kategori.setText(listRes["kategori"])
+            # set target
+            self.target.setText(str(listRes["target"]))
+            # set deadline
+            self.deadline.setText(listRes["timestamp"])
+            return True
+        else:
+            self.judulPg.setText("BANTU SAYA REFORMASI CIREBON")
+            self.descPg.setText("Deskripsi Penggalangan Dana (ISI PAKE DATA)")
+            url = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
+            data = urllib.request.urlopen(url).read()
+            image = QImage()
+            image.loadFromData(data)
+            pixmap = QPixmap(image)
+            self.imagePg.setPixmap(pixmap)
+            self.kategori.setText("Kategori (ISI DATA PENGGALANG)")
+            self.target.setText("Target (ISI DATA PENGGALANG)")
+            return False
 
     def goToHome(self):
-        self.channel.emit("home")
+        self.channel.emit("home", -1)
         
     def goToEditProfile(self):
-        self.channel.emit("profile")
+        self.channel.emit("profile", -1)
 
     def goToLamanPembayaran(self):
-        self.channel.emit("pembayaran")
+        self.channel.emit("pembayaran", self.idLaman["id-laman"])
 
 # UNCOMMENT BELOW FOR TESTING  
 # app = QApplication(sys.argv)
