@@ -130,4 +130,3 @@ dmypy.json
 
 config/
 keys/
-flask_session/

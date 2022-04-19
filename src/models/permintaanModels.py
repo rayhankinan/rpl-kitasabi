@@ -1,6 +1,7 @@
 from models.db import mysql
 from models.cdn import bucket
-import sys
+
+# import sys
 
 class Permintaan:
   # CONSTRUCTOR
@@ -357,7 +358,7 @@ class PermintaanLainnya(Permintaan):
     cursor = mysql.connection.cursor()
 
     dataPermintaan = Permintaan.getByIDPengguna(idPengguna)
-    print(dataPermintaan, file=sys.stdout)
+    # print(dataPermintaan, file=sys.stdout)
 
     if dataPermintaan is None:
       return None

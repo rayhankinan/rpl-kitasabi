@@ -1,19 +1,20 @@
 from operator import itemgetter
-from flask import jsonify, request, session
+from flask import jsonify, request
 
 from models.lamanModels import Laman
 from models.permintaanModels import Permintaan, PermintaanKesehatan
 from models.transaksiModels import Transaksi
-import json
+from application import auth
 
 class LamanController:
   @staticmethod
+  @auth.login_required
   def createLaman():
     try:
       idAutentikasi = request.form.get("id-autentikasi")
 
       dataPermintaan = Permintaan.getByIDPermintaan(idAutentikasi)
-      dataAkun = json.loads(session["User"])
+      dataAkun = auth.current_user()
 
       if dataPermintaan.getStatusAutentikasi() is None:
         return "Permintaan belum disetujui!", 400
@@ -21,7 +22,7 @@ class LamanController:
       if dataPermintaan.getStatusAutentikasi() == 0:
         return "Permintaan tidak disetujui!", 400
       
-      idPenggalang = int(dataAkun["ID"])
+      idPenggalang = dataAkun.getIDPengguna()
       judul =  dataPermintaan.getJudul()
       deskripsi = dataPermintaan.getDeskripsi()
       target = dataPermintaan.getTarget()
@@ -36,13 +37,14 @@ class LamanController:
       else:
         kategori = "Kesehatan"
 
-      laman = Laman(idAutentikasi, idPenggalang, judul, deskripsi, target, kategori, deadline, foto)
+      Laman(idAutentikasi, idPenggalang, judul, deskripsi, target, kategori, deadline, foto)
       return "Created", 201
 
     except Exception as e:
       return str(e), 400
 
   @staticmethod
+  @auth.login_required
   def editLaman():
     try:
       idLaman = request.form.get("id-laman")
@@ -57,6 +59,7 @@ class LamanController:
       return str(e), 400
 
   @staticmethod
+  @auth.login_required
   def searchlaman():
     # SEARCH BY JUDUL
     try:
@@ -87,6 +90,7 @@ class LamanController:
       return str(e), 400
 
   @staticmethod
+  @auth.login_required
   def eksplorKategoriLaman():
     # EKSPLOR BY KATEGORI
     try:
@@ -117,12 +121,13 @@ class LamanController:
       return str(e), 400
 
   @staticmethod
+  @auth.login_required
   def eksplorTotalDonasiLaman():
     # EKSPLOR BY TOTAL DONASI
     try:
       laman = Laman.getAll()
 
-      if (laman is None):
+      if laman is None:
         return "Laman Not Found", 404
       else:
         result = []
@@ -146,6 +151,7 @@ class LamanController:
       return str(e), 400
 
   @staticmethod
+  @auth.login_required
   def detailLaman():
     # FIND BY IDLaman
     try:
@@ -171,10 +177,11 @@ class LamanController:
       return str(e), 400
 
   @staticmethod
+  @auth.login_required
   def riwayatLaman():
     try:
-      dataAkun = json.loads(session["User"])
-      idPenggalang = int(dataAkun["ID"])
+      dataAkun = auth.current_user()
+      idPenggalang = dataAkun.getIDPengguna()
       laman = Laman.riwayatLaman(idPenggalang)
 
       if laman is None:

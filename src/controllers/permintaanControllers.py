@@ -1,10 +1,11 @@
-from flask import jsonify, request, session
-import json
+from flask import jsonify, request
 
 from models.permintaanModels import PermintaanKesehatan, PermintaanLainnya
+from application import auth
 
 class PermintaanController:
   @staticmethod
+  @auth.login_required
   def createPermintaanKesehatan():
     try:
       judul = request.form.get("judul")
@@ -17,8 +18,8 @@ class PermintaanController:
       tujuan = request.form.get("tujuan")
       namaPasien = request.form.get("nama-pasien")
 
-      dataAkun = json.loads(session["User"])
-      idPengguna = int(dataAkun["ID"])
+      dataAkun = auth.current_user()
+      idPengguna = dataAkun.getIDPengguna()
 
       # TODO : get IDPengguna
       PermintaanKesehatan(idPengguna, judul, deskripsi, target, fotoKTP, fotoKK, fotoKetMedis, fotoPemeriksaan, tujuan, namaPasien)
@@ -28,6 +29,7 @@ class PermintaanController:
       return str(e), 400
 
   @staticmethod
+  @auth.login_required
   def createPermintaanLainnya():
     try:
       judul = request.form.get("judul")
@@ -39,8 +41,8 @@ class PermintaanController:
       fb = request.form.get("akun-facebook")
       penerima = request.form.get("nama-penerima")
 
-      dataAkun = json.loads(session["User"])
-      idPengguna = int(dataAkun["ID"])
+      dataAkun = auth.current_user()
+      idPengguna = dataAkun.getIDPengguna()
 
       # TODO : get IDPengguna
       PermintaanLainnya(idPengguna, judul, deskripsi, target, instansi, ig, twt, fb, penerima)
@@ -50,6 +52,7 @@ class PermintaanController:
       return str(e), 400
 
   @staticmethod
+  @auth.login_required
   def editStatusPermintaanKesehatan():
     try:
       idPermintaanKesehatan = request.form.get("id-permintaan-kesehatan")
@@ -64,6 +67,7 @@ class PermintaanController:
       return str(e), 400
 
   @staticmethod
+  @auth.login_required
   def editStatusPermintaanLainnya():
     try:
       idPermintaanLainnya = request.form.get("id-permintaan-lainnya")
@@ -78,10 +82,11 @@ class PermintaanController:
       return str(e), 400
 
   @staticmethod
+  @auth.login_required
   def riwayatPermintaan():
     try:
-      dataAkun = json.loads(session["User"])
-      idPengguna = int(dataAkun["ID"])
+      dataAkun = auth.current_user()
+      idPengguna = dataAkun.getIDPengguna()
 
       result = []
       riwayatKesehatan = PermintaanKesehatan.getByIDPengguna(idPengguna)
