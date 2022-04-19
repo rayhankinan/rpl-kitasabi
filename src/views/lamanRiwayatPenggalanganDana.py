@@ -7,7 +7,7 @@ from PyQt6.QtCore import pyqtSignal
 from views.custom_widgets import ClickableLabel
 import urllib.request
 import sys, requests, json
-import sys
+from requests.auth import HTTPBasicAuth
 import urllib.request
 
 graybg = '#F2F4F7'
@@ -17,6 +17,15 @@ tulisan = 'rgba(37, 49, 60, 1)'
 
 class RiwayatPenggalanganWindow(QWidget):
   channel = pyqtSignal(str)
+
+  session = {
+		"username-email": "",
+		"password": "",
+	}
+    
+  def setSession(self, usernameEmail, password):
+    self.session["username-email"] = usernameEmail
+    self.session["password"] = password
   
   idLaman = {
     "laman1": -1,
@@ -239,30 +248,34 @@ class RiwayatPenggalanganWindow(QWidget):
     self.cairkan_button2.clicked.connect(self.cairkan2)    
 
   def setLaman(self):
-      response = requests.get('http://localhost:3000/riwayat-laman')
+      response = requests.get('http://localhost:3000/laman/riwayat-laman',
+        auth=HTTPBasicAuth(self.session["username-email"], self.session["password"])
+      )
+      print("GAMASUK")
       if (response.status_code == 200):
+          print("MASUK")
           listRes = json.loads(response.text)
           dictRes1 = (listRes[0])
           
           self.idLaman["laman1"] = dictRes1["id-laman"]
           self.judul_penggalangan_dana1.setText(dictRes1["judul"])
-          self.nominal1.setText(dictRes1["total-donasi"])
-          url1 = dictRes1["foto-laman"][0][0]
-          data1 = urllib.request.urlopen(url1).read()
-          image1 = QImage()
-          image1.loadFromData(data1)
+          self.nominal1.setText(dictRes1["target"])
+          self.url1 = dictRes1["foto-laman"][0][0]
+          self.data1 = urllib.request.urlopen(self.url1).read()
+          self.image1 = QImage()
+          self.image1.loadFromData(self.data1)
           self.previewImg1 = QLabel(self)
           self.previewImg1.setFixedSize(117, 117)
           self.previewImg1.move(287, 297)
           self.previewImg1.setScaledContents(True)
-          pixmap1 = QPixmap(image1)
-          self.previewImg1.setPixmap(pixmap1)
+          self.pixmap1 = QPixmap(self.image1)
+          self.previewImg1.setPixmap(self.pixmap1)
           
           if(len(listRes) >= 2):
             dictRes2 = (listRes[1])    
-            self.idLaman["laman2"] = dictRes2["idLaman"]
+            self.idLaman["laman2"] = dictRes2["id-laman"]
             self.judul_penggalangan_dana2.setText(dictRes2["judul"])
-            self.nominal1.setText(str(dictRes2["jumlahTransaksi"]))
+            self.nominal2.setText(str(dictRes2["target"]))
             self.url2 = dictRes2["foto-laman"][0][0]
             self.data2 = urllib.request.urlopen(self.url2).read()
             self.image2 = QImage()

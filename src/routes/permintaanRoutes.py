@@ -8,3 +8,4 @@ permintaanRoutes.route("/create-permintaan-lainnya", methods=["POST"]) (Perminta
 permintaanRoutes.route("/riwayat-permintaan", methods=["GET"]) (PermintaanController.riwayatPermintaan)
 permintaanRoutes.route("/edit-permintaan-kesehatan", methods=["PUT"]) (PermintaanController.editStatusPermintaanKesehatan)
 permintaanRoutes.route("/edit-permintaan-lainnya", methods=["PUT"]) (PermintaanController.editStatusPermintaanLainnya)
+permintaanRoutes.route("/detail-permintaan", methods=["GET"]) (PermintaanController.detailPermintaan)

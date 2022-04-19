@@ -176,10 +176,10 @@ class LamanEksplor(QWidget):
             self.previewImg1.setPixmap(pixmap)
             # check for laman 2
             if (len(listRes) >= 2):
-                # set id laman
-                self.idLaman["laman2"] = dictRes2["id-laman"]
                 # get laman 2
                 dictRes2 = (listRes[1])
+                # set id laman
+                self.idLaman["laman2"] = dictRes2["id-laman"]
                 # set judul
                 self.previewText2.setText(dictRes2["judul"])
                 # set image
@@ -212,8 +212,66 @@ class LamanEksplor(QWidget):
             return False
 
     def search(self):
-        self.previewText1.setText(self.searchbar.text())
-        self.previewText2.setText(self.searchbar.text())
+        # self.previewText1.setText(self.searchbar.text())
+        # self.previewText2.setText(self.searchbar.text())
+
+        response = requests.get('http://localhost:3000/laman/search-laman', data={"query-judul": self.searchbar.text()} ,
+            auth=HTTPBasicAuth(self.session["username-email"], self.session["password"])
+        )
+
+        if (response.status_code == 200):
+            # get list of laman (dictionary)
+            listRes = json.loads(response.text)
+            # get laman 1
+            dictRes1 = (listRes[0])
+            # set id laman
+            self.idLaman["laman1"] = dictRes1["id-laman"]
+            # set judul
+            self.previewText1.setText(str(dictRes1["judul"]))
+            # set image
+            url = dictRes1["foto-laman"][0][0]
+            data = urllib.request.urlopen(url).read()
+            image = QImage()
+            image.loadFromData(data)
+            pixmap = QPixmap(image)
+            self.previewImg1.setPixmap(pixmap)
+            # check for laman 2
+            if (len(listRes) >= 2):
+                # get laman 2
+                dictRes2 = (listRes[1])
+                # set id laman
+                self.idLaman["laman2"] = dictRes2["id-laman"]
+                # set judul
+                self.previewText2.setText(dictRes2["judul"])
+                # set image
+                url = dictRes2["foto-laman"][0][0]
+                data = urllib.request.urlopen(url).read()
+                image = QImage()
+                image.loadFromData(data)
+                pixmap = QPixmap(image)
+                self.previewImg2.setPixmap(pixmap)
+                return True
+            else:
+                # placeholder data
+                self.previewText2.setText("Placeholder Title")
+                url = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
+                data = urllib.request.urlopen(url).read()
+                image = QImage()
+                image.loadFromData(data)
+                pixmap = QPixmap(image)
+                self.previewImg2.setPixmap(pixmap)
+                return False
+        else:
+            # placeholder data
+            self.previewText1.setText("Placeholder Title")
+            url = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
+            data = urllib.request.urlopen(url).read()
+            image = QImage()
+            image.loadFromData(data)
+            pixmap = QPixmap(image)
+            self.previewImg1.setPixmap(pixmap)
+            return False
+
         self.searchbar.clear()
         
     def goToHome(self):

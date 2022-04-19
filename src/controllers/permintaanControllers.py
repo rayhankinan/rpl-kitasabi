@@ -143,3 +143,53 @@ class PermintaanController:
 
     except Exception as e:
       return str(e), 400
+
+
+  @staticmethod
+  @userAuth.login_required
+  def detailPermintaan():
+    try:
+      idPermintaan = request.form.get("id-permintaan")
+
+      riwayatKesehatan = PermintaanKesehatan.getByIDPermintaanKesehatan(idPermintaan)
+      riwayatLainnya = PermintaanLainnya.getByIDPermintaanLainnya(idPermintaan)
+
+      if riwayatKesehatan is not None:
+        result = ({
+            "id-permintaan" : riwayatKesehatan.getIDPermintaan(), 
+            "id-pengguna": riwayatKesehatan.getIDPengguna(), 
+            "judul": riwayatKesehatan.getJudul(), 
+            "deskripsi": riwayatKesehatan.getDeskripsi(), 
+            "target": riwayatKesehatan.getTarget(), 
+            "status-autentikasi": riwayatKesehatan.getStatusAutentikasi(), 
+            "foto-ktp": riwayatKesehatan.getFotoKTP(), 
+            "foto-kk": riwayatKesehatan.getFotoKK(), 
+            "foto-ket-medis": riwayatKesehatan.getFotoKetMedis(), 
+            "foto-pemeriksaan": riwayatKesehatan.getFotoPemeriksaan(), 
+            "tujuan": riwayatKesehatan.getTujuan(), 
+            "nama-pasien": riwayatKesehatan.getNamaPasien()
+          })
+
+      else:
+        result = ({
+            "id-permintaan" : riwayatLainnya.getIDPermintaan(), 
+            "id-pengguna": riwayatLainnya.getIDPengguna(), 
+            "judul": riwayatLainnya.getJudul(), 
+            "deskripsi": riwayatLainnya.getDeskripsi(), 
+            "target": riwayatLainnya.getTarget(), 
+            "status-autentikasi": riwayatLainnya.getStatusAutentikasi(), 
+            "instansi" : riwayatLainnya.getInstansi(), 
+            "akun-instagram": riwayatLainnya.getAkunInstagram(), 
+            "akun-twitter": riwayatLainnya.getAkunTwitter(), 
+            "akun-facebook": riwayatLainnya.getAkunFacebook(), 
+            "nama-penerima": riwayatLainnya.getNamaPenerima()
+          })
+
+      if riwayatKesehatan is None and riwayatLainnya is None:
+        return "Not Found", 404
+
+      else:
+        return jsonify(result), 200
+
+    except Exception as e:
+      return str(e), 400

@@ -40,7 +40,7 @@ class TransaksiController:
                 result.append({
                     "id-transaksi": transaksi.getIDTransaksi(), 
                     "id-donatur": transaksi.getIDDonatur(), 
-                    "id-daman": transaksi.getIDLaman(), 
+                    "id-laman": transaksi.getIDLaman(), 
                     "jumlah-transaksi": transaksi.getJumlahTransaksi(), 
                     "timestamp": transaksi.getTimestamp(), 
                     "status-pencairan": transaksi.getStatusPencairan()
@@ -92,3 +92,4 @@ class TransaksiController:
             
         except Exception as e:
             return str(e), 400
+            
