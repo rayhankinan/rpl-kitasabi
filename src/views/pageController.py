@@ -23,7 +23,7 @@ class PageController:
 		super().__init__()
 		self.setUpPages()
 		self.setListener()
-		self.lamanRiwayatPenggalanganDana.show()
+		self.formLogin.show()
 
 	def setUpPages(self):
 		self.lamanPembayaran = LamanPembayaran()
@@ -60,30 +60,41 @@ class PageController:
 		self.lamanPermintaanPending.channel.connect(self.handleLamanPermintaanPending)
 
 	def handleLamanPembayaran(self, nextPage):
-		self.lamanPembayaran.close()
 		if (nextPage == "home"):
+			self.mainWindow.setLaman()
+			self.lamanPembayaran.close()
 			self.mainWindow.show()
 		elif (nextPage == "profile"):
+			self.lamanPembayaran.close()
 			self.lamanPengelolaanAkun.show()
 		else:
+			self.lamanPembayaran.close()
 			self.lamanRiwayatDonasi.show()
 
-	def handleLamanDetail(self, nextPage):
-		self.lamanDetail.close()
+	def handleLamanDetail(self, nextPage, idLaman):
 		if (nextPage == "home"):
+			self.mainWindow.setLaman()
+			self.lamanDetail.close()
 			self.mainWindow.show()
 		elif (nextPage == "profile"):
+			self.lamanDetail.close()
 			self.lamanPengelolaanAkun.show()
 		else:
+			self.lamanPembayaran.setLaman(idLaman)
+			self.lamanDetail.close()
 			self.lamanPembayaran.show()
 
-	def handleLamanEksplor(self, nextPage):
-		self.lamanEksplor.close()
+	def handleLamanEksplor(self, nextPage, idLaman):
 		if (nextPage == "home"):
+			self.mainWindow.setLaman()
+			self.lamanEksplor.close()
 			self.mainWindow.show()
 		elif (nextPage == "profile"):
+			self.lamanEksplor.close()
 			self.lamanPengelolaanAkun.show()
 		else:
+			self.lamanDetail.setLaman(idLaman)
+			self.lamanEksplor.close()
 			self.lamanDetail.show()
 
 	def handleLamanPenggalangDana(self, nextPage):
@@ -103,34 +114,44 @@ class PageController:
 
 	def handlePageBuilder(self):
 		self.pageBuilder.close()
-		self.lamanPenggalangDana.show()
+		self.lamanPermintaanDiterima.show()
 
 	def handleFormLogin(self, nextPage):
-		self.formLogin.close()
 		if (nextPage == "register"):
+			self.formLogin.close()
 			self.formRegister.show()
 		elif(nextPage == "mainWindow"):
+			self.mainWindow.setLaman()
+			self.formLogin.close()
 			self.mainWindow.show()
 	
 	def handleFormRegister(self):
 		self.formRegister.close()
 		self.formLogin.show()
 
-	def handleMainWindow(self, nextPage):
-		self.mainWindow.close()
+	def handleMainWindow(self, nextPage, idLaman):
 		if (nextPage == "riwayat_penggalangan_dana"):
+			self.mainWindow.close()
 			self.lamanRiwayatPenggalanganDana.show()
 		elif (nextPage == "lihat_detail"):
+			self.lamanDetail.setLaman(idLaman)
+			self.mainWindow.close()
 			self.lamanDetail.show()
 		elif (nextPage == "pengelolaan_akun"):
+			self.mainWindow.close()
 			self.lamanPengelolaanAkun.show()
 		elif (nextPage == "mulai_penggalang"):
+			self.mainWindow.close()
 			self.lamanPenggalangDana.show()
 		elif (nextPage == "riwayat_donasi"):
+			self.mainWindow.close()
 			self.lamanRiwayatDonasi.show()
 		elif (nextPage == "riwayat_penggalangan_dana"):
+			self.mainWindow.close()
 			self.lamanRiwayatPenggalanganDana.show()
 		elif (nextPage == "eksplor"):
+			self.lamanEksplor.setLaman()
+			self.mainWindow.close()
 			self.lamanEksplor.show()
 		elif (nextPage == "permintaan"):
 			pass
@@ -138,21 +159,24 @@ class PageController:
 			pass
 		
 	def handleLamanRiwayatDonasi(self):
+		self.lamanEksplor.setLaman()
 		self.lamanRiwayatDonasi.close()
 		self.lamanEksplor.show()
 
 	def handleLamanRiwayatPenggalanganDana(self, nextPage):
-		self.lamanRiwayatPenggalanganDana.close()
 		if (nextPage == "eksplor"):
+			self.lamanEksplor.setLaman()
+			self.lamanRiwayatPenggalanganDana.close()
 			self.lamanEksplor.show()
 		else:
+			self.lamanRiwayatPenggalanganDana.close()
 			self.lamanPenggalangDana.show()
 			
 	
 	def handleLamanPengelolaanAkun(self, nextPage):
+		self.mainWindow.setLaman()
 		self.lamanPengelolaanAkun.close()
-		if (nextPage == "mainWindow"):
-			self.mainWindow.show()
+		self.mainWindow.show()
 
 	def handleLamanPermintaanDiterima(self, nextPage):
 		self.lamanPermintaanDiterima.close()

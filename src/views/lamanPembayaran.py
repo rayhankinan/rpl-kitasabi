@@ -1,12 +1,18 @@
-from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QTextEdit, QPushButton, QLineEdit, QComboBox
+from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QTextEdit, QPushButton, QLineEdit, QComboBox, QMessageBox
 from PyQt6.QtGui import QFont, QCursor, QImage, QPixmap
 from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtCore import Qt
-import sys
+import sys, requests, json
 import urllib.request
 
 class LamanPembayaran(QWidget):
     channel = pyqtSignal(str)
+
+    dataText = {
+        "id-laman": "",
+        "jumlah-transaksi": "",
+    }
+
     def __init__(self):
         super().__init__()
         
@@ -100,10 +106,10 @@ class LamanPembayaran(QWidget):
 
         # set return button (to laman penggalangan dana)
         self.returnButton = QPushButton(self)
-        self.returnButton.setText("< Kembali ke Laman Penggalangan Dana")
-        self.returnButton.setFixedSize(308, 36)
+        self.returnButton.setText("< Kembali ke Laman Utama")
+        self.returnButton.setFixedSize(268, 36)
         self.returnButton.move(233, 140)
-        self.returnButton.clicked.connect(self.goToRiwayatDonasi)
+        self.returnButton.clicked.connect(self.goToHome)
 
         # set preview penggalangan dana
         self.previewBg = QTextEdit(self)
@@ -113,7 +119,6 @@ class LamanPembayaran(QWidget):
         self.previewBg.setStyleSheet('background-color: #BBC8D4')
         
         self.previewText = QLabel(self)
-        self.previewText.setText("Preview (ISI PAKE DATA)")
         self.previewText.move(559, 262)
         self.previewText.setStyleSheet('font-weight: bold; font-size: 24px')
 
@@ -121,24 +126,15 @@ class LamanPembayaran(QWidget):
         self.targetBg.setDisabled(True)
         self.targetBg.setFixedSize(603, 61)
         self.targetBg.move(550, 339)
-        
         self.targetBg.setStyleSheet('background-color: #94A3B1')
-        self.targetText = QLabel(self)
-        self.targetText.setText("Target (ISI PAKE DATA)")
-        self.targetText.move(579, 360)
-        # temporary for image
-        url = 'https://pbs.twimg.com/profile_images/631884742896431104/RMnmakF-_400x400.jpg'
-        data = urllib.request.urlopen(url).read()
 
-        image = QImage()
-        image.loadFromData(data)
+        self.targetText = QLabel(self)
+        self.targetText.move(579, 360)
 
         self.previewImg = QLabel(self)
         self.previewImg.setFixedSize(190, 176)
         self.previewImg.move(278, 243)
         self.previewImg.setScaledContents(True)
-        pixmap = QPixmap(image)
-        self.previewImg.setPixmap(pixmap)
 
         # set input nominal box
         self.nominal = QLineEdit(self)
@@ -146,6 +142,7 @@ class LamanPembayaran(QWidget):
         self.nominal.move(233, 493)
         self.nominal.setPlaceholderText('10000000 (contoh penulisan)')
         self.nominal.setStyleSheet('background-color: #FFFFFF; border: 1px solid #5A4FF3; padding: 30 20 20 50; font-size: 16px')
+        self.nominal.textChanged.connect(self.setNominal)
         
         self.nominalText = QLabel(self)
         self.nominalText.move(243, 503)
@@ -192,10 +189,52 @@ class LamanPembayaran(QWidget):
         ''')
         self.bayar.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.bayar.clicked.connect(self.goToRiwayatDonasi)
+    
+    def setLaman(self, idLaman):
+        self.dataText["id-laman"] = idLaman
+        response = requests.get('http://localhost:3000/laman/detail-laman', data={"id-laman": idLaman})
+        if (response.status_code == 200):
+            # get list of laman (dictionary)
+            listRes = json.loads(response.text)
+            print(listRes)
+            # set judul
+            self.previewText.setText(listRes["judul"])
+            # set image
+            url = listRes["foto-laman"][0][0]
+            data = urllib.request.urlopen(url).read()
+            image = QImage()
+            image.loadFromData(data)
+            pixmap = QPixmap(image)
+            self.previewImg.setPixmap(pixmap)
+            # set target
+            self.targetText.setText(str(listRes["target"]))
+            return True
+        else:
+            self.previewText.setText("Placeholder Title")
+            url = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
+            data = urllib.request.urlopen(url).read()
+            image = QImage()
+            image.loadFromData(data)
+            pixmap = QPixmap(image)
+            self.previewImg.setPixmap(pixmap)
+            self.targetText.setText("Placeholder Target")
+            return False
+    
+    def setNominal(self):
+        self.dataText["jumlah-transaksi"] = self.nominal.text()
 
     def resetState(self):
         self.nominal.clear()
         self.jenis.clear()
+        for key in list(self.dataText.keys()):
+            self.dataText[key] = ""
+    
+    def sendData(self):
+        response = requests.post('http://localhost:3000/transaksi/bayar', data=self.dataText)
+        if (response.status_code == 201):
+            return True
+        else:
+            return False
 
     def goToHome(self):
         self.resetState()
@@ -206,8 +245,19 @@ class LamanPembayaran(QWidget):
         self.channel.emit("profile")
 
     def goToRiwayatDonasi(self):
-        self.resetState()
-        self.channel.emit("riwayat")
+        success = self.sendData()
+        if (success):
+            self.resetState()
+            self.channel.emit("riwayat")
+        else:
+            msgBox = QMessageBox()
+            msgBox.setText("<p>Please fill out the form properly!</p>")
+            msgBox.setWindowTitle("Pembayaran Failed")
+            msgBox.setIcon(QMessageBox.Icon.Warning)
+            msgBox.setStyleSheet("background-color: white")
+            msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+            msgBox.exec()
+            return
 
 # UNCOMMENT BELOW FOR TESTING  
 # app = QApplication(sys.argv)

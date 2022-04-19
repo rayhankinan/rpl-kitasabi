@@ -153,9 +153,9 @@ class FormKesehatan(QWidget):
         self.tujuan.clear()
         self.deskripsi.clear()
         self.target.clear()
-        for key in self.dataText.items():
+        for key in list(self.dataText.keys()):
             self.dataText[key] = ""
-        for key in self.dataFile.items():
+        for key in list(self.dataFile.keys()):
             self.dataFile[key] = ""
 
     def setJudul(self):

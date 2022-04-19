@@ -1,13 +1,19 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QTextEdit, QPushButton, QLineEdit, QLabel
 from PyQt6.QtGui import QFont, QCursor, QImage, QPixmap
 from PyQt6.QtCore import pyqtSignal, Qt
-import sys
+import sys, requests, json
 import urllib.request
 # from lamanUtama import LamanUtama
 
 
 class LamanEksplor(QWidget):
-    channel = pyqtSignal(str)
+    channel = pyqtSignal(str, int)
+
+    idLaman = {
+        "laman1": -1,
+        "laman2": -1,
+    }
+
     def __init__(self):
         super().__init__()
         
@@ -95,32 +101,24 @@ class LamanEksplor(QWidget):
         self.previewBg1.setFixedSize(1010, 227)
         self.previewBg1.move(233, 212)
         self.previewBg1.setStyleSheet('background-color: #FFFFFF')
+       
         self.previewText1 = QTextEdit(self)
         self.previewText1.setDisabled(True)
         self.previewText1.setFixedSize(500, 130)
-        self.previewText1.setText("Judul Penggalangan (ISI PAKE DATA)")
         self.previewText1.move(469, 262)
-        # temporary for image
-        url1 = 'https://pbs.twimg.com/profile_images/631884742896431104/RMnmakF-_400x400.jpg'
-        data1 = urllib.request.urlopen(url1).read()
-
-        image1 = QImage()
-        image1.loadFromData(data1)
 
         self.previewImg1 = QLabel(self)
         self.previewImg1.setFixedSize(176, 176)
         self.previewImg1.move(268, 238)
         self.previewImg1.setScaledContents(True)
-        pixmap1 = QPixmap(image1)
-        self.previewImg1.setPixmap(pixmap1)
 
         # set bayar button
-        self.bayar1 = QPushButton(self)
-        self.bayar1.setText("Lihat Detail >")
-        self.bayar1.setFixedSize(165, 52)
-        self.bayar1.move(1020, 301)
-        self.bayar1.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.bayar1.clicked.connect(self.goToLamanDetail)
+        self.detail1 = QPushButton(self)
+        self.detail1.setText("Lihat Detail >")
+        self.detail1.setFixedSize(165, 52)
+        self.detail1.move(1020, 301)
+        self.detail1.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.detail1.clicked.connect(self.goToLamanDetail1)
 
         # set preview penggalangan dana
         self.previewBg2 = QTextEdit(self)
@@ -128,24 +126,17 @@ class LamanEksplor(QWidget):
         self.previewBg2.setFixedSize(1010, 227)
         self.previewBg2.move(233, 462)
         self.previewBg2.setStyleSheet('background-color: #FFFFFF')
+        
         self.previewText2 = QTextEdit(self)
         self.previewText2.setFixedSize(500, 130)
         self.previewText2.setDisabled(True)
         self.previewText2.setText("Judul Penggalangan (ISI PAKE DATA)")
         self.previewText2.move(469, 512)
-        # temporary for image
-        url2 = 'https://pbs.twimg.com/profile_images/631884742896431104/RMnmakF-_400x400.jpg'
-        data2 = urllib.request.urlopen(url2).read()
-
-        image2 = QImage()
-        image2.loadFromData(data2)
 
         self.previewImg2 = QLabel(self)
         self.previewImg2.setFixedSize(176, 176)
         self.previewImg2.move(268, 488)
         self.previewImg2.setScaledContents(True)
-        pixmap2 = QPixmap(image2)
-        self.previewImg2.setPixmap(pixmap2)
 
         # set bayar button
         self.detail2 = QPushButton(self)
@@ -153,22 +144,79 @@ class LamanEksplor(QWidget):
         self.detail2.setFixedSize(165, 52)
         self.detail2.move(1020, 551)
         self.detail2.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.detail2.clicked.connect(self.goToLamanDetail)
+        self.detail2.clicked.connect(self.goToLamanDetail2)
+    
+    def setLaman(self):
+        response = requests.get('http://localhost:3000/laman/eksplor-total-donasi')
+        if (response.status_code == 200):
+            # get list of laman (dictionary)
+            listRes = json.loads(response.text)
+            # get laman 1
+            dictRes1 = (listRes[0])
+            # set id laman
+            self.idLaman["laman1"] = dictRes1["id-laman"]
+            # set judul
+            self.previewText1.setText(str(dictRes1["judul"]))
+            # set image
+            url = dictRes1["foto-laman"][0][0]
+            data = urllib.request.urlopen(url).read()
+            image = QImage()
+            image.loadFromData(data)
+            pixmap = QPixmap(image)
+            self.previewImg1.setPixmap(pixmap)
+            # check for laman 2
+            if (len(listRes) >= 2):
+                # set id laman
+                self.idLaman["laman2"] = dictRes2["id-laman"]
+                # get laman 2
+                dictRes2 = (listRes[1])
+                # set judul
+                self.previewText2.setText(dictRes2["judul"])
+                # set image
+                url = dictRes2["foto-laman"][0][0]
+                data = urllib.request.urlopen(url).read()
+                image = QImage()
+                image.loadFromData(data)
+                pixmap = QPixmap(image)
+                self.previewImg2.setPixmap(pixmap)
+                return True
+            else:
+                # placeholder data
+                self.previewText2.setText("Placeholder Title")
+                url = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
+                data = urllib.request.urlopen(url).read()
+                image = QImage()
+                image.loadFromData(data)
+                pixmap = QPixmap(image)
+                self.previewImg2.setPixmap(pixmap)
+                return False
+        else:
+            # placeholder data
+            self.previewText1.setText("Placeholder Title")
+            url = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
+            data = urllib.request.urlopen(url).read()
+            image = QImage()
+            image.loadFromData(data)
+            pixmap = QPixmap(image)
+            self.previewImg1.setPixmap(pixmap)
+            return False
 
     def search(self):
-        print("yoyo")
         self.previewText1.setText(self.searchbar.text())
         self.previewText2.setText(self.searchbar.text())
         self.searchbar.clear()
         
     def goToHome(self):
-        self.channel.emit("home")
+        self.channel.emit("home", -1)
         
     def goToEditProfil(self):
-        self.channel.emit("profile")
+        self.channel.emit("profile", -1)
 
-    def goToLamanDetail(self):
-        self.channel.emit("detail")
+    def goToLamanDetail1(self):
+        self.channel.emit("detail", self.idLaman["laman1"])
+    
+    def goToLamanDetail2(self):
+        self.channel.emit("detail", self.idLaman["laman2"])
 
 # UNCOMMENT BELOW FOR TESTING  
 # app = QApplication(sys.argv)
