@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import QApplication
 from threading import Thread
 import sys
-import time
 
 from application import app
 from routes.akunRoutes import akunRoutes
@@ -16,7 +15,7 @@ def loadBackend():
     app.register_blueprint(transaksiRoutes, url_prefix="/transaksi")
     app.register_blueprint(lamanRoutes, url_prefix="/laman")
 
-    app.run(host="localhost", port=3000, debug=True, use_reloader=False)
+    app.run(port=3000, debug=True, use_reloader=False)
 
 if __name__ == "__main__":
     threadBackend = Thread(target=loadBackend)

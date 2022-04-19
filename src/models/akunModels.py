@@ -51,15 +51,9 @@ class Akun:
         else:
             self.hashedPassword = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
 
-        # UPLOAD FOTO JIKA ADA
-        foto.seek(0, os.SEEK_END)
-        if foto.tell() != 0:
-            blob = bucket.blob(foto.filename)
-            blob.upload_from_string(foto.stream.read())
-            self.gcloudURL = blob.public_url
-
-        else:
-            self.gcloudURL = None
+        blob = bucket.blob(foto.filename)
+        blob.upload_from_string(foto.stream.read())
+        self.gcloudURL = blob.public_url
 
         # INISIALISASI CURSOR
         cursor = mysql.connection.cursor()
@@ -205,11 +199,6 @@ class Akun:
         return self.gcloudURL
 
     def setFoto(self, foto):
-        # CEK APAKAH FOTO BUKAN FILE KOSONG
-        foto.seek(0, os.SEEK_END)
-        if foto.tell() == 0:
-            raise Exception("File foto tidak ada!")
-
         # DELETE FOTO JIKA ADA
         if self.gcloudURL is not None:
             blob = bucket.blob(self.gcloudURL.rsplit("/", 1)[-1])

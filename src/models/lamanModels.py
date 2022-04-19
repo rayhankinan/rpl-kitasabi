@@ -19,10 +19,6 @@ class Laman():
     # CHECK FOTO 
     listFoto = []
     for f in foto:
-      f.seek(0, os.SEEK_END)
-      if f.tell() == 0:
-        raise Exception("Foto is needed!")
-
       blob = bucket.blob(f.filename)
       blob.upload_from_string(f.stream.read())
       listFoto.append(blob.public_url)
