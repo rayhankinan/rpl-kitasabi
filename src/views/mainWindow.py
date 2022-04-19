@@ -1,9 +1,8 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget, QTextEdit, QLabel, QLineEdit, QPushButton, QMessageBox
+from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QPushButton
 from PyQt6.QtGui import QFont, QPixmap, QCursor, QImage
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import pyqtSignal
-from views.custom_widgets import ClickableLabel
 import urllib.request
 
 import sys
@@ -28,8 +27,33 @@ class MainWindow(QWidget):
     
   
   def setUpWidgets(self):
-    # Set warna background
-    self.setStyleSheet('background-color: #E5E5E5')
+    self.setStyleSheet('''
+      QWidget {
+        background-color: #E5E5E5;
+      }
+      QLabel {
+        color: #25313C;
+        font-weight: extra-bold;
+        background: transparent;
+      }
+      QLineEdit {
+        padding: 11px 30px 11px 30px;
+        border: 2px solid rgba(90, 79, 243, 1);
+        border-radius: 20px;
+        color: rgba(37, 49, 60, 1);
+        background-color: #FFFFFF;
+      }
+      QPushButton {
+        color: #ffffff;
+        background-color: #5A4FF3;
+        border: 1px solid #5A4FF3;
+        border-radius: 12px;
+        font-weight: bold;
+      }
+      QPushButton:hover {
+        background-color: #6b75ff;
+      }
+    ''')
   
     # Set up font
     mulish16 = QFont()
@@ -44,38 +68,20 @@ class MainWindow(QWidget):
       
     # Kata Kata Motivasi
     heading = QLabel(self)
-    heading.setFixedSize(1151, 253)
+    heading.setFixedSize(741, 253)
     heading.setStyleSheet(f'background-color: {graybg}')
-    heading.move(144,79)
+    heading.move(344,79)
     
     kata_kata = QLabel(self)
-    kata_kata.setText("Tidak Perlu Kata-Kata Yang Penting Bukti Nyata")
-    kata_kata.setStyleSheet('''
-      color: #25313C;
-      font-weight: extra-bold;
-      background-color: #F2F4F7
-    ''')
-    kata_kata.move(230,138)
+    kata_kata.setText("BERSAMA, KITA SABI")
+    kata_kata.move(490,138)
     kata_kata.setFont(mulish44)
-    
 
-    
     # tombol mulai penggalangan dana
     self.mulai_penggalangan_button = QPushButton(self)
     self.mulai_penggalangan_button.setText("Mulai Penggalangan Dana")
     self.mulai_penggalangan_button.setFixedSize(430, 53)
     self.mulai_penggalangan_button.move(505,239)
-    self.mulai_penggalangan_button.setStyleSheet('''
-      QPushButton {
-        color: #ffffff;
-        background-color: #3643fc;
-        border: none;
-        border-radius: 12px;
-      }
-      QPushButton:hover {
-        background-color: #6b75ff;
-      }
-    ''')
     self.mulai_penggalangan_button.setFont(mulish16)
     self.mulai_penggalangan_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
     self.mulai_penggalangan_button.clicked.connect(self.goToPenggalanganDana)
@@ -91,16 +97,14 @@ class MainWindow(QWidget):
       self.preview_penggalangan_dana = QLabel(self)
       self.preview_penggalangan_dana.setText("Preview Penggalangan Dana")
       self.preview_penggalangan_dana.setStyleSheet('color: rgba(37, 49, 60, 1)')
-      self.preview_penggalangan_dana.setStyleSheet('background-color: #F2F4F7')
       self.preview_penggalangan_dana.move(351, 399) 
       self.preview_penggalangan_dana.setFont(mulish24)
       # target penggalangan dana
       self.target_penggalangan = QLabel(self)
       self.target_penggalangan.setText("Nominal Target")
       self.target_penggalangan.setStyleSheet('color: rgba(37, 49, 60, 1)')
-      self.target_penggalangan.setStyleSheet('background-color: #F2F4F7')
       self.target_penggalangan.move(351, 449)
-      self.target_penggalangan.setFont(mulish24)
+      self.target_penggalangan.setFont(mulish16)
       # foto          
       url2 = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
       data2 = urllib.request.urlopen(url2).read()
@@ -120,17 +124,6 @@ class MainWindow(QWidget):
       self.lihat_detail_button.move(1009, 413)
       self.lihat_detail_button.setFont(mulish16)
       self.lihat_detail_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-      self.lihat_detail_button.setStyleSheet('''
-        QPushButton {
-          color: #ffffff;
-          background-color: #3643fc;
-          border: none;
-          border-radius: 12px;
-        }
-        QPushButton:hover {
-          background-color: #6b75ff;
-        }
-      ''')
       self.lihat_detail_button.clicked.connect(self.goToLihatDetail)
       
       # Ubah Data Button
@@ -140,17 +133,6 @@ class MainWindow(QWidget):
       self.ubahDataButton.setFixedSize(165,52)
       self.ubahDataButton.setFont(mulish16)
       self.ubahDataButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-      self.ubahDataButton.setStyleSheet('''
-      QPushButton {
-        color: #ffffff;
-        background-color: #3643fc;
-        border: none;
-        border-radius: 12px;
-      }
-      QPushButton:hover {
-        background-color: #6b75ff;
-      }
-      ''') 
       self.ubahDataButton.clicked.connect(self.goToPengelolaanAkun)
       
       # laman riwayat penggalang button
@@ -160,17 +142,6 @@ class MainWindow(QWidget):
       self.riwayatPenggalangButton.setFixedSize(165,52)
       self.riwayatPenggalangButton.setFont(mulish16)
       self.riwayatPenggalangButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-      self.riwayatPenggalangButton.setStyleSheet('''
-      QPushButton {
-        color: #ffffff;
-        background-color: #3643fc;
-        border: none;
-        border-radius: 12px;
-      }
-      QPushButton:hover {
-        background-color: #6b75ff;
-      }
-      ''')   
       self.riwayatPenggalangButton.clicked.connect(self.goToRiwayatPenggalanganDana)
       
       # laman riwayat penggalang button
@@ -180,17 +151,6 @@ class MainWindow(QWidget):
       self.riwayatDonasiButton.setFixedSize(165,52)
       self.riwayatDonasiButton.setFont(mulish16)
       self.riwayatDonasiButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-      self.riwayatDonasiButton.setStyleSheet('''
-      QPushButton {
-        color: #ffffff;
-        background-color: #3643fc;
-        border: none;
-        border-radius: 12px;
-      }
-      QPushButton:hover {
-        background-color: #6b75ff;
-      }
-      ''')   
       self.riwayatDonasiButton.clicked.connect(self.goToRiwayatDonasi)
  
       
@@ -201,17 +161,6 @@ class MainWindow(QWidget):
       self.logoutButton.setFixedSize(165,52)
       self.logoutButton.setFont(mulish16)
       self.logoutButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-      self.logoutButton.setStyleSheet('''
-      QPushButton {
-        color: #ffffff;
-        background-color: #3643fc;
-        border: none;
-        border-radius: 12px;
-      }
-      QPushButton:hover {
-        background-color: #6b75ff;
-      }
-      ''')   
       self.logoutButton.clicked.connect(self.goToLogout)
       
       # permintaan button
@@ -221,17 +170,6 @@ class MainWindow(QWidget):
       self.permintaanButton.setFixedSize(165,52)
       self.permintaanButton.setFont(mulish16)
       self.permintaanButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-      self.permintaanButton.setStyleSheet('''
-      QPushButton {
-        color: #ffffff;
-        background-color: #3643fc;
-        border: none;
-        border-radius: 12px;
-      }
-      QPushButton:hover {
-        background-color: #6b75ff;
-      }
-      ''')   
       self.logoutButton.clicked.connect(self.goToPermintaan)
                                        
       #  Tombol explore lebih banyak penggalangan dana
@@ -241,17 +179,6 @@ class MainWindow(QWidget):
       self.explore_button.move(499, 564)
       self.explore_button.setFont(mulish16)
       self.explore_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-      self.explore_button.setStyleSheet('''
-        QPushButton {
-          color: #ffffff;
-          background-color: #3643fc;
-          border: none;
-          border-radius: 12px;
-        }
-        QPushButton:hover {
-          background-color: #6b75ff;
-        }
-      ''')
       self.explore_button.clicked.connect(self.goToLamanEksplor)
   
   def goToLamanEksplor(self):

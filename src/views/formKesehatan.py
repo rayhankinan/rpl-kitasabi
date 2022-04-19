@@ -1,7 +1,6 @@
-from PyQt6.QtWidgets import QLabel, QTextEdit, QPushButton, QWidget, QFileDialog
+from PyQt6.QtWidgets import QLabel, QTextEdit, QPushButton, QWidget, QFileDialog, QMessageBox
 from PyQt6.QtGui import QCursor
 from PyQt6.QtCore import Qt, pyqtSignal
-import base64
 import requests
 
 
@@ -33,63 +32,64 @@ class FormKesehatan(QWidget):
         self.setWidget()
 
     def setWidget(self):
+        self.setStyleSheet('''
+            QWidget {
+                background-color: #E5E5E5;
+            }
+            QLabel {
+                color: #25313C;
+                font-weight: bold;
+                font-size: 38px;
+            }
+            QTextEdit {
+                padding: 11px 30px 11px 30px;
+                border: 1px solid rgba(90, 79, 243, 1);
+                border-radius: 5px;
+                color: rgba(37, 49, 60, 1);
+                background-color: #FFFFFF;
+            }
+            QPushButton {
+                color: #ffffff;
+                background-color: #5A4FF3;
+                border: 1px solid #5A4FF3;
+                border-radius: 20px;
+            }
+            QPushButton:hover {
+                background-color: #6b75ff;
+            }
+            ''')
         # set title label
         self.text = QLabel(self)
         self.text.setText("Form Penggalangan Dana Kesehatan")
-        self.text.setStyleSheet('''
-            color: #25313C;
-            font-weight: bold;
-            font-size: 38px;
-        ''')
-        self.text.move(401, 53)
+        self.text.move(401, 88)
 
-        # LEFTSIDE
+        # LEFTSIDE5A4FF3
         # set judul
         self.judul = QTextEdit(self)
         self.judul.setPlaceholderText("Judul")
         self.judul.setFixedSize(320, 46)
-        self.judul.move(336, 149)
-        self.judul.setStyleSheet('''
-            border: 2px solid #5A4FF3;
-            background-color: #FFFFFF;
-            padding: 10px 10px 10px 10px;
-        ''')
+        self.judul.move(336, 219)
         self.judul.textChanged.connect(self.setJudul)
 
         # set nama
         self.nama = QTextEdit(self)
         self.nama.setPlaceholderText("Nama")
         self.nama.setFixedSize(320, 46)
-        self.nama.move(336, 219)
-        self.nama.setStyleSheet('''
-            border: 2px solid #5A4FF3;
-            background-color: #FFFFFF;
-            padding: 10px 10px 10px 10px;
-        ''')
+        self.nama.move(336, 289)
         self.nama.textChanged.connect(self.setNama)
 
         # set penyakit yang diderita
         self.penyakit = QTextEdit(self)
         self.penyakit.setPlaceholderText("Penyakit yang Diderita")
         self.penyakit.setFixedSize(320, 46)
-        self.penyakit.move(336, 289)
-        self.penyakit.setStyleSheet('''
-            border: 2px solid #5A4FF3;
-            background-color: #FFFFFF;
-            padding: 10px 10px 10px 10px;
-        ''')
+        self.penyakit.move(336, 349)
         self.penyakit.textChanged.connect(self.setPenyakit)
 
         # set tujuan
         self.tujuan = QTextEdit(self)
         self.tujuan.setPlaceholderText("Tujuan")
-        self.tujuan.setFixedSize(320, 116)
-        self.tujuan.move(336, 359)
-        self.tujuan.setStyleSheet('''
-            border: 2px solid #5A4FF3;
-            background-color: #FFFFFF;
-            padding: 10px 10px 10px 10px;
-        ''')
+        self.tujuan.setFixedSize(320, 41)
+        self.tujuan.move(336, 429)
         self.tujuan.textChanged.connect(self.setTujuan)
 
         # RIGHTSIDE
@@ -97,18 +97,7 @@ class FormKesehatan(QWidget):
         self.uploadKTP = QPushButton(self)
         self.uploadKTP.setText("KTP Penggalang Dana")
         self.uploadKTP.setFixedSize(320, 46)
-        self.uploadKTP.move(773, 149)
-        self.uploadKTP.setStyleSheet('''
-            QPushButton {
-                border: 2px solid #5A4FF3;
-                background-color: #FFFFFF;
-                padding: 10px 10px 10px 10px;
-            }
-            QPushButton:hover {
-                background-color: #5A4FF3;
-                color: white;
-            }
-        ''')
+        self.uploadKTP.move(773, 219)
         self.uploadKTP.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.uploadKTP.clicked.connect(self.openKTP)
 
@@ -116,18 +105,7 @@ class FormKesehatan(QWidget):
         self.uploadKK = QPushButton(self)
         self.uploadKK.setText("Kartu Keluarga")
         self.uploadKK.setFixedSize(320, 46)
-        self.uploadKK.move(773, 219)
-        self.uploadKK.setStyleSheet('''
-            QPushButton {
-                border: 2px solid #5A4FF3;
-                background-color: #FFFFFF;
-                padding: 10px 10px 10px 10px;
-            }
-            QPushButton:hover {
-                background-color: #5A4FF3;
-                color: white;
-            }
-        ''')
+        self.uploadKK.move(773, 289)
         self.uploadKK.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.uploadKK.clicked.connect(self.openKK)
 
@@ -135,18 +113,7 @@ class FormKesehatan(QWidget):
         self.uploadSKM = QPushButton(self)
         self.uploadSKM.setText("Surat Keterangan Medis")
         self.uploadSKM.setFixedSize(320, 46)
-        self.uploadSKM.move(773, 289)
-        self.uploadSKM.setStyleSheet('''
-            QPushButton {
-                border: 2px solid #5A4FF3;
-                background-color: #FFFFFF;
-                padding: 10px 10px 10px 10px;
-            }
-            QPushButton:hover {
-                background-color: #5A4FF3;
-                color: white;
-            }
-        ''')
+        self.uploadSKM.move(773, 349)
         self.uploadSKM.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.uploadSKM.clicked.connect(self.openSKM)
 
@@ -154,61 +121,21 @@ class FormKesehatan(QWidget):
         self.uploadHP = QPushButton(self)
         self.uploadHP.setText("Hasil Pemeriksaan")
         self.uploadHP.setFixedSize(320, 46)
-        self.uploadHP.move(773, 359)
-        self.uploadHP.setStyleSheet('''
-            QPushButton {
-                border: 2px solid #5A4FF3;
-                background-color: #FFFFFF;
-                padding: 10px 10px 10px 10px;
-            }
-            QPushButton:hover {
-                background-color: #5A4FF3;
-                color: white;
-            }
-        ''')
+        self.uploadHP.move(773, 429)
         self.uploadHP.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.uploadHP.clicked.connect(self.openHP)
-
-        # # set upload RM
-        # self.uploadRM = QPushButton(self)
-        # self.uploadRM.setText("Riwayat Medis")
-        # self.uploadRM.setFixedSize(320, 46)
-        # self.uploadRM.move(773, 429)
-        # self.uploadRM.setStyleSheet('''
-        #     QPushButton {
-        #         border: 2px solid #5A4FF3;
-        #         background-color: #FFFFFF;
-        #         padding: 10px 10px 10px 10px;
-        #     }
-        #     QPushButton:hover {
-        #         background-color: #5A4FF3;
-        #         color: white;
-        #     }
-        # ''')
-        # self.uploadRM.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        # self.uploadRM.clicked.connect(self.openRM)
 
         # LOWER
         self.deskripsi = QTextEdit(self)
         self.deskripsi.setPlaceholderText("Deskripsi")
         self.deskripsi.setFixedSize(757, 96)
         self.deskripsi.move(336, 499)
-        self.deskripsi.setStyleSheet('''
-            border: 2px solid #5A4FF3;
-            background-color: #FFFFFF;
-            padding: 10px 10px 10px 10px;
-        ''')
         self.deskripsi.textChanged.connect(self.setDeskripsi)
 
         self.target = QTextEdit(self)
         self.target.setPlaceholderText("Target Donasi (Rp)")
         self.target.setFixedSize(317, 46)
         self.target.move(556, 619)
-        self.target.setStyleSheet('''
-            border: 2px solid #5A4FF3;
-            background-color: #FFFFFF;
-            padding: 10px 10px 10px 10px;
-        ''')
         self.target.textChanged.connect(self.setTarget)
 
         # set submit button
@@ -216,20 +143,6 @@ class FormKesehatan(QWidget):
         self.submitFormK.setText("SUBMIT")
         self.submitFormK.setFixedSize(165, 52)
         self.submitFormK.move(638, 684)
-        self.submitFormK.setStyleSheet('''
-            QPushButton {
-                border: 2px solid #5A4FF3;
-                border-radius: 20px;
-                background-color: #5A4FF3;
-                padding: 10px 10px 10px 10px;
-                color: white;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background-color: #FFFFFF;
-                color: black;
-            }
-        ''')
         self.submitFormK.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.submitFormK.clicked.connect(self.goToRiwayatPenggalangan)
 
@@ -240,6 +153,10 @@ class FormKesehatan(QWidget):
         self.tujuan.clear()
         self.deskripsi.clear()
         self.target.clear()
+        for key in self.dataText.items():
+            self.dataText[key] = ""
+        for key in self.dataFile.items():
+            self.dataFile[key] = ""
 
     def setJudul(self):
         self.dataText["judul"] = self.judul.toPlainText()
@@ -257,15 +174,25 @@ class FormKesehatan(QWidget):
     def sendData(self):
         response = requests.post('http://localhost:3000/permintaan/create-permintaan-kesehatan', data=self.dataText, files=self.dataFile)
         if (response.status_code == 201):
-            print("BERHASIL")
+            return True
         else:
-            print("GAGAL")
+            return False
 
     def goToRiwayatPenggalangan(self):
-        self.sendData()
-        self.resetState()
-        self.channel.emit()
-
+        success = self.sendData()
+        if (success):
+            self.resetState()
+            self.channel.emit()
+        else:
+            msgBox = QMessageBox()
+            msgBox.setText("<p>Please fill out the form properly!</p>")
+            msgBox.setWindowTitle("Request Permintaan Failed")
+            msgBox.setIcon(QMessageBox.Icon.Warning)
+            msgBox.setStyleSheet("background-color: white")
+            msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+            msgBox.exec()
+            return
+            
     def openKTP(self):
         self.openFile("foto-ktp")
 
@@ -278,15 +205,10 @@ class FormKesehatan(QWidget):
     def openHP(self):
         self.openFile("foto-pemeriksaan")
     
-    # def openRM(self):
-    #     self.openFile("foto-riwayat-medis")
-
     def openFile(self, type):
         file = QFileDialog.getOpenFileName(self, 'Open a file', '', 'Image(*.jpg);;PDF(*.pdf);;Word(*.docx)')
         if file != ('', ''):
             path = file[0]
-            print(path)
-            # TEST OPEN TXT FILE
             self.dataFile[type] = open(path, "rb")
                 
             

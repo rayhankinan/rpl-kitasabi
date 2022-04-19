@@ -1,5 +1,4 @@
-from urllib import response
-from PyQt6.QtWidgets import QApplication, QLabel, QPushButton, QTextEdit, QWidget
+from PyQt6.QtWidgets import QApplication, QLabel, QPushButton, QTextEdit, QWidget, QMessageBox
 from PyQt6.QtGui import QCursor
 from PyQt6.QtCore import Qt, pyqtSignal
 import requests
@@ -19,7 +18,6 @@ class FormNonKesehatan(QWidget):
         "nama-penerima": "",
     }
     
-    
     def __init__(self):
         super().__init__()
         
@@ -30,63 +28,63 @@ class FormNonKesehatan(QWidget):
         self.setWidget()
 
     def setWidget(self):
+        self.setStyleSheet('''
+            QWidget {
+                background-color: #E5E5E5;
+            }
+            QLabel {
+                color: #25313C;
+                font-weight: bold;
+                font-size: 38px;
+            }
+            QTextEdit {
+                padding: 11px 30px 11px 30px;
+                border: 1px solid rgba(90, 79, 243, 1);
+                border-radius: 5px;
+                color: rgba(37, 49, 60, 1);
+                background-color: #FFFFFF;
+            }
+            QPushButton {
+                color: #ffffff;
+                background-color: #5A4FF3;
+                border: 1px solid #5A4FF3;
+                border-radius: 20px;
+            }
+            QPushButton:hover {
+                background-color: #6b75ff;
+            }
+        ''')
         self.text = QLabel(self)
         self.text.setText("Form Non-Kesehatan")
-        self.text.setStyleSheet('''
-            color: #25313C;
-            font-weight: bold;
-            font-size: 38px;
-        ''')
-        self.text.move(561, 53)
+        self.text.move(561, 88)
 
         # LEFTSIDE
         # set judul
         self.judul = QTextEdit(self)
         self.judul.setPlaceholderText("Judul")
         self.judul.setFixedSize(320, 46)
-        self.judul.move(336, 179)
-        self.judul.setStyleSheet('''
-            border: 2px solid #5A4FF3;
-            background-color: #FFFFFF;
-            padding: 10px 10px 10px 10px;
-        ''')
+        self.judul.move(336, 219)
         self.judul.textChanged.connect(self.setJudul)
 
         # set nama
         self.namaPenerima = QTextEdit(self)
         self.namaPenerima.setPlaceholderText("Nama Penerima")
         self.namaPenerima.setFixedSize(320, 46)
-        self.namaPenerima.move(336, 249)
-        self.namaPenerima.setStyleSheet('''
-            border: 2px solid #5A4FF3;
-            background-color: #FFFFFF;
-            padding: 10px 10px 10px 10px;
-        ''')
+        self.namaPenerima.move(336, 279)
         self.namaPenerima.textChanged.connect(self.setNamaPenerima)
 
         # set fb
         self.fb = QTextEdit(self)
-        self.fb.setPlaceholderText("facebook")
+        self.fb.setPlaceholderText("Facebook")
         self.fb.setFixedSize(320, 46)
-        self.fb.move(336, 319)
-        self.fb.setStyleSheet('''
-            border: 2px solid #5A4FF3;
-            background-color: #FFFFFF;
-            padding: 10px 10px 10px 10px;
-        ''')
+        self.fb.move(336, 339)
         self.fb.textChanged.connect(self.setFb)
-
 
         # set ig
         self.ig = QTextEdit(self)
-        self.ig.setPlaceholderText("instagram")
-        self.ig.setFixedSize(320, 116)
-        self.ig.move(336, 389)
-        self.ig.setStyleSheet('''
-            border: 2px solid #5A4FF3;
-            background-color: #FFFFFF;
-            padding: 10px 10px 10px 10px;
-        ''')
+        self.ig.setPlaceholderText("Instagram")
+        self.ig.setFixedSize(320, 46)
+        self.ig.move(336, 409)
         self.ig.textChanged.connect(self.setIg)
 
         # RIGHTSIDE
@@ -94,12 +92,7 @@ class FormNonKesehatan(QWidget):
         self.twitter = QTextEdit(self)
         self.twitter.setPlaceholderText("Twitter")
         self.twitter.setFixedSize(320, 46)
-        self.twitter.move(773, 179)
-        self.twitter.setStyleSheet('''
-            border: 2px solid #5A4FF3;
-            background-color: #FFFFFF;
-            padding: 10px 10px 10px 10px;
-        ''')
+        self.twitter.move(773, 219)
         self.twitter.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.twitter.textChanged.connect(self.setTwitter)
         
@@ -107,12 +100,7 @@ class FormNonKesehatan(QWidget):
         self.namaPenerima = QTextEdit(self)
         self.namaPenerima.setPlaceholderText("Nama Penerima")
         self.namaPenerima.setFixedSize(320, 46)
-        self.namaPenerima.move(773, 249)
-        self.namaPenerima.setStyleSheet('''
-            border: 2px solid #5A4FF3;
-            background-color: #FFFFFF;
-            padding: 10px 10px 10px 10px;
-        ''')
+        self.namaPenerima.move(773, 279)
         self.namaPenerima.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.namaPenerima.textChanged.connect(self.setNamaPenerima)
         
@@ -120,26 +108,15 @@ class FormNonKesehatan(QWidget):
         self.namaInstansi = QTextEdit(self)
         self.namaInstansi.setPlaceholderText("Nama Instansi")
         self.namaInstansi.setFixedSize(320, 46)
-        self.namaInstansi.move(773, 319)
-        self.namaInstansi.setStyleSheet('''
-            border: 2px solid #5A4FF3;
-            background-color: #FFFFFF;
-            padding: 10px 10px 10px 10px;
-        ''')
+        self.namaInstansi.move(773, 339)
         self.namaInstansi.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.namaInstansi.textChanged.connect(self.setNamaInstansi)
-
         
         # set upload RM
         self.targetDonasi = QTextEdit(self)
         self.targetDonasi.setPlaceholderText("Target Donasi (Rp)")
         self.targetDonasi.setFixedSize(320, 46)
-        self.targetDonasi.move(773, 459)
-        self.targetDonasi.setStyleSheet('''
-            border: 2px solid #5A4FF3;
-            background-color: #FFFFFF;
-            padding: 10px 10px 10px 10px;
-        ''')
+        self.targetDonasi.move(773, 409)
         self.targetDonasi.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.targetDonasi.textChanged.connect(self.setTargetDonasi)
 
@@ -147,33 +124,14 @@ class FormNonKesehatan(QWidget):
         self.deskripsi = QTextEdit(self)
         self.deskripsi.setPlaceholderText("Deskripsi")
         self.deskripsi.setFixedSize(757, 116)
-        self.deskripsi.move(336, 529)
-        self.deskripsi.setStyleSheet('''
-            border: 2px solid #5A4FF3;
-            background-color: #FFFFFF;
-            padding: 10px 10px 10px 10px;
-        ''')
+        self.deskripsi.move(336, 479)
         self.deskripsi.textChanged.connect(self.setDeskripsi)
         
         # set submit button
         self.submitFormNK = QPushButton(self)
         self.submitFormNK.setText("SUBMIT")
         self.submitFormNK.setFixedSize(165, 52)
-        self.submitFormNK.move(638, 684)
-        self.submitFormNK.setStyleSheet('''
-            QPushButton {
-                border: 2px solid #5A4FF3;
-                border-radius: 20px;
-                background-color: #5A4FF3;
-                padding: 10px 10px 10px 10px;
-                color: white;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background-color: #FFFFFF;
-                color: black;
-            }
-        ''')
+        self.submitFormNK.move(638, 634)
         self.submitFormNK.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.submitFormNK.clicked.connect(self.goToRiwayatPenggalangan)
 
@@ -188,6 +146,10 @@ class FormNonKesehatan(QWidget):
         self.akunMedsos.clear()
         self.targetDonasi.clear()
         self.deskripsi.clear()
+        for key in self.dataText.items():
+            self.dataText[key] = ""
+        for key in self.dataFile.items():
+            self.dataFile[key] = ""
 
     def setJudul(self):
         self.dataText["judul"] = self.judul.toPlainText()
@@ -216,14 +178,24 @@ class FormNonKesehatan(QWidget):
     def sendData(self):
         response = requests.post('http://localhost:3000/permintaan/create-permintaan-lainnya', data=self.dataText)
         if (response.status_code == 201):
-            print("BERHASIL")
+            return True
         else:
-            print("GAGAL")
+            return False
     
     def goToRiwayatPenggalangan(self):
-        self.sendData()
-        self.resetState()
-        self.channel.emit()
+        success = self.sendData()
+        if (success):
+            self.resetState()
+            self.channel.emit()
+        else:
+            msgBox = QMessageBox()
+            msgBox.setText("<p>Please fill out the form properly!</p>")
+            msgBox.setWindowTitle("Request Permintaan Failed")
+            msgBox.setIcon(QMessageBox.Icon.Warning)
+            msgBox.setStyleSheet("background-color: white")
+            msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+            msgBox.exec()
+            return
 
 
 if(__name__ == "__main__"):

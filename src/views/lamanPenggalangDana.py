@@ -18,10 +18,41 @@ class LamanPenggalangDana(QWidget):
         self.setWidget()
 
     def setWidget(self):
+        self.setStyleSheet('''
+            QWidget {
+                background-color: #E5E5E5;
+            }
+            QLabel {
+                color: #25313C;
+                background: transparent;
+            }
+            QLineEdit {
+                background: white;
+                font-size: 12px;
+                padding: 0 10 0 10
+            }
+            QTextEdit {
+                border: 0;
+                background: transparent;
+                font-size: 24px;
+                font-weight: bold;
+                color: #25313C;
+            }
+            QPushButton {
+                color: #ffffff;
+                background-color: #5A4FF3;
+                border: 1px solid #5A4FF3;
+                border-radius: 12px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: #6b75ff;
+            }
+        ''')
+
         self.text = QLabel(self)
         self.text.setText("Pilih Kategori")
         self.text.setStyleSheet('''
-            color: #25313C;
             font-weight: bold;
             font-size: 38px;
         ''')
@@ -30,50 +61,23 @@ class LamanPenggalangDana(QWidget):
         self.subtext = QLabel(self)
         self.subtext.setText("Ingin membuka penggalangan dana kategori apa?")
         self.subtext.setStyleSheet('''
-            color: #25313C;
             font-size: 22px;
         ''')
         self.subtext.move(471, 160)
 
         self.nonkesButton = QPushButton(self)
         self.nonkesButton.setFixedSize(402, 402)
-        self.nonkesButton.move(770, 266)
-        self.nonkesButton.setText("NON-KESEHATAN")
-        self.nonkesButton.setStyleSheet('''
-            QPushButton {
-                background: #5A4FF3;
-                border: 2px solid #5A4FF3;
-                border-radius: 200px;
-                color: white;
-                font-weight: bold;
-                font-size: 28px;
-            }
-            QPushButton:hover {
-                background: #FFFFFF;
-                color: #5A4FF3;
-            }
-        ''')
+        self.nonkesButton.move(770, 256)
+        self.nonkesButton.setText("Non-Kesehatan")
+        self.nonkesButton.setStyleSheet('font-size: 28px')
         self.nonkesButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.nonkesButton.clicked.connect(self.goToFormNonKesehatan)
 
         self.kesButton = QPushButton(self)
         self.kesButton.setFixedSize(402, 402)
-        self.kesButton.move(268, 266)
-        self.kesButton.setText("KESEHATAN")
-        self.kesButton.setStyleSheet('''
-            QPushButton {
-                background: #5A4FF3;
-                border: 2px solid #5A4FF3;
-                border-radius: 200px;
-                color: white;
-                font-weight: bold;
-                font-size: 28px;
-            }
-            QPushButton:hover {
-                background: #FFFFFF;
-                color: #5A4FF3;
-            }
-        ''')
+        self.kesButton.move(268, 256)
+        self.kesButton.setText("Kesehatan")
+        self.kesButton.setStyleSheet('font-size: 28px')
         self.kesButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.kesButton.clicked.connect(self.goToFormKesehatan)
 

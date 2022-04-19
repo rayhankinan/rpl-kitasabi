@@ -15,7 +15,7 @@ from views.lamanRiwayatPenggalanganDana import RiwayatPenggalanganWindow
 from views.lamanPermintaanDiterima import PermintaanDiterimaWindow
 from views.mainWindow import MainWindow
 from views.pageBuilder import PageBuilder
-from views.lamanPermintaanPending import LamanPermintaanPending
+from views.lamanPermintaanPending import PermintaanPendingWindow
 
 
 class PageController:
@@ -23,7 +23,7 @@ class PageController:
 		super().__init__()
 		self.setUpPages()
 		self.setListener()
-		self.formLogin.show()
+		self.lamanRiwayatPenggalanganDana.show()
 
 	def setUpPages(self):
 		self.lamanPembayaran = LamanPembayaran()
@@ -40,7 +40,7 @@ class PageController:
 		self.lamanPermintaanDiterima = PermintaanDiterimaWindow()
 		self.mainWindow = MainWindow()
 		self.pageBuilder = PageBuilder()
-		self.lamanPermintaanPending = LamanPermintaanPending()
+		self.lamanPermintaanPending = PermintaanPendingWindow()
 
 	def setListener(self):
 		self.lamanPembayaran.channel.connect(self.handleLamanPembayaran)

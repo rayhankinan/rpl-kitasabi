@@ -25,6 +25,39 @@ class LamanPembayaran(QWidget):
         self.setWidget()
 
     def setWidget(self):
+        self.setStyleSheet('''
+            QWidget {
+                background-color: #E5E5E5;
+            }
+            QLabel {
+                background: transparent;
+                color: #25313C;
+            }
+            QLineEdit {
+                background: white;
+                font-size: 12px;
+                padding: 0 10 0 10
+            }
+            QTextEdit {
+                background: #BBC8D4;
+            }
+            QPushButton {
+                color: #ffffff;
+                background-color: #5A4FF3;
+                border: 1px solid #5A4FF3;
+                border-radius: 12px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: #6b75ff;
+            }
+            QComboBox {
+                border: 1px solid #5A4FF3;
+                background: white;
+                padding-left: 10;
+            }
+        ''')
+        
         # set navbar (home + profile button)
         self.navbar = QTextEdit(self)
         self.navbar.setDisabled(True)
@@ -70,20 +103,6 @@ class LamanPembayaran(QWidget):
         self.returnButton.setText("< Kembali ke Laman Penggalangan Dana")
         self.returnButton.setFixedSize(308, 36)
         self.returnButton.move(233, 140)
-        self.returnButton.setStyleSheet('''
-            QPushButton {
-                padding-left: 2px;
-                background: #5A4FF3;
-                border: 1px solid #5A4FF3;
-                color: white;
-                border-radius: 28;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background: #FFFFFF;
-                color: black;
-            }
-        ''')
         self.returnButton.clicked.connect(self.goToRiwayatDonasi)
 
         # set preview penggalangan dana
@@ -92,28 +111,21 @@ class LamanPembayaran(QWidget):
         self.previewBg.setFixedSize(1010, 227)
         self.previewBg.move(233, 212)
         self.previewBg.setStyleSheet('background-color: #BBC8D4')
+        
         self.previewText = QLabel(self)
         self.previewText.setText("Preview (ISI PAKE DATA)")
         self.previewText.move(559, 262)
-        self.previewText.setStyleSheet('''
-            background: transparent;
-            font-size: 24px;
-            font-weight: bold;
-            color: #25313C;
-        ''')
+        self.previewText.setStyleSheet('font-weight: bold; font-size: 24px')
+
         self.targetBg = QTextEdit(self)
         self.targetBg.setDisabled(True)
         self.targetBg.setFixedSize(603, 61)
         self.targetBg.move(550, 339)
+        
         self.targetBg.setStyleSheet('background-color: #94A3B1')
         self.targetText = QLabel(self)
         self.targetText.setText("Target (ISI PAKE DATA)")
-        self.targetText.move(579, 350)
-        self.targetText.setStyleSheet('''
-            background: transparent;
-            font-size: 24px;
-            color: #25313C;
-        ''')
+        self.targetText.move(579, 360)
         # temporary for image
         url = 'https://pbs.twimg.com/profile_images/631884742896431104/RMnmakF-_400x400.jpg'
         data = urllib.request.urlopen(url).read()
@@ -134,10 +146,12 @@ class LamanPembayaran(QWidget):
         self.nominal.move(233, 493)
         self.nominal.setPlaceholderText('10000000 (contoh penulisan)')
         self.nominal.setStyleSheet('background-color: #FFFFFF; border: 1px solid #5A4FF3; padding: 30 20 20 50; font-size: 16px')
+        
         self.nominalText = QLabel(self)
         self.nominalText.move(243, 503)
         self.nominalText.setText("Nominal uang yang akan didonasikan:")
         self.nominalText.setStyleSheet('background: transparent; color: #ACACAC')
+        
         self.nominalRp = QLabel(self)
         self.nominalRp.move(243, 493)
         self.nominalRp.setText("Rp.")

@@ -29,8 +29,38 @@ class RiwayatDonasiWindow(QWidget):
     self.setUpWidgets()
     
   def setUpWidgets(self):
-    # Set warna background
-    self.setStyleSheet('background-color: #E5E5E5')
+    self.setStyleSheet('''
+        QWidget {
+            background-color: #E5E5E5;
+        }
+        QLabel {
+            color: #25313C;
+            font-weight: extra-bold;
+            background: transparent;
+        }
+        QLineEdit {
+            background: white;
+            font-size: 12px;
+            padding: 0 10 0 10
+        }
+        QTextEdit {
+            border: 0;
+            background: transparent;
+            font-size: 24px;
+            font-weight: bold;
+            color: #25313C;
+        }
+        QPushButton {
+            color: #ffffff;
+            background-color: #5A4FF3;
+            border: 1px solid #5A4FF3;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+        QPushButton:hover {
+            background-color: #6b75ff;
+        }
+    ''')
     
     # set up font
     mulish16 = QFont()
@@ -54,22 +84,9 @@ class RiwayatDonasiWindow(QWidget):
     # return button
     self.returnButton = QPushButton(self)
     self.returnButton.setText("< Kembali ke Laman Eksplor")
-    self.returnButton.setFixedSize(282, 56)
-    self.returnButton.move(47, 49)
-    self.returnButton.setStyleSheet('''
-        QPushButton {
-            padding-left: 2px;
-            background: #5A4FF3;
-            border: 1px solid #5A4FF3;
-            color: white;
-            border-radius: 28;
-            font-weight: bold;
-        }
-        QPushButton:hover {
-            background: #FFFFFF;
-            color: black;
-        }
-    ''')
+    self.returnButton.setFixedSize(208, 36)
+    self.returnButton.move(33, 30)  
+
     self.initializeRiwayatDonasi()
     self.setUpDisplayRiwayatDonasi()
     self.returnButton.clicked.connect(self.goToLamanEksplor)
@@ -79,17 +96,6 @@ class RiwayatDonasiWindow(QWidget):
     nextButton.setText(">")
     nextButton.setFixedSize(40, 71)
     nextButton.move(1336,426)
-    nextButton.setStyleSheet('''
-      QPushButton {
-        color: #ffffff;
-        background-color: #3643fc;
-        border: none;
-        border-radius: 12px;
-      }
-      QPushButton:hover {
-        background-color: #6b75ff;
-      }
-    ''')
     nextButton.setFont(mulish44)
     nextButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
     # nextButton.clicked.connect(self.nextRiwayatDonasi())
@@ -99,17 +105,6 @@ class RiwayatDonasiWindow(QWidget):
     previousButton.setText("<")
     previousButton.setFixedSize(40, 71)
     previousButton.move(76,426)
-    previousButton.setStyleSheet('''
-      QPushButton {
-        color: #ffffff;
-        background-color: #3643fc;
-        border: none;
-        border-radius: 12px;
-      }
-      QPushButton:hover {
-        background-color: #6b75ff;
-      }
-    ''')
     previousButton.setFont(mulish44)
     previousButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
     # previousButton.clicked.connect(self.previousRiwayatDonasi())
@@ -142,14 +137,14 @@ class RiwayatDonasiWindow(QWidget):
     # align center text
     self.labelRiwayatDonasi.setAlignment(Qt.AlignmentFlag.AlignCenter)
     self.labelRiwayatDonasi.setFont(mulish33_bold)
-    self.labelRiwayatDonasi.setFixedSize(433,37)
     self.labelRiwayatDonasi.setStyleSheet('background-color: rgba(187, 200, 212, 1)')
-    self.labelRiwayatDonasi.move(452, 96)
+    self.labelRiwayatDonasi.setFixedSize(508,63)
+    self.labelRiwayatDonasi.move(485, 72)
 
     # set background
     self.cardBackground = QLabel(self)
-    self.cardBackground.setFixedSize(1220, 608)
-    self.cardBackground.move(116, 158)
+    self.cardBackground.setFixedSize(1220, 558)
+    self.cardBackground.move(116, 208)
     self.cardBackground.setStyleSheet('background-color: rgba(187, 200, 212, 1)')
     
     self.riwayatDonasiCard = []
@@ -157,31 +152,31 @@ class RiwayatDonasiWindow(QWidget):
       self.riwayatDonasiCard.append({})
       # set preview penggalangan dana
       self.riwayatDonasiCard[i]["bg_list"] = QLabel(self)
-      self.riwayatDonasiCard[i]["bg_list"].setFixedSize(956, 158)
+      self.riwayatDonasiCard[i]["bg_list"].setFixedSize(956, 128)
       self.riwayatDonasiCard[i]["bg_list"].setStyleSheet(f'background-color: {graybg}')
-      self.riwayatDonasiCard[i]["bg_list"].move(253,199+i *185)
+      self.riwayatDonasiCard[i]["bg_list"].move(253,239+i *185)
         # Preview penggalangan dana +i *185
       self.riwayatDonasiCard[i]["preview_penggalangan_dana"] = QLabel(self)
       self.riwayatDonasiCard[i]["preview_penggalangan_dana"].setText("Judul Penggalangan Dana")
       self.riwayatDonasiCard[i]["preview_penggalangan_dana"].setStyleSheet('color: rgba(37, 49, 60, 1)')
       self.riwayatDonasiCard[i]["preview_penggalangan_dana"].setStyleSheet('background-color: #F2F4F7')
-      self.riwayatDonasiCard[i]["preview_penggalangan_dana"].move(425, 233 +i*185) 
+      self.riwayatDonasiCard[i]["preview_penggalangan_dana"].move(425, 273 +i*185) 
       self.riwayatDonasiCard[i]["preview_penggalangan_dana"].setFont(mulish24)
       # nominal penggalangan dana
       self.riwayatDonasiCard[i]["nominal"] = QLabel(self)
       self.riwayatDonasiCard[i]["nominal"].setText("Nominal")
       self.riwayatDonasiCard[i]["nominal"].setStyleSheet('color: rgba(37, 49, 60, 1)')
       self.riwayatDonasiCard[i]["nominal"].setStyleSheet('background-color: #F2F4F7')
-      self.riwayatDonasiCard[i]["nominal"].move(425, 282 +i*185)
-      self.riwayatDonasiCard[i]["nominal"].setFont(mulish24)
+      self.riwayatDonasiCard[i]["nominal"].move(425, 322 +i*185)
+      self.riwayatDonasiCard[i]["nominal"].setFont(mulish16)
       # foto          
       self.url2 = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
       self.data2 = urllib.request.urlopen(self.url2).read()
       self.image2 = QImage()
       self.image2.loadFromData(self.data2)
       self.riwayatDonasiCard[i]["previewImg2"] = QLabel(self)
-      self.riwayatDonasiCard[i]["previewImg2"].setFixedSize(117, 128)
-      self.riwayatDonasiCard[i]["previewImg2"].move(269, 213 +i*185)
+      self.riwayatDonasiCard[i]["previewImg2"].setFixedSize(117, 98)
+      self.riwayatDonasiCard[i]["previewImg2"].move(269, 253 +i*185)
       self.riwayatDonasiCard[i]["previewImg2"].setScaledContents(True)
       self.pixmap2 = QPixmap(self.image2)
       self.riwayatDonasiCard[i]["previewImg2"].setPixmap(self.pixmap2)

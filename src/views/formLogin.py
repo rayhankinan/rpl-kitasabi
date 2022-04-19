@@ -10,7 +10,7 @@ class LoginWindow(QWidget):
   channel = pyqtSignal(str)
 
   dataText = {
-    "email-usernme": "",
+    "email-username": "",
     "password": "",
   }
 
@@ -27,7 +27,31 @@ class LoginWindow(QWidget):
 
   def setUpWidgets(self):
     # Set warna background
-    self.setStyleSheet('background-color: #E5E5E5')
+    self.setStyleSheet('''
+      QWidget {
+        background-color: #E5E5E5;
+      }
+      QLabel {
+        color: #25313C;
+        font-weight: extra-bold;
+      }
+      QLineEdit {
+        padding: 11px 30px 11px 30px;
+        border: 2px solid rgba(90, 79, 243, 1);
+        border-radius: 20px;
+        color: rgba(37, 49, 60, 1);
+        background-color: #FFFFFF;
+      }
+      QPushButton {
+        color: #ffffff;
+        background-color: #5A4FF3;
+        border: 1px solid #5A4FF3;
+        border-radius: 12px;
+      }
+      QPushButton:hover {
+        background-color: #6b75ff;
+      }
+    ''')
 
     # Set up font
     mulish16 = QFont()
@@ -40,30 +64,17 @@ class LoginWindow(QWidget):
     mulish44.setFamily("Mulish"); mulish44.setPixelSize(44)
     mulish44.setBold(True)
 
-
     # Label log in
     loginText = QLabel(self)
     loginText.setText("Masuk")
-    loginText.setStyleSheet('''
-      color: #25313C;
-      background-color: #E5E5E5
-      font-weight: extra-bold;
-    ''')
-    loginText.move(700, 275)
+    loginText.move(700, 225)
     loginText.setFont(mulish44)
 
     # Input username/email
     self.usernameEdit = QLineEdit(self)
     self.usernameEdit.setPlaceholderText("Email atau Username")
     self.usernameEdit.setFixedSize(446, 46)
-    self.usernameEdit.move(560, 456)
-    self.usernameEdit.setStyleSheet('''
-      padding: 11px 30px 11px 30px;
-      border: 2px solid rgba(90, 79, 243, 1);
-      border-radius: 20px;
-      color: rgba(37, 49, 60, 1);
-      background-color: #FFFFFF
-    ''')
+    self.usernameEdit.move(540, 356)
     self.usernameEdit.setFont(mulish16)
     self.usernameEdit.textChanged.connect(self.setUsername)
 
@@ -71,14 +82,7 @@ class LoginWindow(QWidget):
     self.passwordEdit = QLineEdit(self)
     self.passwordEdit.setPlaceholderText("Password")
     self.passwordEdit.setFixedSize(446, 46)
-    self.passwordEdit.move(560, 528)
-    self.passwordEdit.setStyleSheet('''
-      padding: 11px 30px 11px 30px;
-      border: 2px solid rgba(90, 79, 243, 1);
-      border-radius: 20px;
-      color: rgba(37, 49, 60, 1);
-      background-color: #FFFFFF
-    ''')
+    self.passwordEdit.move(540, 428)
     self.passwordEdit.setFont(mulish16)
     self.passwordEdit.setEchoMode(QLineEdit.EchoMode.Password)
     self.passwordEdit.textChanged.connect(self.setPassword)
@@ -87,18 +91,7 @@ class LoginWindow(QWidget):
     self.loginButton = QPushButton(self)
     self.loginButton.setText("Masuk")
     self.loginButton.setFixedSize(170, 56)
-    self.loginButton.move(680, 637)
-    self.loginButton.setStyleSheet('''
-      QPushButton {
-        color: #ffffff;
-        background-color: #3643fc;
-        border: none;
-        border-radius: 12px;
-      }
-      QPushButton:hover {
-        background-color: #6b75ff;
-      }
-    ''')
+    self.loginButton.move(680, 537)
     self.loginButton.setFont(mulish16)
     self.loginButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
     self.loginButton.clicked.connect(self.login)
@@ -106,14 +99,14 @@ class LoginWindow(QWidget):
     # Don't have an account? label
     label = QLabel(self)
     label.setText("Belum Punya Akun?")
-    label.setFont(mulish24)
+    label.setFont(mulish16)
     label.setStyleSheet('color: rgba(0, 0, 0, 1)')
-    label.move(600, 350)
+    label.move(650, 290)
 
     # Register here label
     registerHere = ClickableLabel(self)
     registerHere.setText("Daftar disini")
-    registerHere.setFont(mulish24)
+    registerHere.setFont(mulish16)
     registerHere.setStyleSheet('''
       QLabel {
         color: #5A4FF3; 
@@ -122,9 +115,8 @@ class LoginWindow(QWidget):
       QLabel:hover {
         color: #746bf2;
       }
-    '''
-    )
-    registerHere.move(810, 350)
+    ''')
+    registerHere.move(800, 290)
     registerHere.clicked.connect(self.goToRegisterWindow)
     registerHere.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
@@ -142,15 +134,39 @@ class LoginWindow(QWidget):
   def sendData(self):
     response = requests.post('http://localhost:3000/akun/login', data=self.dataText)
     if (response.status_code == 201):
-        print("BERHASIL")
+      return True
     else:
-        print("GAGAL")
+      return False
 
   def login(self):
-    self.sendData()
-    # fetch
-    self.resetState()
-    self.goToMainWindow()
+    for key, value in self.dataText.items():
+      if (value == ""):
+        print(key + value)
+        msgBox = QMessageBox()
+        msgBox.setText("<p>Please fill out the form properly!</p>")
+        msgBox.setWindowTitle("Login Failed")
+        msgBox.setIcon(QMessageBox.Icon.Warning)
+        msgBox.setStyleSheet("background-color: white")
+        msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+        msgBox.exec()
+        return
+    success = self.sendData()
+    if (success):
+      # fetch
+      self.resetState()
+      self.goToMainWindow()
+      for key in self.dataText.items():
+        self.dataText[key] = ""
+    else:
+      print(key + value)
+      msgBox = QMessageBox()
+      msgBox.setText("<p>Account not registered, register first!</p>")
+      msgBox.setWindowTitle("Login Failed")
+      msgBox.setIcon(QMessageBox.Icon.Warning)
+      msgBox.setStyleSheet("background-color: white")
+      msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+      msgBox.exec()
+      return
               
   def resetState(self):
     self.passwordEdit.clear()

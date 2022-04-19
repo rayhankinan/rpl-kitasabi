@@ -1,10 +1,20 @@
-from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QTextEdit, QPushButton, QFileDialog, QCalendarWidget, QHBoxLayout
+from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QTextEdit, QPushButton, QFileDialog, QCalendarWidget, QHBoxLayout, QMessageBox
 from PyQt6.QtGui import QFont, QCursor
 from PyQt6.QtCore import Qt, QDate, pyqtSignal
 import sys
+import requests
 
 class PageBuilder(QWidget):
     channel = pyqtSignal()
+
+    dataText = {
+        "deadline": ""
+    }
+
+    dataFile = {
+        "foto-laman": ""
+    }
+
     def __init__(self):
         super().__init__()
         
@@ -25,56 +35,56 @@ class PageBuilder(QWidget):
         self.setWidget()
         
     def setWidget(self):
+        self.setStyleSheet('''
+            QWidget {
+                background-color: #E5E5E5;
+            }
+            QLabel {
+                color: #25313C;
+                font-weight: bold;
+                font-size: 38px;
+            }
+            QTextEdit, QLineEdit {
+                padding: 11px 30px 11px 30px;
+                border: 1px solid rgba(90, 79, 243, 1);
+                border-radius: 5px;
+                color: rgba(37, 49, 60, 1);
+                background-color: #FFFFFF;
+            }
+            QPushButton {
+                color: #ffffff;
+                background-color: #5A4FF3;
+                border: 1px solid #5A4FF3;
+                border-radius: 20px;
+            }
+            QPushButton:hover {
+                background-color: #6b75ff;
+            }
+        ''')
         # set page title label
         text = QLabel(self)
         text.setText("Pembuatan Laman Penggalangan Dana")
-        text.setStyleSheet('''
-            color: #25313C;
-            font-weight: 700;
-            font-size: 36px;
-            line-height: 24px;
-        ''')
-        text.move(374, 53)
+        text.move(359, 53)
 
         # set fixed judul box
-        self.judulFixed = QTextEdit(self)
+        self.judulFixed = QLineEdit(self)
         self.judulFixed.setEnabled(False)
         self.judulFixed.setPlaceholderText("Kategori: Kesehatan")
-        self.judulFixed.setFixedSize(377, 47)
-        self.judulFixed.move(531, 142)
-        self.judulFixed.setStyleSheet('''
-            border: 2px solid #5A4FF3;
-            background-color: #DAE3EA;
-            padding: 10px 10px 10px 10px;
-        ''')
+        self.judulFixed.setFixedSize(427, 47)
+        self.judulFixed.move(481, 142)
 
         # set fixed judul box
-        self.judulFixed = QTextEdit(self)
+        self.judulFixed = QLineEdit(self)
         self.judulFixed.setEnabled(False)
         self.judulFixed.setPlaceholderText("Judul: tolong keluarga ini membeli beras (ISI PAKE DATA DR DATABASE)")
-        self.judulFixed.setFixedSize(377, 47)
-        self.judulFixed.move(531, 208)
-        self.judulFixed.setStyleSheet('''
-            border: 2px solid #5A4FF3;
-            background-color: #DAE3EA;
-            padding: 10px 10px 10px 10px;
-        ''')
+        self.judulFixed.setFixedSize(427, 47)
+        self.judulFixed.move(481, 208)
 
         # set upload foto box
         self.uploadFoto = QPushButton(self)
         self.uploadFoto.setText("Upload Foto")
-        self.uploadFoto.setFixedSize(377, 47)
-        self.uploadFoto.move(531, 274)
-        self.uploadFoto.setStyleSheet('''
-            QPushButton {
-                border: 2px solid #5A4FF3;
-                background-color: #FFFFFF;
-                padding: 10px 10px 10px 10px;
-            }
-            QPushButton:hover {
-                background-color: #5A4FF3
-            }
-        ''')
+        self.uploadFoto.setFixedSize(427, 47)
+        self.uploadFoto.move(481, 521)
         self.uploadFoto.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.uploadFoto.clicked.connect(self.openFile)
 
@@ -82,41 +92,21 @@ class PageBuilder(QWidget):
         self.descFixed = QTextEdit(self)
         self.descFixed.setEnabled(False)
         self.descFixed.setPlaceholderText("Deskripsi: ibu jubaidah dan anaknya ilham ingin membeli beras tolonglah mereka membeli segelintir beras (ISI PAKE DATA DR DATABASE)")
-        self.descFixed.setFixedSize(377, 163)
-        self.descFixed.move(531, 339)
-        self.descFixed.setStyleSheet('''
-            border: 2px solid #5A4FF3;
-            background-color: #DAE3EA;
-            padding: 10px 10px 10px 10px;
-        ''')
+        self.descFixed.setFixedSize(427, 163)
+        self.descFixed.move(481, 339)
 
         # set fixed target donasi box
-        self.targetFixed = QTextEdit(self)
+        self.targetFixed = QLineEdit(self)
         self.targetFixed.setEnabled(False)
         self.targetFixed.setPlaceholderText("Target: 10 juta (ISI PAKE DATA DR DATABASE)")
-        self.targetFixed.setFixedSize(377, 47)
-        self.targetFixed.move(531, 521)
-        self.targetFixed.setStyleSheet('''
-            border: 2px solid #5A4FF3;
-            background-color: #DAE3EA;
-            padding: 10px 10px 10px 10px;
-        ''')
+        self.targetFixed.setFixedSize(427, 47)
+        self.targetFixed.move(481, 274)
 
         # set date picker box
         self.setDeadline = QPushButton(self)
         self.setDeadline.setText("Pilih Tenggat Waktu")
-        self.setDeadline.setFixedSize(377, 47)
-        self.setDeadline.move(531, 586)
-        self.setDeadline.setStyleSheet('''
-            QPushButton {
-                border: 2px solid #5A4FF3;
-                background-color: #FFFFFF;
-                padding: 10px 10px 10px 10px;
-            }
-            QPushButton:hover {
-                background-color: #5A4FF3
-            }
-        ''')
+        self.setDeadline.setFixedSize(427, 47)
+        self.setDeadline.move(481, 586)
         self.setDeadline.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.setDeadline.clicked.connect(self.pickDate)
 
@@ -124,33 +114,42 @@ class PageBuilder(QWidget):
         self.submitPage = QPushButton(self)
         self.submitPage.setText("SUBMIT")
         self.submitPage.setFixedSize(165, 52)
-        self.submitPage.move(638, 664)
-        self.submitPage.setStyleSheet('''
-            QPushButton {
-                border: 2px solid #5A4FF3;
-                border-radius: 20px;
-                background-color: #5A4FF3;
-                padding: 10px 10px 10px 10px;
-            }
-            QPushButton:hover {
-                background-color: #FFFFFF;
-            }
-        ''')
+        self.submitPage.move(603, 664)
         self.submitPage.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.submitPage.clicked.connect(self.goToRiwayatPenggalang)
 
+    def resetState(self):
+        self.dataText["deadline"] = ""
+        self.dataFile["foto-laman"] = ""
+
+    def sendData(self):
+        response = requests.post('http://localhost:3000/laman/create-laman', data=self.dataText, files=self.dataFile)
+        if (response.status_code == 201):
+            return True
+        else:
+            return False
+
     def goToRiwayatPenggalang(self):
-        self.channel.emit()
+        success = self.sendData()
+        if (success):
+            self.resetState()
+            self.channel.emit()
+        else:
+            msgBox = QMessageBox()
+            msgBox.setText("<p>Please fill out the form properly!</p>")
+            msgBox.setWindowTitle("Request Permintaan Failed")
+            msgBox.setIcon(QMessageBox.Icon.Warning)
+            msgBox.setStyleSheet("background-color: white")
+            msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+            msgBox.exec()
+            return
 
     # get jpg file
     def openFile(self):
         file = QFileDialog.getOpenFileName(self, 'Open a file', '', 'Image (*.jpg*)')
         if file != ('', ''):
             path = file[0]
-            print(path)
-            # TEST OPEN TXT FILE
-            # with open(path, "r") as f:
-            #     print(f.readline())
+            self.dataFile[type] = open(path, "rb")
             
     # get date
     def pickDate(self):
@@ -171,6 +170,7 @@ class PageBuilder(QWidget):
     # set input as selected date
     def setDate(self, date):
         self.setDeadline.setText(date.toString())
+        self.dataText["deadline"] = date.toString()
 
 
 # # UNCOMMENT BELOW FOR TESTING  
