@@ -1,3 +1,4 @@
+from operator import itemgetter
 from flask import jsonify, request, session
 
 from models.lamanModels import Laman
@@ -119,7 +120,7 @@ class LamanController:
   def eksplorTotalDonasiLaman():
     # EKSPLOR BY TOTAL DONASI
     try:
-      laman = Laman.getByTotalDonasi()
+      laman = Laman.getAll()
 
       if (laman is None):
         return "Laman Not Found", 404
@@ -139,7 +140,7 @@ class LamanController:
                         "timestamp": l.getTimestamp(),
                         "foto-laman": l.getFoto()})
 
-        return jsonify(result), 200
+        return jsonify(sorted(result, key=itemgetter("total-donasi"), reverse=True)), 200
 
     except Exception as e:
       return str(e), 400
