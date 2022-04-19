@@ -104,7 +104,7 @@ class RiwayatDonasiWindow(QWidget):
     self.returnButton.move(33, 30)  
 
     self.initializeRiwayatDonasi()
-    self.setUpDisplayRiwayatDonasi()
+    # self.setUpDisplayRiwayatDonasi()
     self.returnButton.clicked.connect(self.goToLamanEksplor)
     
     # next button
@@ -246,7 +246,7 @@ class RiwayatDonasiWindow(QWidget):
       )
       lamanRes = json.loads(response_laman.text)
       self.preview_penggalangan_dana1.setText(lamanRes["judul"])
-      self.nominal1.setText(str(lamanRes["target"]))
+      self.nominal1.setText(str(dictRes1["jumlah-transaksi"]))
       self.url1 = lamanRes["foto-laman"][0][0]
       self.data1 = urllib.request.urlopen(self.url1).read()
       self.image1 = QImage()
@@ -266,17 +266,17 @@ class RiwayatDonasiWindow(QWidget):
         )
         lamanRes = json.loads(response_laman.text)
         self.preview_penggalangan_dana2.setText(lamanRes["judul"])
-        self.nominal2.setText(str(lamanRes["target"]))
+        self.nominal2.setText(str(dictRes2["jumlah-transaksi"]))
         self.url2 = lamanRes["foto-laman"][0][0]
         self.data2 = urllib.request.urlopen(self.url2).read()
         self.image2 = QImage()
-        self.image2.loadFromData(self.data1)
+        self.image2.loadFromData(self.data2)
         self.previewImg2 = QLabel(self)
         self.previewImg2.setFixedSize(117, 98)
-        self.previewImg2.move(269, 253)
+        self.previewImg2.move(269, 253+185)
         self.previewImg2.setScaledContents(True)
-        self.pixmap2 = QPixmap(self.image1)
-        self.previewImg2.setPixmap(self.pixmap1)         
+        self.pixmap2 = QPixmap(self.image2)
+        self.previewImg2.setPixmap(self.pixmap2)         
 
   def goToLamanEksplor(self):
     self.channel.emit()

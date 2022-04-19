@@ -176,10 +176,10 @@ class LamanEksplor(QWidget):
             self.previewImg1.setPixmap(pixmap)
             # check for laman 2
             if (len(listRes) >= 2):
-                # set id laman
-                self.idLaman["laman2"] = dictRes2["id-laman"]
                 # get laman 2
                 dictRes2 = (listRes[1])
+                # set id laman
+                self.idLaman["laman2"] = dictRes2["id-laman"]
                 # set judul
                 self.previewText2.setText(dictRes2["judul"])
                 # set image

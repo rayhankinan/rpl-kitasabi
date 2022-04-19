@@ -259,23 +259,23 @@ class RiwayatPenggalanganWindow(QWidget):
           
           self.idLaman["laman1"] = dictRes1["id-laman"]
           self.judul_penggalangan_dana1.setText(dictRes1["judul"])
-          self.nominal1.setText(dictRes1["total-donasi"])
-          url1 = dictRes1["foto-laman"][0][0]
-          data1 = urllib.request.urlopen(url1).read()
-          image1 = QImage()
-          image1.loadFromData(data1)
+          self.nominal1.setText(dictRes1["target"])
+          self.url1 = dictRes1["foto-laman"][0][0]
+          self.data1 = urllib.request.urlopen(self.url1).read()
+          self.image1 = QImage()
+          self.image1.loadFromData(self.data1)
           self.previewImg1 = QLabel(self)
           self.previewImg1.setFixedSize(117, 117)
           self.previewImg1.move(287, 297)
           self.previewImg1.setScaledContents(True)
-          pixmap1 = QPixmap(image1)
-          self.previewImg1.setPixmap(pixmap1)
+          self.pixmap1 = QPixmap(self.image1)
+          self.previewImg1.setPixmap(self.pixmap1)
           
           if(len(listRes) >= 2):
             dictRes2 = (listRes[1])    
-            self.idLaman["laman2"] = dictRes2["idLaman"]
+            self.idLaman["laman2"] = dictRes2["id-laman"]
             self.judul_penggalangan_dana2.setText(dictRes2["judul"])
-            self.nominal1.setText(str(dictRes2["jumlahTransaksi"]))
+            self.nominal2.setText(str(dictRes2["target"]))
             self.url2 = dictRes2["foto-laman"][0][0]
             self.data2 = urllib.request.urlopen(self.url2).read()
             self.image2 = QImage()
