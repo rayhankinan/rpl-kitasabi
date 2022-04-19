@@ -96,7 +96,7 @@ class PermintaanController:
           result.append({"id-permintaan" : lain.getIDPermintaan(), "id-pengguna": lain.getIDPengguna(), "judul": lain.getJudul(), "deskripsi": lain.getDeskripsi(), "target": lain.getTarget(), "status-autentikasi": lain.getStatusAutentikasi(), "instansi" : lain.getInstansi(), "akun-instagram": lain.getAkunInstagram(), "akun-twitter": lain.getAkunTwitter(), "akun-facebook": lain.getAkunFacebook(), "nama-penerima": lain.getNamaPenerima()})
 
       if riwayatKesehatan is None and riwayatLainnya is None:
-        return jsonify({}), 200
+        return "Not Found", 404
 
       else:
         return jsonify(result), 200
