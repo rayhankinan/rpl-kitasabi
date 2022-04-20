@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QTextEdit, QPushButton, QLineEdit, QLabel
-from PyQt6.QtGui import QFont, QCursor, QImage, QPixmap
+from PyQt6.QtGui import QFont, QCursor, QImage, QPixmap, QIcon
 from PyQt6.QtCore import pyqtSignal, Qt
-import sys, requests, json
+import sys, requests, json, pathlib
 import urllib.request
 from requests.auth import HTTPBasicAuth
 
@@ -29,6 +29,9 @@ class LamanEksplor(QWidget):
         self.setFixedSize(1440, 1024)
         self.setWindowTitle("KITASABI - Eksplor")
         self.setStyleSheet('background-color: #F2F4F7')
+        current_directory = str(pathlib.Path(__file__).parent.absolute())
+        path = current_directory + '/../../assets/icon.png'
+        self.setWindowIcon(QIcon(path))
     
         # set fonts
         mulish16 = QFont()

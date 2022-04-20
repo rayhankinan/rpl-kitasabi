@@ -1,9 +1,9 @@
 import sys, requests, json
 from PyQt6.QtWidgets import QApplication, QWidget, QTextEdit, QLabel, QLineEdit, QPushButton, QMessageBox
-from PyQt6.QtGui import QFont, QPixmap, QCursor, QImage
+from PyQt6.QtGui import QFont, QPixmap, QCursor, QImage, QIcon
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import pyqtSignal
-import urllib.request
+import pathlib
 from requests.auth import HTTPBasicAuth
 
 graybg = '#F2F4F7'
@@ -44,6 +44,9 @@ class LamanPermintaan(QWidget):
       mulish44 = QFont()
       mulish44.setFamily("Mulish"); mulish44.setPixelSize(44)
       self.setWidget()
+      current_directory = str(pathlib.Path(__file__).parent.absolute())
+      path = current_directory + '/../../assets/icon.png'
+      self.setWindowIcon(QIcon(path))
 
   def setWidget(self):
       self.setStyleSheet('''

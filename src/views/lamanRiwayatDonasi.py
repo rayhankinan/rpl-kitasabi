@@ -1,12 +1,12 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QTextEdit, QLabel, QLineEdit, QPushButton, QMessageBox
-from PyQt6.QtGui import QFont, QPixmap, QCursor, QImage
+from PyQt6.QtGui import QFont, QPixmap, QCursor, QImage, QIcon
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import pyqtSignal
 import sys, requests, json
 from views.custom_widgets import ClickableLabel
 from requests.auth import HTTPBasicAuth
-import urllib.request
+import urllib.request, pathlib
 
 import sys
 import urllib.request
@@ -43,6 +43,9 @@ class RiwayatDonasiWindow(QWidget):
     self.setFixedSize(1440, 1024)
     self.setWindowTitle("KITASABI - Laman Riwayat Donasi")
     self.setUpWidgets()
+    current_directory = str(pathlib.Path(__file__).parent.absolute())
+    path = current_directory + '/../../assets/icon.png'
+    self.setWindowIcon(QIcon(path))
     
   def setUpWidgets(self):
     self.setStyleSheet('''

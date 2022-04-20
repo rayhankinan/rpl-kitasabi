@@ -1,7 +1,8 @@
 import sys
 import requests
+import pathlib
 from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QRadioButton, QMessageBox, QFileDialog
-from PyQt6.QtGui import QFont, QPixmap, QCursor
+from PyQt6.QtGui import QFont, QPixmap, QCursor, QIcon
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import pyqtSignal
 from requests.auth import HTTPBasicAuth
@@ -37,6 +38,9 @@ class RegisterWindow(QWidget):
     self.setFixedSize(1440, 1024)
     self.setWindowTitle("KITASABI - Register")
     self.setUpWidgets()
+    current_directory = str(pathlib.Path(__file__).parent.absolute())
+    path = current_directory + '/../../assets/icon.png'
+    self.setWindowIcon(QIcon(path))
 
   def setUpWidgets(self):
     # Set warna background

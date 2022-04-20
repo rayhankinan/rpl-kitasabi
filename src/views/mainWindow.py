@@ -1,9 +1,9 @@
 import sys, requests, json
 from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QPushButton
-from PyQt6.QtGui import QFont, QPixmap, QCursor, QImage
+from PyQt6.QtGui import QFont, QPixmap, QCursor, QImage, QIcon
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import pyqtSignal
-import urllib.request
+import urllib.request, pathlib
 from requests.auth import HTTPBasicAuth
 
 import sys
@@ -38,6 +38,9 @@ class MainWindow(QWidget):
     self.setFixedSize(1440, 1024)
     self.setWindowTitle("KITASABI - Laman Utama")
     self.setUpWidgets()
+    current_directory = str(pathlib.Path(__file__).parent.absolute())
+    path = current_directory + '/../../assets/icon.png'
+    self.setWindowIcon(QIcon(path))
     
   
   def setUpWidgets(self):

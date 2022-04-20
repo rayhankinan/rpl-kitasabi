@@ -1,11 +1,11 @@
 import sys
 from urllib import response
 from PyQt6.QtWidgets import QApplication, QWidget, QTextEdit, QLabel, QLineEdit, QPushButton, QMessageBox
-from PyQt6.QtGui import QFont, QPixmap, QCursor, QImage
+from PyQt6.QtGui import QFont, QPixmap, QCursor, QImage, QIcon
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import pyqtSignal
 from views.custom_widgets import ClickableLabel
-import urllib.request
+import urllib.request, pathlib
 import sys, requests, json
 from requests.auth import HTTPBasicAuth
 import urllib.request
@@ -39,8 +39,11 @@ class RiwayatPenggalanganWindow(QWidget):
     
   def setUpRiwayatPenggalanganWindow(self):
     self.setFixedSize(1440, 1024)
-    self.setWindowTitle("KITASABI - Laman Riwayat Donasi")
+    self.setWindowTitle("KITASABI - Laman Riwayat Penggalangan Dana")
     self.setUpWidgets()
+    current_directory = str(pathlib.Path(__file__).parent.absolute())
+    path = current_directory + '/../../assets/icon.png'
+    self.setWindowIcon(QIcon(path))
     
   def setUpWidgets(self):
     self.setStyleSheet('''
@@ -339,14 +342,68 @@ class RiwayatPenggalanganWindow(QWidget):
   def cairkan1(self):
     response = requests.put('http://localhost:3000/transaksi/cair', data = {"id-laman" : self.idLaman["laman1"]}, 
       auth=HTTPBasicAuth(self.session["username-email"], self.session["password"]))
+    if (response.status_code == 200):
+      msgBox = QMessageBox()
+      msgBox.setText("<p>Pencairan Berhasil!</p>")
+      msgBox.setWindowTitle("Pencairan")
+      msgBox.setIcon(QMessageBox.Icon.Information)
+      msgBox.setStyleSheet("background-color: white")
+      msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+      msgBox.exec()
+      return
+    else:
+      msgBox = QMessageBox()
+      msgBox.setText("<p>Pencairan Gagal!</p>")
+      msgBox.setWindowTitle("Pencairan")
+      msgBox.setIcon(QMessageBox.Icon.Warning)
+      msgBox.setStyleSheet("background-color: white")
+      msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+      msgBox.exec()
+      return
     
   def cairkan2(self):
     response = requests.put('http://localhost:3000/transaksi/cair', data = {"id-laman" : self.idLaman["laman2"]},
       auth=HTTPBasicAuth(self.session["username-email"], self.session["password"]))
+    if (response.status_code == 200):
+      msgBox = QMessageBox()
+      msgBox.setText("<p>Pencairan Berhasil!</p>")
+      msgBox.setWindowTitle("Pencairan")
+      msgBox.setIcon(QMessageBox.Icon.Information)
+      msgBox.setStyleSheet("background-color: white")
+      msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+      msgBox.exec()
+      return
+    else:
+      msgBox = QMessageBox()
+      msgBox.setText("<p>Pencairan Gagal!</p>")
+      msgBox.setWindowTitle("Pencairan")
+      msgBox.setIcon(QMessageBox.Icon.Warning)
+      msgBox.setStyleSheet("background-color: white")
+      msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+      msgBox.exec()
+      return
 
   def cairkan3(self):
     response = requests.put('http://localhost:3000/transaksi/cair', data = {"id-laman" : self.idLaman["laman3"]},
       auth=HTTPBasicAuth(self.session["username-email"], self.session["password"]))
+    if (response.status_code == 200):
+      msgBox = QMessageBox()
+      msgBox.setText("<p>Pencairan Berhasil!</p>")
+      msgBox.setWindowTitle("Pencairan")
+      msgBox.setIcon(QMessageBox.Icon.Information)
+      msgBox.setStyleSheet("background-color: white")
+      msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+      msgBox.exec()
+      return
+    else:
+      msgBox = QMessageBox()
+      msgBox.setText("<p>Pencairan Gagal!</p>")
+      msgBox.setWindowTitle("Pencairan")
+      msgBox.setIcon(QMessageBox.Icon.Warning)
+      msgBox.setStyleSheet("background-color: white")
+      msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+      msgBox.exec()
+      return
     
 
   def goToLamanPenggalang(self):

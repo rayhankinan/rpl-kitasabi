@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QTextEdit, QPushButton, QFileDialog, QCalendarWidget, QHBoxLayout, QMessageBox
-from PyQt6.QtGui import QFont, QCursor
+from PyQt6.QtGui import QFont, QCursor, QIcon
 from PyQt6.QtCore import Qt, QDate, pyqtSignal
-import sys, json, requests
+import sys, json, requests, pathlib
 from requests.auth import HTTPBasicAuth 
 
 class PageBuilder(QWidget):
@@ -32,6 +32,9 @@ class PageBuilder(QWidget):
         self.setFixedSize(1440, 1024)
         self.setWindowTitle("KITASABI - Page Builder")
         self.setStyleSheet('background-color: #F2F4F7')
+        current_directory = str(pathlib.Path(__file__).parent.absolute())
+        path = current_directory + '/../../assets/icon.png'
+        self.setWindowIcon(QIcon(path))
 
         # nanti janlup connect database
 

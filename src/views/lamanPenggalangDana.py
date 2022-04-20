@@ -3,7 +3,7 @@ from PyQt6.QtGui import QCursor, QIcon
 from PyQt6.QtCore import pyqtSignal, Qt
 from views.formKesehatan import FormKesehatan
 from views.formNonKesehatan import FormNonKesehatan
-import sys
+import sys, pathlib
 
 class LamanPenggalangDana(QWidget):
     channel = pyqtSignal(str)
@@ -16,6 +16,9 @@ class LamanPenggalangDana(QWidget):
         self.setStyleSheet('background-color: #F2F4F7')
         # nanti janlup connect database
         self.setWidget()
+        current_directory = str(pathlib.Path(__file__).parent.absolute())
+        path = current_directory + '/../../assets/icon.png'
+        self.setWindowIcon(QIcon(path))
 
     def setWidget(self):
         self.setStyleSheet('''

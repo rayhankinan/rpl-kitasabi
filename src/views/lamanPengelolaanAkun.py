@@ -1,12 +1,12 @@
 import sys
 from urllib import response
 from PyQt6.QtWidgets import QApplication, QWidget, QTextEdit, QLabel, QLineEdit, QPushButton, QMessageBox
-from PyQt6.QtGui import QFont, QPixmap, QCursor, QImage
+from PyQt6.QtGui import QFont, QPixmap, QCursor, QImage, QIcon
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import pyqtSignal
 from views.custom_widgets import ClickableLabel
 from requests.auth import HTTPBasicAuth
-import sys, json, requests
+import sys, json, requests, pathlib
 import urllib.request
 
 
@@ -50,6 +50,9 @@ class PengelolaanAkunWindow(QWidget):
     self.setFixedSize(1440, 1024)
     self.setWindowTitle("KITASABI - Laman Pengelolaan Akun")
     self.setUpWidgets()
+    current_directory = str(pathlib.Path(__file__).parent.absolute())
+    path = current_directory + '/../../assets/icon.png'
+    self.setWindowIcon(QIcon(path))
 
   def setUpWidgets(self):
     self.setStyleSheet('''
@@ -187,7 +190,7 @@ class PengelolaanAkunWindow(QWidget):
       # get profile info
       listRes = json.loads(response.text)
       self.usernameLabel.setText(listRes["username"])
-      self.noTeleponEdit.setText(str(listRes["listNoTelp"][0]))
+      self.noTeleponEdit.setText(str(listRes["listNoTelp"][0][0]))
       self.nameDepanEdit.setText((listRes["namaDepan"] + listRes["namaBelakang"]))
       self.emailEdit.setText(listRes["email"])
       self.usernameEdit.setPlaceholderText(listRes["username"])

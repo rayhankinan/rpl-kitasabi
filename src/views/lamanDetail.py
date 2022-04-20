@@ -1,9 +1,9 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QTextEdit, QPushButton
-from PyQt6.QtGui import QFont, QCursor, QImage, QPixmap
+from PyQt6.QtGui import QFont, QCursor, QImage, QPixmap, QIcon
 from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtCore import Qt
 import urllib.request
-import sys, requests, json
+import sys, requests, json, pathlib
 from requests.auth import HTTPBasicAuth
 
 class LamanDetail(QWidget):
@@ -29,6 +29,9 @@ class LamanDetail(QWidget):
         self.setFixedSize(1440, 1024)
         self.setWindowTitle("KITASABI - Detail Penggalangan")
         self.setStyleSheet('background-color: #F2F4F7')
+        current_directory = str(pathlib.Path(__file__).parent.absolute())
+        path = current_directory + '/../../assets/icon.png'
+        self.setWindowIcon(QIcon(path))
     
         # set fonts
         mulish16 = QFont()

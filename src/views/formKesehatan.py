@@ -1,8 +1,9 @@
 from PyQt6.QtWidgets import QLabel, QTextEdit, QPushButton, QWidget, QFileDialog, QMessageBox
-from PyQt6.QtGui import QCursor
+from PyQt6.QtGui import QCursor, QIcon
 from PyQt6.QtCore import Qt, pyqtSignal
 from requests.auth import HTTPBasicAuth
 import requests
+import pathlib
 
 class FormKesehatan(QWidget):
     channel = pyqtSignal()
@@ -39,6 +40,9 @@ class FormKesehatan(QWidget):
         self.setWindowTitle("KITASABI - Form Penggalangan Dana Kesehatan")
         self.setStyleSheet('background-color: #F2F4F7')
         self.setWidget()
+        current_directory = str(pathlib.Path(__file__).parent.absolute())
+        path = current_directory + '/../../assets/icon.png'
+        self.setWindowIcon(QIcon(path))
 
     def setWidget(self):
         self.setStyleSheet('''
