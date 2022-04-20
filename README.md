@@ -93,6 +93,114 @@ Untuk melakukan penggalangan dana ataupun melakukan donasi, pengunjung diwajibka
 ## Daftar Modul yang Diimplementasi
 
 ## Daftar Tabel Basis Data
+* Tabel Akun
+```
++--------------+---------------+------+-----+---------+----------------+
+| Field        | Type          | Null | Key | Default | Extra          |
++--------------+---------------+------+-----+---------+----------------+
+| IDPengguna   | int unsigned  | NO   | PRI | NULL    | auto_increment |
+| Email        | varchar(320)  | NO   | UNI | NULL    |                |
+| NamaDepan    | varchar(255)  | NO   |     | NULL    |                |
+| NamaBelakang | varchar(255)  | NO   |     | NULL    |                |
+| Username     | varchar(255)  | NO   | UNI | NULL    |                |
+| Password     | varbinary(60) | NO   |     | NULL    |                |
+| Foto         | varchar(255)  | NO   |     | NULL    |                |
++--------------+---------------+------+-----+---------+----------------+
+```
+
+* Tabel AkunNoTelp
+```
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| IDPengguna | int unsigned | NO   | PRI | NULL    |       |
+| NoTelp     | varchar(31)  | NO   | PRI | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+```
+
+* Tabel Permintaan
+```
++-------------------+-----------------+------+-----+---------+----------------+
+| Field             | Type            | Null | Key | Default | Extra          |
++-------------------+-----------------+------+-----+---------+----------------+
+| IDPermintaan      | int unsigned    | NO   | PRI | NULL    | auto_increment |
+| IDPengguna        | int unsigned    | NO   | MUL | NULL    |                |
+| Judul             | varchar(255)    | NO   | MUL | NULL    |                |
+| Deskripsi         | varchar(255)    | NO   |     | NULL    |                |
+| Target            | bigint unsigned | NO   |     | NULL    |                |
+| StatusAutentikasi | tinyint(1)      | YES  |     | NULL    |                |
++-------------------+-----------------+------+-----+---------+----------------+
+```
+
+* Tabel Permintaan Kesehatan
+```
++--------------------------+--------------+------+-----+---------+-------+
+| Field                    | Type         | Null | Key | Default | Extra |
++--------------------------+--------------+------+-----+---------+-------+
+| IDPermintaanKesehatan    | int unsigned | NO   | PRI | NULL    |       |
+| FotoKTP                  | varchar(255) | NO   |     | NULL    |       |
+| FotoKK                   | varchar(255) | NO   |     | NULL    |       |
+| FotoSuratKeteranganMedis | varchar(255) | NO   |     | NULL    |       |
+| FotoHasilPemeriksaan     | varchar(255) | NO   |     | NULL    |       |
+| Tujuan                   | varchar(255) | NO   |     | NULL    |       |
+| NamaPasien               | varchar(255) | NO   |     | NULL    |       |
++--------------------------+--------------+------+-----+---------+-------+
+```
+
+* Tabel Permintaan Lainnya
+```
++---------------------+--------------+------+-----+---------+-------+
+| Field               | Type         | Null | Key | Default | Extra |
++---------------------+--------------+------+-----+---------+-------+
+| IDPermintaanLainnya | int unsigned | NO   | PRI | NULL    |       |
+| Instansi            | varchar(255) | NO   |     | NULL    |       |
+| AkunInstagram       | varchar(255) | YES  |     | NULL    |       |
+| AkunTwitter         | varchar(255) | YES  |     | NULL    |       |
+| AkunFacebook        | varchar(255) | YES  |     | NULL    |       |
+| NamaPenerima        | varchar(255) | NO   |     | NULL    |       |
++---------------------+--------------+------+-----+---------+-------+
+```
+
+* Tabel Laman
+```
++---------------+-----------------------------+------+-----+---------+----------------+
+| Field         | Type                        | Null | Key | Default | Extra          |
++---------------+-----------------------------+------+-----+---------+----------------+
+| IDLaman       | int unsigned                | NO   | PRI | NULL    | auto_increment |
+| IDAutentikasi | int unsigned                | NO   | MUL | NULL    |                |
+| IDPenggalang  | int unsigned                | NO   | MUL | NULL    |                |
+| Judul         | varchar(255)                | NO   |     | NULL    |                |
+| Deskripsi     | varchar(255)                | NO   |     | NULL    |                |
+| Target        | bigint unsigned             | NO   |     | NULL    |                |
+| Kategori      | enum('Kesehatan','Lainnya') | NO   |     | NULL    |                |
+| Deadline      | date                        | NO   |     | NULL    |                |
+| Timestamp     | datetime                    | NO   |     | NULL    |                |
++---------------+-----------------------------+------+-----+---------+----------------+
+```
+
+* Tabel Laman Foto
+```
++---------+--------------+------+-----+---------+-------+
+| Field   | Type         | Null | Key | Default | Extra |
++---------+--------------+------+-----+---------+-------+
+| IDLaman | int unsigned | NO   | PRI | NULL    |       |
+| Foto    | varchar(255) | NO   | PRI | NULL    |       |
++---------+--------------+------+-----+---------+-------+
+```
+
+* Tabel Transaksi
+```
++-----------------+-----------------+------+-----+-------------------+-------------------+
+| Field           | Type            | Null | Key | Default           | Extra             |
++-----------------+-----------------+------+-----+-------------------+-------------------+
+| IDTransaksi     | int unsigned    | NO   | PRI | NULL              | auto_increment    |
+| IDDonatur       | int unsigned    | YES  | MUL | NULL              |                   |
+| IDLaman         | int unsigned    | YES  | MUL | NULL              |                   |
+| JumlahTransaksi | bigint unsigned | NO   |     | NULL              |                   |
+| Timestamp       | timestamp       | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
+| StatusPencairan | tinyint(1)      | NO   |     | 0                 |                   |
++-----------------+-----------------+------+-----+-------------------+-------------------+
+```
 
 ## Author
 * [Adiyansa Prasetya Wicaksana - 13520044](https://gitlab.informatika.org/apwic)

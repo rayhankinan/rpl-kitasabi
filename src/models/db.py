@@ -44,7 +44,7 @@ with app.app_context():
     # TABLE Permintaan
     cursor.execute("CREATE TABLE Permintaan ( \
                     IDPermintaan INT UNSIGNED AUTO_INCREMENT,\
-                    IDPengguna INT UNSIGNED,\
+                    IDPengguna INT UNSIGNED NOT NULL,\
                     Judul VARCHAR(255) NOT NULL, \
                     Deskripsi VARCHAR(255) NOT NULL, \
                     Target BIGINT UNSIGNED NOT NULL, \
@@ -72,18 +72,18 @@ with app.app_context():
                     AkunInstagram VARCHAR(255), \
                     AkunTwitter VARCHAR(255), \
                     AkunFacebook VARCHAR(255), \
-                    NamaPenerima VARCHAR(255), \
+                    NamaPenerima VARCHAR(255) NOT NULL, \
                     PRIMARY KEY (IDPermintaanLainnya), \
                     FOREIGN KEY (IDPermintaanLainnya) REFERENCES Permintaan (IDPermintaan) ON DELETE CASCADE)")
                     
     # TABLE Laman
     cursor.execute("CREATE TABLE Laman ( \
                     IDLaman INT UNSIGNED AUTO_INCREMENT, \
-                    IDAutentikasi INT UNSIGNED, \
-                    IDPenggalang INT UNSIGNED, \
+                    IDAutentikasi INT UNSIGNED NOT NULL, \
+                    IDPenggalang INT UNSIGNED NOT NULL, \
                     Judul VARCHAR(255) NOT NULL, \
                     Deskripsi VARCHAR(255) NOT NULL, \
-                    Target  BIGINT UNSIGNED, \
+                    Target BIGINT UNSIGNED NOT NULL, \
                     Kategori ENUM('Kesehatan', 'Lainnya') NOT NULL, \
                     Deadline DATE NOT NULL, \
                     Timestamp DATETIME NOT NULL, \
