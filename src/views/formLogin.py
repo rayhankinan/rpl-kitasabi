@@ -19,7 +19,7 @@ class LoginWindow(QWidget):
     super().__init__()
     self.setUpLoginWindow()
     current_directory = str(pathlib.Path(__file__).parent.absolute())
-    path = current_directory + '/../../assets/icon.png'
+    path = current_directory + '/../../img/icon.png'
     self.setWindowIcon(QIcon(path))
 
   def setUpLoginWindow(self):

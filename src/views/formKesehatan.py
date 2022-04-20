@@ -41,7 +41,7 @@ class FormKesehatan(QWidget):
         self.setStyleSheet('background-color: #F2F4F7')
         self.setWidget()
         current_directory = str(pathlib.Path(__file__).parent.absolute())
-        path = current_directory + '/../../assets/icon.png'
+        path = current_directory + '/../../img/icon.png'
         self.setWindowIcon(QIcon(path))
 
     def setWidget(self):

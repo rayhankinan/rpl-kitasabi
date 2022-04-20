@@ -45,7 +45,7 @@ class LamanPermintaan(QWidget):
       mulish44.setFamily("Mulish"); mulish44.setPixelSize(44)
       self.setWidget()
       current_directory = str(pathlib.Path(__file__).parent.absolute())
-      path = current_directory + '/../../assets/icon.png'
+      path = current_directory + '/../../img/icon.png'
       self.setWindowIcon(QIcon(path))
 
   def setWidget(self):

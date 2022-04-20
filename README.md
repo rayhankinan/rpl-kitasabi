@@ -94,26 +94,26 @@ Untuk melakukan penggalangan dana ataupun melakukan donasi, pengunjung diwajibka
 ## Daftar Modul yang Diimplementasi
 ### 1. Kitasabi
 Modul Kitasabi merupakan modul _main_ untuk aplikasi.
-![](./assets/main_window.png)
+![](./doc/main_window.png)
 ### 2. Pengelolaan Pengguna
 Modul Pengelolaan Pengguna menerapkan _login_, _register_, _edit_, dan _logout_:
-![](./assets/register.png)
-![](./assets/login.png)
-![](./assets/profile.png)
+![](./doc/register.png)
+![](./doc/login.png)
+![](./doc/profile.png)
 ### 3. Donatur
 Modul Donatur menerapkan Laman Utama, Eksplor, _Search Bar_, Laman Detail, Riwayat Donasi, dan Pembayaran:
-![](./assets/eksplor.png)
-![](./assets/detail.png)
-![](./assets/riwayat_donasi.png)
-![](./assets/pembayaran.png)
+![](./doc/eksplor.png)
+![](./doc/detail.png)
+![](./doc/riwayat_donasi.png)
+![](./doc/pembayaran.png)
 ### 4. Penggalang Dana
 Modul Penggalang Dana menerapkan Pembuatan Permintaan, Riwayat Permintaan, Pembuatan Laman, Riwayat Penggalangan:
-![](./assets/pilihan_form.png)
-![](./assets/form_kesehatan.png)
-![](./assets/form_non_kesehatan.png)
-![](./assets/page_builder.png)
-![](./assets/riwayat_permintaan.png)
-![](./assets/riwayat_penggalang.png)
+![](./doc/pilihan_form.png)
+![](./doc/form_kesehatan.png)
+![](./doc/form_non_kesehatan.png)
+![](./doc/page_builder.png)
+![](./doc/riwayat_permintaan.png)
+![](./doc/riwayat_penggalang.png)
 ### 5. Autentikasi Penggalangan Dana
 Modul Autentikasi Penggalangan Dana menerapkan Edit Permintaan tetapi tidak diterapkan pada Frontend, tetapi bisa diakses dengan melakukan Request dengan autentikasi akun admin pada auditorConfig.
 ## Daftar Tabel Basis Data

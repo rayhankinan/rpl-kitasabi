@@ -17,7 +17,7 @@ class LamanPenggalangDana(QWidget):
         # nanti janlup connect database
         self.setWidget()
         current_directory = str(pathlib.Path(__file__).parent.absolute())
-        path = current_directory + '/../../assets/icon.png'
+        path = current_directory + '/../../img/icon.png'
         self.setWindowIcon(QIcon(path))
 
     def setWidget(self):

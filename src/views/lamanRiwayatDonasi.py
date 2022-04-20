@@ -44,7 +44,7 @@ class RiwayatDonasiWindow(QWidget):
     self.setWindowTitle("KITASABI - Laman Riwayat Donasi")
     self.setUpWidgets()
     current_directory = str(pathlib.Path(__file__).parent.absolute())
-    path = current_directory + '/../../assets/icon.png'
+    path = current_directory + '/../../img/icon.png'
     self.setWindowIcon(QIcon(path))
     
   def setUpWidgets(self):
