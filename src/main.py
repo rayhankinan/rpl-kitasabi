@@ -15,7 +15,7 @@ def loadBackend():
     app.register_blueprint(transaksiRoutes, url_prefix="/transaksi")
     app.register_blueprint(lamanRoutes, url_prefix="/laman")
 
-    app.run(port=3000, debug=True, use_reloader=False)
+    app.run(port=3000, use_reloader=False)
 
 if __name__ == "__main__":
     threadBackend = Thread(target=loadBackend)
