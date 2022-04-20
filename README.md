@@ -76,15 +76,12 @@ Untuk melakukan penggalangan dana ataupun melakukan donasi, pengunjung diwajibka
 ## Requirement Program
 * Python versi 3.7.6 atau lebih baru. Pastikan pula terdapat package PyPi (PIP) pada Python Anda.
 * Google Gloud SDK versi 380.0.0 atau lebih baru.
-* MySQL versi 8.0.26 atau lebih baru.
 
 ## Cara Menyiapkan *Environment*
 1. Pastikan seluruh requirement program sudah terpasang pada komputer (Anda dapat mengecek versi Python dengan menjalankan *command* `py --version` pada *command prompt*).
 2. Lakukan instalasi semua *library* yang digunakan pada program. Anda dapat menginstalasi seluruh *library* yang digunakan pada program ini dengan menjalankan *command* `pip install -r requirements.txt` pada *command prompt*.
 3. Jika seluruh *library* berhasil diinstalasi, maka akan terdapat pemberitahuan pada *command prompt*.
 4. Pastikan pula Google Cloud SDK sudah terpasang pada komputer (Anda dapat menginisialisasi Google Cloud SDK dengan menjalankan *command* `gcloud init` pada *command prompt*).
-5. Tambahkan *database* baru pada DBMS MySQL bernama `KITASABI`.
-6. Masukkan konfigurasi *database* MySQL ke dalam file `databaseConfig.py` yang berada di dalam folder `config`.
 
 ## Cara Menjalankan Program
 1. Pastikan sudah menyiapkan *environment* program serta komputer terhubung dengan internet.
@@ -123,7 +120,7 @@ Modul Autentikasi Penggalangan Dana menerapkan Edit Permintaan tetapi tidak dite
 | Field        | Type          | Null | Key | Default | Extra          |
 +--------------+---------------+------+-----+---------+----------------+
 | IDPengguna   | int unsigned  | NO   | PRI | NULL    | auto_increment |
-| Email        | varchar(320)  | NO   | UNI | NULL    |                |
+| Email        | varchar(255)  | NO   | UNI | NULL    |                |
 | NamaDepan    | varchar(255)  | NO   |     | NULL    |                |
 | NamaBelakang | varchar(255)  | NO   |     | NULL    |                |
 | Username     | varchar(255)  | NO   | UNI | NULL    |                |
