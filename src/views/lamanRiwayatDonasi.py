@@ -213,6 +213,45 @@ class RiwayatDonasiWindow(QWidget):
     self.pixmap2 = QPixmap(self.image2)
     self.previewImg2.setPixmap(self.pixmap2)
 
+    # card 3
+
+    # set background
+    self.cardBackground3 = QLabel(self)
+    self.cardBackground3.setFixedSize(1220, 558)
+    self.cardBackground3.move(116, 208 + 370)
+    self.cardBackground3.setStyleSheet('background-color: rgba(187, 200, 212, 1)')
+    
+    # set preview penggalangan dana
+    self.bg_list3 = QLabel(self)
+    self.bg_list3.setFixedSize(956, 128)
+    self.bg_list3.setStyleSheet(f'background-color: {graybg}')
+    self.bg_list3.move(253,239 + 370)
+      # Preview penggalangan dana +i *185
+    self.preview_penggalangan_dana3 = QLabel(self)
+    self.preview_penggalangan_dana3.setText("Judul Penggalangan Dana")
+    self.preview_penggalangan_dana3.setStyleSheet('color: rgba(37, 49, 60, 1)')
+    self.preview_penggalangan_dana3.setStyleSheet('background-color: #F2F4F7')
+    self.preview_penggalangan_dana3.move(425, 273 + 370) 
+    self.preview_penggalangan_dana3.setFont(mulish24)
+    # nominal penggalangan dana
+    self.nominal3 = QLabel(self)
+    self.nominal3.setText("Nominal")
+    self.nominal3.setStyleSheet('color: rgba(37, 49, 60, 1)')
+    self.nominal3.setStyleSheet('background-color: #F2F4F7')
+    self.nominal3.move(425, 322  + 370)
+    self.nominal3.setFont(mulish16)
+    
+    self.url3 = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
+    self.data3 = urllib.request.urlopen(self.url3).read()
+    self.image3 = QImage()
+    self.image3.loadFromData(self.data3)
+    self.previewImg3 = QLabel(self)
+    self.previewImg3.setFixedSize(117, 98)
+    self.previewImg3.move(269, 253 + 370)
+    self.previewImg3.setScaledContents(True)
+    self.pixmap3 = QPixmap(self.image3)
+    self.previewImg3.setPixmap(self.pixmap3)
+
   def setLaman(self):
     response = requests.get('http://localhost:3000/transaksi/riwayat-donatur',
       auth=HTTPBasicAuth(self.session["username-email"], self.session["password"])
@@ -257,7 +296,27 @@ class RiwayatDonasiWindow(QWidget):
         self.previewImg2.move(269, 253+185)
         self.previewImg2.setScaledContents(True)
         self.pixmap2 = QPixmap(self.image2)
-        self.previewImg2.setPixmap(self.pixmap2)         
+        self.previewImg2.setPixmap(self.pixmap2)  
+
+        if (len(listRes) >= 3):
+          dictRes3 = (listRes[2])    
+          self.idLaman["laman2"] = dictRes3["id-laman"]
+          response_laman = requests.get('http://localhost:3000/laman/detail-laman', data={"id-laman": dictRes3["id-laman"]},
+            auth=HTTPBasicAuth(self.session["username-email"], self.session["password"])
+          )
+          lamanRes = json.loads(response_laman.text)
+          self.preview_penggalangan_dana3.setText(lamanRes["judul"])
+          self.nominal3.setText(str(dictRes3["jumlah-transaksi"]))
+          self.url3 = lamanRes["foto-laman"][0][0]
+          self.data3 = urllib.request.urlopen(self.url3).read()
+          self.image3 = QImage()
+          self.image3.loadFromData(self.data3)
+          self.previewImg3 = QLabel(self)
+          self.previewImg3.setFixedSize(117, 98)
+          self.previewImg3.move(269, 253+370)
+          self.previewImg3.setScaledContents(True)
+          self.pixmap3 = QPixmap(self.image3)
+          self.previewImg3.setPixmap(self.pixmap3) 
 
   def goToLamanEksplor(self):
     self.channel.emit()

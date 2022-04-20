@@ -1,4 +1,4 @@
 MYSQL_HOST = "localhost"
 MYSQL_USER = "root"
-MYSQL_PASSWORD = "password"
+MYSQL_PASSWORD = "18273645"
 MYSQL_DB = "KITASABI"
