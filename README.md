@@ -1,5 +1,5 @@
 # KITASABI
-Disusun untuk memenuhi Tugas 7 Implementasi Perancangan Perangkat Lunak IF2250 Rekayasa Perangkat Lunak.
+> Disusun untuk memenuhi Tugas 7 Implementasi Perancangan Perangkat Lunak IF2250 Rekayasa Perangkat Lunak.
 
 ## Daftar Isi
 * [Deskripsi Singkat Program](#deskripsi-singkat-program)
@@ -91,7 +91,30 @@ Untuk melakukan penggalangan dana ataupun melakukan donasi, pengunjung diwajibka
 3. Jika berhasil dijalankan, maka akan terdapat *window* Python pada komputer.
 
 ## Daftar Modul yang Diimplementasi
-
+### 1. Kitasabi
+Modul Kitasabi merupakan modul _main_ untuk aplikasi.
+![](./assets/main_window.png)
+### 2. Pengelolaan Pengguna
+Modul Pengelolaan Pengguna menerapkan _login_, _register_, _edit_, dan _logout_:
+![](./assets/register.png)
+![](./assets/login.png)
+![](./assets/profile.png)
+### 3. Donatur
+Modul Donatur menerapkan Laman Utama, Eksplor, _Search Bar_, Laman Detail, Riwayat Donasi, dan Pembayaran:
+![](./assets/eksplor.png)
+![](./assets/detail.png)
+![](./assets/riwayat_donasi.png)
+![](./assets/pembayaran.png)
+### 4. Penggalang Dana
+Modul Penggalang Dana menerapkan Pembuatan Permintaan, Riwayat Permintaan, Pembuatan Laman, Riwayat Penggalangan:
+![](./assets/pilihan_form.png)
+![](./assets/form_kesehatan.png)
+![](./assets/form_non_kesehatan.png)
+![](./assets/page_builder.png)
+![](./assets/riwayat_permintaan.png)
+![](./assets/riwayat_penggalang.png)
+### 5. Autentikasi Penggalangan Dana
+Modul Autentikasi Penggalangan Dana menerapkan Edit Permintaan tetapi tidak diterapkan pada Frontend, tetapi bisa diakses dengan melakukan Request dengan autentikasi akun admin pada auditorConfig.
 ## Daftar Tabel Basis Data
 * Tabel Akun
 ```
