@@ -230,4 +230,4 @@ Modul Autentikasi Penggalangan Dana menerapkan Edit Permintaan tetapi tidak dite
 * [Adiyansa Prasetya Wicaksana - 13520044](https://gitlab.informatika.org/apwic)
 * [Fikri Khoiron Fadhila - 13520056](https://gitlab.informatika.org/fikrikhoironn)
 * [Rayhan Kinan Muhannad - 13520065](https://gitlab.informatika.org/rayhankinan)
-* [Sarah Azka - 13520083](https://gitlab.informatika.org/sarahzka)
+* [Sarah Azka Arief - 13520083](https://gitlab.informatika.org/sarahzka)
