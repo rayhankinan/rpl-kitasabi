@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QApplication, QWidget, QTextEdit, QLabel, QLineEdit,
 from PyQt6.QtGui import QFont, QPixmap, QCursor, QImage
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import pyqtSignal
-from views.custom_widgets import ClickableLabel
+from custom_widgets import ClickableLabel
 from requests.auth import HTTPBasicAuth
 
 graybg = '#F2F4F7'
@@ -81,14 +81,14 @@ class PengelolaanAkunWindow(QWidget):
 
     # # profile
     self.profilePicture = QLabel(self)
-    self.profilePicture.setFixedSize(183,183)
-    self.profilePicture.move(642,42)
+    self.profilePicture.setFixedSize(100,100)
+    self.profilePicture.move(680,32)
     self.profilePicture.setStyleSheet('''
       padding-right: 50px;
       padding-top: 25px;
       background: #DAE3EA;
       border: 20px;
-      border-radius: 30;
+      border-radius: 50;
     ''')
     
     # username label
@@ -116,6 +116,7 @@ class PengelolaanAkunWindow(QWidget):
     self.nameDepanEdit.setFixedSize(580, 43)
     self.nameDepanEdit.setFont(mulish16)
     self.nameDepanEdit.move(458, 275)
+    self.nameDepanEdit.setStyleSheet('background-color: #DAE3EA')
          
     # nama belakang 
     self.nameEdit = QLineEdit(self)
@@ -124,6 +125,8 @@ class PengelolaanAkunWindow(QWidget):
     self.nameEdit.setFixedSize(580, 43)
     self.nameEdit.setFont(mulish16)
     self.nameEdit.move(458, 335)
+    self.nameEdit.setStyleSheet('background-color: #DAE3EA')
+
     
     # email 
     self.emailEdit = QLineEdit(self)
@@ -132,6 +135,8 @@ class PengelolaanAkunWindow(QWidget):
     self.emailEdit.setFixedSize(580, 43)
     self.emailEdit.setFont(mulish16)
     self.emailEdit.move(458, 395)
+    self.emailEdit.setStyleSheet('background-color: #DAE3EA')
+
     
     # no telepon
     self.noTeleponEdit = QLineEdit(self)
@@ -140,6 +145,8 @@ class PengelolaanAkunWindow(QWidget):
     self.noTeleponEdit.setFixedSize(580, 43)
     self.noTeleponEdit.setFont(mulish16)
     self.noTeleponEdit.move(458, 455)
+    self.noTeleponEdit.setStyleSheet('background-color: #DAE3EA')
+
     
     # username
     self.usernameEdit = QLineEdit(self)
@@ -179,8 +186,8 @@ class PengelolaanAkunWindow(QWidget):
   def goToMainWindow(self):
     self.channel.emit("mainWindow")
 
-# if __name__ == "__main__":
-#   app = QApplication(sys.argv)
-#   window = PengelolaanAkunWindow()
-#   window.show()
-#   sys.exit(app.exec())
+if __name__ == "__main__":
+  app = QApplication(sys.argv)
+  window = PengelolaanAkunWindow()
+  window.show()
+  sys.exit(app.exec())
