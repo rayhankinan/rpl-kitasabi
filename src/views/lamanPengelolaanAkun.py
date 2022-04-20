@@ -1,10 +1,13 @@
 import sys
+from urllib import response
 from PyQt6.QtWidgets import QApplication, QWidget, QTextEdit, QLabel, QLineEdit, QPushButton, QMessageBox
 from PyQt6.QtGui import QFont, QPixmap, QCursor, QImage
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import pyqtSignal
 from views.custom_widgets import ClickableLabel
 from requests.auth import HTTPBasicAuth
+import sys, json, requests
+
 
 graybg = '#F2F4F7'
 ungu = 'rgba(90, 79, 243, 1)'
@@ -18,6 +21,20 @@ class PengelolaanAkunWindow(QWidget):
 		"username-email": "",
 		"password": "",
 	}
+  
+  dataText = {
+    "email": "",
+    "no-telp": "",
+    "nama-depan": "",
+    "nama-belakang": "",
+    "username": "",
+    "password": ""
+  }
+  
+  dataFile = {
+    "foto"
+  }
+  
     
   def setSession(self, usernameEmail, password):
       self.session["username-email"] = usernameEmail
@@ -179,6 +196,23 @@ class PengelolaanAkunWindow(QWidget):
     # perbarui data
     self.perbaruiButton.clicked.connect(self.register)
   
+  def setLaman(self):
+    response = requests.get('http://localhost:3000/akun/profile',
+            auth=HTTPBasicAuth(self.session["username-email"], self.session["password"])
+    )
+    if (response.status_code == 200):
+      # get profile info
+      listRes = json.loads(response.text)
+      self.usernameLabel.setText(listRes["username"])
+      self.nameDepanEdit.setText(listRes["no-telp"])
+      self.nameEdit.setText(listRes["nama-belakang"])
+      self.emailEdit.setText(listRes["email"])
+      self.noTeleponEdit.setText(listRes["no-telp"])
+      self.usernameEdit.setText(listRes["username"])
+      self.passwordEdit.setText("********")
+  
+
+  
   def register(self):
     # register 
     self.goToMainWindow()
@@ -186,8 +220,8 @@ class PengelolaanAkunWindow(QWidget):
   def goToMainWindow(self):
     self.channel.emit("mainWindow")
 
-if __name__ == "__main__":
-  app = QApplication(sys.argv)
-  window = PengelolaanAkunWindow()
-  window.show()
-  sys.exit(app.exec())
+# if __name__ == "__main__":
+#   app = QApplication(sys.argv)
+#   window = PengelolaanAkunWindow()
+#   window.show()
+#   sys.exit(app.exec())
