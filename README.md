@@ -84,6 +84,7 @@ Untuk melakukan penggalangan dana ataupun melakukan donasi, pengunjung diwajibka
 3. Jika seluruh *library* berhasil diinstalasi, maka akan terdapat pemberitahuan pada *command prompt*.
 4. Pastikan pula Google Cloud SDK sudah terpasang pada komputer (Anda dapat menginisialisasi Google Cloud SDK dengan menjalankan *command* `gcloud init` pada *command prompt*).
 5. Tambahkan *database* baru pada DBMS MySQL bernama `KITASABI`.
+6. Masukkan konfigurasi *database* MySQL ke dalam file `databaseConfig.py` yang berada di dalam folder `config`.
 
 ## Cara Menjalankan Program
 1. Pastikan sudah menyiapkan *environment* program serta komputer terhubung dengan internet.
