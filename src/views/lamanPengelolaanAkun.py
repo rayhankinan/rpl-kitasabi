@@ -7,6 +7,8 @@ from PyQt6.QtCore import pyqtSignal
 from views.custom_widgets import ClickableLabel
 from requests.auth import HTTPBasicAuth
 import sys, json, requests
+import urllib.request
+
 
 
 graybg = '#F2F4F7'
@@ -101,24 +103,17 @@ class PengelolaanAkunWindow(QWidget):
     self.profilePicture.setFixedSize(100,100)
     self.profilePicture.move(680,32)
     self.profilePicture.setStyleSheet('''
-      padding-right: 50px;
-      padding-top: 25px;
       background: #DAE3EA;
       border: 20px;
-      border-radius: 50;
     ''')
-    
-    # username label
-    self.usernameBg = QLabel(self)
-    self.usernameBg.setFixedSize(266, 46)
-    self.usernameBg.move(601, 145)
-    self.usernameBg.setStyleSheet('background-color: rgba(218, 227, 234, 1)')
     
     self.usernameLabel = QLabel(self)
     self.usernameLabel.setText("Username")
-    self.usernameLabel.move(644, 149)
+    self.usernameLabel.setFixedSize(266, 46)
+    self.usernameLabel.move(601, 145)
     self.usernameLabel.setFont(mulish33_bold)
     self.usernameLabel.setStyleSheet('background-color: rgba(218, 227, 234, 1)')
+    self.usernameLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
     
     # set bg form
     self.formBg = QLabel(self)
@@ -132,65 +127,53 @@ class PengelolaanAkunWindow(QWidget):
     self.nameDepanEdit.setDisabled(True)
     self.nameDepanEdit.setFixedSize(580, 43)
     self.nameDepanEdit.setFont(mulish16)
-    self.nameDepanEdit.move(458, 275)
+    self.nameDepanEdit.move(458, 295)
     self.nameDepanEdit.setStyleSheet('background-color: #DAE3EA')
-         
-    # nama belakang 
-    self.nameEdit = QLineEdit(self)
-    self.nameEdit.setPlaceholderText("Nama Belakang")
-    self.nameEdit.setDisabled(True)
-    self.nameEdit.setFixedSize(580, 43)
-    self.nameEdit.setFont(mulish16)
-    self.nameEdit.move(458, 335)
-    self.nameEdit.setStyleSheet('background-color: #DAE3EA')
 
-    
     # email 
     self.emailEdit = QLineEdit(self)
     self.emailEdit.setPlaceholderText("Email")
     self.emailEdit.setDisabled(True)
     self.emailEdit.setFixedSize(580, 43)
     self.emailEdit.setFont(mulish16)
-    self.emailEdit.move(458, 395)
+    self.emailEdit.move(458, 355)
     self.emailEdit.setStyleSheet('background-color: #DAE3EA')
 
-    
     # no telepon
     self.noTeleponEdit = QLineEdit(self)
     self.noTeleponEdit.setPlaceholderText("No Telepon")
     self.noTeleponEdit.setDisabled(True)
     self.noTeleponEdit.setFixedSize(580, 43)
     self.noTeleponEdit.setFont(mulish16)
-    self.noTeleponEdit.move(458, 455)
+    self.noTeleponEdit.move(458, 415)
     self.noTeleponEdit.setStyleSheet('background-color: #DAE3EA')
 
-    
     # username
     self.usernameEdit = QLineEdit(self)
     self.usernameEdit.setFixedSize(580, 43)
     self.usernameEdit.setPlaceholderText("Username")
     self.usernameEdit.setFont(mulish16)
-    self.usernameEdit.move(458, 515)
+    self.usernameEdit.move(458, 475)
     
     # password
     self.passwordEdit = QLineEdit(self)
     self.passwordEdit.setFixedSize(580, 43)
     self.passwordEdit.setPlaceholderText("Password")
     self.passwordEdit.setFont(mulish16)
-    self.passwordEdit.move(458, 575)
+    self.passwordEdit.move(458, 555)
 
     # konfirmasi password
     self.confirmPassword = QLineEdit(self)
     self.confirmPassword.setFixedSize(580, 43)
     self.confirmPassword.setPlaceholderText("Konfirmasi Password")
     self.confirmPassword.setFont(mulish16)
-    self.confirmPassword.move(458, 635)
+    self.confirmPassword.move(458, 615)
     
     # perbarui button
     self.perbaruiButton = QPushButton(self)
     self.perbaruiButton.setText("Perbarui")
     self.perbaruiButton.setFixedSize(145, 36)
-    self.perbaruiButton.move(664, 706)
+    self.perbaruiButton.move(664, 686)
     self.perbaruiButton.setFont(mulish16)
     self.perbaruiButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
     # perbarui data
@@ -198,20 +181,24 @@ class PengelolaanAkunWindow(QWidget):
   
   def setLaman(self):
     response = requests.get('http://localhost:3000/akun/profile',
-            auth=HTTPBasicAuth(self.session["username-email"], self.session["password"])
+      auth=HTTPBasicAuth(self.session["username-email"], self.session["password"])
     )
     if (response.status_code == 200):
       # get profile info
       listRes = json.loads(response.text)
       self.usernameLabel.setText(listRes["username"])
-      self.nameDepanEdit.setText(listRes["no-telp"])
-      self.nameEdit.setText(listRes["nama-belakang"])
+      self.noTeleponEdit.setText(str(listRes["listNoTelp"][0]))
+      self.nameDepanEdit.setText((listRes["namaDepan"] + listRes["namaBelakang"]))
       self.emailEdit.setText(listRes["email"])
-      self.noTeleponEdit.setText(listRes["no-telp"])
-      self.usernameEdit.setText(listRes["username"])
-      self.passwordEdit.setText("********")
-  
-
+      self.usernameEdit.setPlaceholderText(listRes["username"])
+      self.passwordEdit.setPlaceholderText("********")
+      url = listRes["foto"]
+      data = urllib.request.urlopen(url).read()
+      image = QImage()
+      image.loadFromData(data)
+      pixmap = QPixmap(image)
+      self.profilePicture.setPixmap(pixmap)
+      self.profilePicture.setScaledContents(True)
   
   def register(self):
     # register 

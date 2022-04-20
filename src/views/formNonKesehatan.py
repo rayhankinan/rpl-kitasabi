@@ -145,6 +145,15 @@ class FormNonKesehatan(QWidget):
         self.submitFormNK.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.submitFormNK.clicked.connect(self.goToRiwayatPenggalangan)
 
+        self.returnButton = QPushButton(self)
+        self.returnButton.setText("< Kembali ke Laman Utama")
+        self.returnButton.setFixedSize(258, 36)
+        self.returnButton.move(53, 32)
+        self.returnButton.clicked.connect(self.goToHome)
+
+    def goToHome(self):
+        self.channel.emit()
+
     def resetState(self):
         self.judul.clear()
         self.namaPenerima.clear()

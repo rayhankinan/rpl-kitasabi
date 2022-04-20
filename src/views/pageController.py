@@ -62,6 +62,7 @@ class PageController:
 			self.lamanPembayaran.close()
 			self.mainWindow.show()
 		elif (nextPage == "profile"):
+			self.lamanPengelolaanAkun.setLaman()
 			self.lamanPembayaran.close()
 			self.lamanPengelolaanAkun.show()
 		else:
@@ -75,6 +76,7 @@ class PageController:
 			self.lamanDetail.close()
 			self.mainWindow.show()
 		elif (nextPage == "profile"):
+			self.lamanPengelolaanAkun.setLaman()
 			self.lamanDetail.close()
 			self.lamanPengelolaanAkun.show()
 		else:
@@ -88,6 +90,7 @@ class PageController:
 			self.lamanEksplor.close()
 			self.mainWindow.show()
 		elif (nextPage == "profile"):
+			self.lamanPengelolaanAkun.setLaman()
 			self.lamanEksplor.close()
 			self.lamanPengelolaanAkun.show()
 		else:
@@ -96,21 +99,28 @@ class PageController:
 			self.lamanDetail.show()
 
 	def handleLamanPenggalangDana(self, nextPage):
-		self.lamanPenggalangDana.close()
 		if (nextPage == "kesehatan"):
+			self.lamanPenggalangDana.close()
 			self.formKesehatan.show()
+		elif (nextPage == "utama"):
+			self.mainWindow.setLaman()
+			self.lamanPenggalangDana.close()
+			self.mainWindow.show()
 		else:
+			self.lamanPenggalangDana.close()
 			self.formNonKesehatan.show()
 
 	def handleFormKesehatan(self):
+		self.mainWindow.setLaman()
 		self.formKesehatan.close()
-		self.lamanRiwayatPenggalanganDana.show()
+		self.mainWindow.show()
 	
 	def handleFormNonKesehatan(self):
+		self.mainWindow.setLaman()
 		self.formNonKesehatan.close()
-		self.lamanRiwayatPenggalanganDana.show()
+		self.mainWindow.show()
 
-	def handlePageBuilder(self):
+	def handlePageBuilder(self, nextPage):
 		self.lamanPermintaan.setLaman()
 		self.pageBuilder.close()
 		self.lamanPermintaan.show()
@@ -150,6 +160,7 @@ class PageController:
 			self.mainWindow.close()
 			self.lamanDetail.show()
 		elif (nextPage == "pengelolaan_akun"):
+			self.lamanPengelolaanAkun.setLaman()
 			self.mainWindow.close()
 			self.lamanPengelolaanAkun.show()
 		elif (nextPage == "mulai_penggalang"):
@@ -200,6 +211,7 @@ class PageController:
 			self.lamanPermintaan.close()
 			self.pageBuilder.show()
 		elif (nextPage == "profile"):
+			self.lamanPengelolaanAkun.setLaman()
 			self.lamanPermintaan.close()
 			self.lamanPengelolaanAkun.show()
 		else:

@@ -101,7 +101,7 @@ class LamanPermintaan(QWidget):
           }
       ''')
       self.profileButton.clicked.connect(self.goToEditProfil)
-
+      
       # set preview penggalangan dana
       self.previewBg1 = QTextEdit(self)
       self.previewBg1.setDisabled(True)
@@ -179,11 +179,14 @@ class LamanPermintaan(QWidget):
       else:
         # placeholder data
         self.previewText2.setText("Not Found")
+        self.detail2.setDisabled(True)
         return False
     else:
       # placeholder data
       self.previewText1.setText("Not Found")
       self.previewText2.setText("Not Found")
+      self.detail1.setDisabled(True)
+      self.detail2.setDisabled(True)
       return False
 
   def goToHome(self):

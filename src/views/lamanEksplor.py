@@ -250,7 +250,6 @@ class LamanEksplor(QWidget):
                 image.loadFromData(data)
                 pixmap = QPixmap(image)
                 self.previewImg2.setPixmap(pixmap)
-                return True
             else:
                 # placeholder data
                 self.previewText2.setText("Placeholder Title")
@@ -260,7 +259,6 @@ class LamanEksplor(QWidget):
                 image.loadFromData(data)
                 pixmap = QPixmap(image)
                 self.previewImg2.setPixmap(pixmap)
-                return False
         else:
             # placeholder data
             self.previewText1.setText("Placeholder Title")
@@ -272,9 +270,8 @@ class LamanEksplor(QWidget):
             pixmap = QPixmap(image)
             self.previewImg1.setPixmap(pixmap)
             self.previewImg2.setPixmap(pixmap)
-            return False
-
         self.searchbar.clear()
+
         
     def goToHome(self):
         self.channel.emit("home", -1)

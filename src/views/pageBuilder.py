@@ -123,7 +123,16 @@ class PageBuilder(QWidget):
         self.submitPage.move(603, 664)
         self.submitPage.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.submitPage.clicked.connect(self.goToRiwayatPenggalang)
+
+        self.returnButton = QPushButton(self)
+        self.returnButton.setText("< Kembali ke Laman Permintaan")
+        self.returnButton.setFixedSize(258, 36)
+        self.returnButton.move(53, 32)
+        self.returnButton.clicked.connect(self.goToPermintaan)
     
+    def goToPermintaan(self):
+        self.channel.emit()
+
     def setLaman(self, idPermintaan):
         self.dataText["id-autentikasi"] = idPermintaan
         # set id laman
