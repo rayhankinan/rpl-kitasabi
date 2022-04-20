@@ -242,7 +242,8 @@ class Laman():
     # SEACH TOTAL DONASI SORTED
     cursor.execute("SELECT * \
                     FROM Laman \
-                    WHERE IDPenggalang = %s", (idPenggalang, ))
+                    WHERE IDPenggalang = %s \
+                    ORDER BY Timestamp DESC", (idPenggalang, ))
 
     dataLaman = cursor.fetchall()
 

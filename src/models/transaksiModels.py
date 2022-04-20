@@ -42,7 +42,7 @@ class Transaksi:
     def getRiwayatDonasi(cls, idDonatur):
         cursor = mysql.connection.cursor()
 
-        cursor.execute("SELECT * FROM Transaksi WHERE IDDonatur = %s", (idDonatur, ))
+        cursor.execute("SELECT * FROM Transaksi WHERE IDDonatur = %s ORDER BY Timestamp DESC", (idDonatur, ))
         dataRiwayat = cursor.fetchall()
 
         cursor.close()

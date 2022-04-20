@@ -65,7 +65,7 @@ class Permintaan:
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT IDPermintaan, Judul, Deskripsi, Target, StatusAutentikasi\
                     FROM Permintaan \
-                    WHERE IDPengguna = %s", (idPengguna, ))
+                    WHERE IDPengguna = %s AND IdPermintaan NOT IN (SELECT IdAutentikasi FROM Laman)", (idPengguna, ))
 
     dataPermintaan = cursor.fetchall()
 
