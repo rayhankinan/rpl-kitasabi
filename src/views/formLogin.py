@@ -1,9 +1,9 @@
+import pathlib
 import sys, requests
 from requests.auth import HTTPBasicAuth
 from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QMessageBox
-from PyQt6.QtGui import QFont, QCursor
-from PyQt6.QtCore import Qt
-from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtGui import QFont, QCursor, QIcon
+from PyQt6.QtCore import Qt, pyqtSignal
 from views.custom_widgets import ClickableLabel
 
 
@@ -18,6 +18,9 @@ class LoginWindow(QWidget):
   def __init__(self):
     super().__init__()
     self.setUpLoginWindow()
+    current_directory = str(pathlib.Path(__file__).parent.absolute())
+    path = current_directory + '/../../img/icon.png'
+    self.setWindowIcon(QIcon(path))
 
   def setUpLoginWindow(self):
     self.setFixedSize(1440, 1024)

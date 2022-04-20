@@ -1,9 +1,10 @@
 from PyQt6.QtWidgets import QApplication, QLabel, QPushButton, QTextEdit, QWidget, QMessageBox
-from PyQt6.QtGui import QCursor
+from PyQt6.QtGui import QCursor, QIcon
 from PyQt6.QtCore import Qt, pyqtSignal
 import requests
 from requests.auth import HTTPBasicAuth
 import sys
+import pathlib
 
 class FormNonKesehatan(QWidget):
     channel = pyqtSignal()
@@ -36,6 +37,9 @@ class FormNonKesehatan(QWidget):
         self.setWindowTitle("KITASABI - Form Penggalangan Dana Non-Kesehatan")
         self.setStyleSheet('background-color: #F2F4F7')
         self.setWidget()
+        current_directory = str(pathlib.Path(__file__).parent.absolute())
+        path = current_directory + '/../../img/icon.png'
+        self.setWindowIcon(QIcon(path))
 
     def setWidget(self):
         self.setStyleSheet('''
@@ -144,6 +148,15 @@ class FormNonKesehatan(QWidget):
         self.submitFormNK.move(638, 634)
         self.submitFormNK.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.submitFormNK.clicked.connect(self.goToRiwayatPenggalangan)
+
+        self.returnButton = QPushButton(self)
+        self.returnButton.setText("< Kembali ke Laman Utama")
+        self.returnButton.setFixedSize(258, 36)
+        self.returnButton.move(53, 32)
+        self.returnButton.clicked.connect(self.goToHome)
+
+    def goToHome(self):
+        self.channel.emit()
 
     def resetState(self):
         self.judul.clear()

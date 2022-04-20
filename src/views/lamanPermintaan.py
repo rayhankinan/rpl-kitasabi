@@ -1,9 +1,9 @@
 import sys, requests, json
 from PyQt6.QtWidgets import QApplication, QWidget, QTextEdit, QLabel, QLineEdit, QPushButton, QMessageBox
-from PyQt6.QtGui import QFont, QPixmap, QCursor, QImage
+from PyQt6.QtGui import QFont, QPixmap, QCursor, QImage, QIcon
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import pyqtSignal
-import urllib.request
+import pathlib
 from requests.auth import HTTPBasicAuth
 
 graybg = '#F2F4F7'
@@ -44,6 +44,9 @@ class LamanPermintaan(QWidget):
       mulish44 = QFont()
       mulish44.setFamily("Mulish"); mulish44.setPixelSize(44)
       self.setWidget()
+      current_directory = str(pathlib.Path(__file__).parent.absolute())
+      path = current_directory + '/../../img/icon.png'
+      self.setWindowIcon(QIcon(path))
 
   def setWidget(self):
       self.setStyleSheet('''
@@ -101,7 +104,7 @@ class LamanPermintaan(QWidget):
           }
       ''')
       self.profileButton.clicked.connect(self.goToEditProfil)
-
+      
       # set preview penggalangan dana
       self.previewBg1 = QTextEdit(self)
       self.previewBg1.setDisabled(True)
@@ -179,11 +182,14 @@ class LamanPermintaan(QWidget):
       else:
         # placeholder data
         self.previewText2.setText("Not Found")
+        self.detail2.setDisabled(True)
         return False
     else:
       # placeholder data
       self.previewText1.setText("Not Found")
       self.previewText2.setText("Not Found")
+      self.detail1.setDisabled(True)
+      self.detail2.setDisabled(True)
       return False
 
   def goToHome(self):

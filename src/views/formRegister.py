@@ -1,7 +1,8 @@
 import sys
 import requests
-from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QRadioButton, QMessageBox
-from PyQt6.QtGui import QFont, QPixmap, QCursor
+import pathlib
+from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QRadioButton, QMessageBox, QFileDialog
+from PyQt6.QtGui import QFont, QPixmap, QCursor, QIcon
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import pyqtSignal
 from requests.auth import HTTPBasicAuth
@@ -37,6 +38,9 @@ class RegisterWindow(QWidget):
     self.setFixedSize(1440, 1024)
     self.setWindowTitle("KITASABI - Register")
     self.setUpWidgets()
+    current_directory = str(pathlib.Path(__file__).parent.absolute())
+    path = current_directory + '/../../img/icon.png'
+    self.setWindowIcon(QIcon(path))
 
   def setUpWidgets(self):
     # Set warna background
@@ -166,11 +170,21 @@ class RegisterWindow(QWidget):
     self.confirmPwEdit.setEchoMode(QLineEdit.EchoMode.Password)
 
     # Register push button
+    self.fotoEdit = QPushButton(self)
+    self.fotoEdit.setText("Upload Foto")
+    self.fotoEdit.setFixedSize(340, 42)
+    self.fotoEdit.setFont(mulish16)
+    self.fotoEdit.move(550, 630)
+    self.fotoEdit.setStyleSheet('border-radius: 20px')
+    self.fotoEdit.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+    self.fotoEdit.clicked.connect(self.uploadFoto)
+
+    # upload foto push button
     self.registerButton = QPushButton(self)
     self.registerButton.setText("Daftar")
-    self.registerButton.setFixedSize(183, 48)
-    self.registerButton.move(637, 683)
-    self.registerButton.setFont(mulish24)
+    self.registerButton.setFixedSize(183, 43)
+    self.registerButton.move(637, 733)
+    self.registerButton.setFont(mulish16)
     self.registerButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
     self.registerButton.clicked.connect(self.register)
   
@@ -201,6 +215,12 @@ class RegisterWindow(QWidget):
     
   def setPassword(self):
     self.dataText["password"] = self.passwordEdit.text()
+
+  def uploadFoto(self):
+    file = QFileDialog.getOpenFileName(self, 'Open a file', '', 'Image (*.jpg*)')
+    if file != ('', ''):
+        path = file[0]
+        self.dataFile["foto"] = open(path, "rb")
 
   def register(self):
     # # validasi masukan tidak boleh kosong

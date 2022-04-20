@@ -1,11 +1,11 @@
 import sys
 from urllib import response
 from PyQt6.QtWidgets import QApplication, QWidget, QTextEdit, QLabel, QLineEdit, QPushButton, QMessageBox
-from PyQt6.QtGui import QFont, QPixmap, QCursor, QImage
+from PyQt6.QtGui import QFont, QPixmap, QCursor, QImage, QIcon
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import pyqtSignal
 from views.custom_widgets import ClickableLabel
-import urllib.request
+import urllib.request, pathlib
 import sys, requests, json
 from requests.auth import HTTPBasicAuth
 import urllib.request
@@ -39,8 +39,11 @@ class RiwayatPenggalanganWindow(QWidget):
     
   def setUpRiwayatPenggalanganWindow(self):
     self.setFixedSize(1440, 1024)
-    self.setWindowTitle("KITASABI - Laman Riwayat Donasi")
+    self.setWindowTitle("KITASABI - Laman Riwayat Penggalangan Dana")
     self.setUpWidgets()
+    current_directory = str(pathlib.Path(__file__).parent.absolute())
+    path = current_directory + '/../../img/icon.png'
+    self.setWindowIcon(QIcon(path))
     
   def setUpWidgets(self):
     self.setStyleSheet('''
@@ -190,7 +193,8 @@ class RiwayatPenggalanganWindow(QWidget):
     self.cairkan_button1.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
     self.cairkan_button1.clicked.connect(self.cairkan1)
     
- # set preview penggalangan dana
+    # card 2
+    # set preview penggalangan dana
     self.bg_list2 = QLabel(self)
     self.bg_list2.setFixedSize(956, 144)
     self.bg_list2.setStyleSheet(f'background-color: {graybg}')
@@ -227,7 +231,47 @@ class RiwayatPenggalanganWindow(QWidget):
     self.cairkan_button2.move(990, 328+167)
     self.cairkan_button2.setFont(mulish16)
     self.cairkan_button2.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-    self.cairkan_button2.clicked.connect(self.cairkan2)    
+    self.cairkan_button2.clicked.connect(self.cairkan2)  
+
+    # card 3
+    # set preview penggalangan dana
+    self.bg_list3 = QLabel(self)
+    self.bg_list3.setFixedSize(956, 144)
+    self.bg_list3.setStyleSheet(f'background-color: {graybg}')
+    self.bg_list3.move(271,284+334 )
+    # Preview penggalangan dana +i *185
+    self.judul_penggalangan_dana3 = QLabel(self)
+    self.judul_penggalangan_dana3.setText("Judul Penggalangan Dana")
+    self.judul_penggalangan_dana3.setStyleSheet('color: rgba(37, 49, 60, 1)')
+    self.judul_penggalangan_dana3.setStyleSheet('background-color: #F2F4F7')
+    self.judul_penggalangan_dana3.move(443, 315+334) 
+    self.judul_penggalangan_dana3.setFont(mulish24)
+    # nominal penggalangan dana
+    self.nominal3 = QLabel(self)
+    self.nominal3.setText("Nominal")
+    self.nominal3.setStyleSheet('color: rgba(37, 49, 60, 1)')
+    self.nominal3.setStyleSheet('background-color: #F2F4F7')
+    self.nominal3.move(443, 359+334)
+    self.nominal3.setFont(mulish16)
+    # foto          
+    url3 = 'https://yt3.ggpht.com/ytc/AKedOLQU2qqsQIYjE4SgWbHOYL4QkPO6dEXBcV8SnYEDig=s900-c-k-c0x00ffffff-no-rj'
+    data3 = urllib.request.urlopen(url3).read()
+    image3 = QImage()
+    image3.loadFromData(data3)
+    self.previewImg3 = QLabel(self)
+    self.previewImg3.setFixedSize(117, 117)
+    self.previewImg3.move(287, 297+334)
+    self.previewImg3.setScaledContents(True)
+    pixmap3 = QPixmap(image3)
+    self.previewImg3.setPixmap(pixmap3)
+    # cairkan button
+    self.cairkan_button3 = QPushButton(self)
+    self.cairkan_button3.setText("Cairkan")
+    self.cairkan_button3.setFixedSize(165, 56)
+    self.cairkan_button3.move(990, 328+334)
+    self.cairkan_button3.setFont(mulish16)
+    self.cairkan_button3.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+    self.cairkan_button3.clicked.connect(self.cairkan3)   
 
   def setLaman(self):
       response = requests.get('http://localhost:3000/laman/riwayat-laman',
@@ -266,7 +310,25 @@ class RiwayatPenggalanganWindow(QWidget):
             self.previewImg2.setScaledContents(True)
             self.pixmap2 = QPixmap(self.image2)
             self.previewImg2.setPixmap(self.pixmap2)
-            return True
+
+            if (len(listRes) >= 3):
+              dictRes3 = (listRes[2])    
+              self.idLaman["laman3"] = dictRes3["id-laman"]
+              self.judul_penggalangan_dana3.setText(dictRes3["judul"])
+              self.nominal3.setText(str(dictRes3["target"]))
+              self.url3 = dictRes3["foto-laman"][0][0]
+              self.data3 = urllib.request.urlopen(self.url3).read()
+              self.image3 = QImage()
+              self.image3.loadFromData(self.data3)
+              self.previewImg3 = QLabel(self)
+              self.previewImg3.setFixedSize(117, 117)
+              self.previewImg3.move(287, 297+167+167)
+              self.previewImg3.setScaledContents(True)
+              self.pixmap3 = QPixmap(self.image3)
+              self.previewImg3.setPixmap(self.pixmap3)
+              return True
+            else:
+              return False
       else:
             return False
                         
@@ -278,10 +340,70 @@ class RiwayatPenggalanganWindow(QWidget):
   
   
   def cairkan1(self):
-    response = requests.get('http://localhost:3000/transaksi/cair', data = self.idLaman["laman1"])
+    response = requests.put('http://localhost:3000/transaksi/cair', data = {"id-laman" : self.idLaman["laman1"]}, 
+      auth=HTTPBasicAuth(self.session["username-email"], self.session["password"]))
+    if (response.status_code == 200):
+      msgBox = QMessageBox()
+      msgBox.setText("<p>Pencairan Berhasil!</p>")
+      msgBox.setWindowTitle("Pencairan")
+      msgBox.setIcon(QMessageBox.Icon.Information)
+      msgBox.setStyleSheet("background-color: white")
+      msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+      msgBox.exec()
+      return
+    else:
+      msgBox = QMessageBox()
+      msgBox.setText("<p>Pencairan Gagal!</p>")
+      msgBox.setWindowTitle("Pencairan")
+      msgBox.setIcon(QMessageBox.Icon.Warning)
+      msgBox.setStyleSheet("background-color: white")
+      msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+      msgBox.exec()
+      return
     
   def cairkan2(self):
-    response = requests.get('http://localhost:3000/transaksi/cair', data = self.idLaman["laman2"])
+    response = requests.put('http://localhost:3000/transaksi/cair', data = {"id-laman" : self.idLaman["laman2"]},
+      auth=HTTPBasicAuth(self.session["username-email"], self.session["password"]))
+    if (response.status_code == 200):
+      msgBox = QMessageBox()
+      msgBox.setText("<p>Pencairan Berhasil!</p>")
+      msgBox.setWindowTitle("Pencairan")
+      msgBox.setIcon(QMessageBox.Icon.Information)
+      msgBox.setStyleSheet("background-color: white")
+      msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+      msgBox.exec()
+      return
+    else:
+      msgBox = QMessageBox()
+      msgBox.setText("<p>Pencairan Gagal!</p>")
+      msgBox.setWindowTitle("Pencairan")
+      msgBox.setIcon(QMessageBox.Icon.Warning)
+      msgBox.setStyleSheet("background-color: white")
+      msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+      msgBox.exec()
+      return
+
+  def cairkan3(self):
+    response = requests.put('http://localhost:3000/transaksi/cair', data = {"id-laman" : self.idLaman["laman3"]},
+      auth=HTTPBasicAuth(self.session["username-email"], self.session["password"]))
+    if (response.status_code == 200):
+      msgBox = QMessageBox()
+      msgBox.setText("<p>Pencairan Berhasil!</p>")
+      msgBox.setWindowTitle("Pencairan")
+      msgBox.setIcon(QMessageBox.Icon.Information)
+      msgBox.setStyleSheet("background-color: white")
+      msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+      msgBox.exec()
+      return
+    else:
+      msgBox = QMessageBox()
+      msgBox.setText("<p>Pencairan Gagal!</p>")
+      msgBox.setWindowTitle("Pencairan")
+      msgBox.setIcon(QMessageBox.Icon.Warning)
+      msgBox.setStyleSheet("background-color: white")
+      msgBox.setStandardButtons(QMessageBox.StandardButton.Ok)
+      msgBox.exec()
+      return
     
 
   def goToLamanPenggalang(self):

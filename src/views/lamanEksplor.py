@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QTextEdit, QPushButton, QLineEdit, QLabel
-from PyQt6.QtGui import QFont, QCursor, QImage, QPixmap
+from PyQt6.QtGui import QFont, QCursor, QImage, QPixmap, QIcon
 from PyQt6.QtCore import pyqtSignal, Qt
-import sys, requests, json
+import sys, requests, json, pathlib
 import urllib.request
 from requests.auth import HTTPBasicAuth
 
@@ -29,6 +29,9 @@ class LamanEksplor(QWidget):
         self.setFixedSize(1440, 1024)
         self.setWindowTitle("KITASABI - Eksplor")
         self.setStyleSheet('background-color: #F2F4F7')
+        current_directory = str(pathlib.Path(__file__).parent.absolute())
+        path = current_directory + '/../../img/icon.png'
+        self.setWindowIcon(QIcon(path))
     
         # set fonts
         mulish16 = QFont()
@@ -250,7 +253,6 @@ class LamanEksplor(QWidget):
                 image.loadFromData(data)
                 pixmap = QPixmap(image)
                 self.previewImg2.setPixmap(pixmap)
-                return True
             else:
                 # placeholder data
                 self.previewText2.setText("Placeholder Title")
@@ -260,7 +262,6 @@ class LamanEksplor(QWidget):
                 image.loadFromData(data)
                 pixmap = QPixmap(image)
                 self.previewImg2.setPixmap(pixmap)
-                return False
         else:
             # placeholder data
             self.previewText1.setText("Placeholder Title")
@@ -272,9 +273,8 @@ class LamanEksplor(QWidget):
             pixmap = QPixmap(image)
             self.previewImg1.setPixmap(pixmap)
             self.previewImg2.setPixmap(pixmap)
-            return False
-
         self.searchbar.clear()
+
         
     def goToHome(self):
         self.channel.emit("home", -1)

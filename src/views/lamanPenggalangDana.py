@@ -1,9 +1,9 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QPushButton
-from PyQt6.QtGui import QCursor
+from PyQt6.QtGui import QCursor, QIcon
 from PyQt6.QtCore import pyqtSignal, Qt
 from views.formKesehatan import FormKesehatan
 from views.formNonKesehatan import FormNonKesehatan
-import sys
+import sys, pathlib
 
 class LamanPenggalangDana(QWidget):
     channel = pyqtSignal(str)
@@ -16,6 +16,9 @@ class LamanPenggalangDana(QWidget):
         self.setStyleSheet('background-color: #F2F4F7')
         # nanti janlup connect database
         self.setWidget()
+        current_directory = str(pathlib.Path(__file__).parent.absolute())
+        path = current_directory + '/../../img/icon.png'
+        self.setWindowIcon(QIcon(path))
 
     def setWidget(self):
         self.setStyleSheet('''
@@ -80,6 +83,15 @@ class LamanPenggalangDana(QWidget):
         self.kesButton.setStyleSheet('font-size: 28px')
         self.kesButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.kesButton.clicked.connect(self.goToFormKesehatan)
+
+        self.returnButton = QPushButton(self)
+        self.returnButton.setText("< Kembali ke Laman Utama")
+        self.returnButton.setFixedSize(258, 36)
+        self.returnButton.move(53, 32)
+        self.returnButton.clicked.connect(self.goToHome)
+
+    def goToHome(self):
+        self.channel.emit("utama")
 
     def goToFormKesehatan(self):
         self.channel.emit("kesehatan")
