@@ -113,7 +113,10 @@ with app.app_context():
 
     # DUMMY DATA AKUN
     cursor.execute("INSERT INTO Akun (Email, NamaDepan, NamaBelakang, Username, Password, Foto) \
-                    VALUES (%s, %s, %s, %s, %s, %s)", ("kitasabi@kitasabi.com", "kita", "sabi", "kitasabi",  "$2b$12$oACTLwRomSp0vWcxo.NrSOnDNoT4YmX0gQ0moSdhM700OvJd74XDG", ""))
+                    VALUES (%s, %s, %s, %s, %s, %s)", ("kitasabi@kitasabi.com", "kita", "sabi", "kitasabi",  "$2b$12$oACTLwRomSp0vWcxo.NrSOnDNoT4YmX0gQ0moSdhM700OvJd74XDG", "https://storage.googleapis.com/kitasabi-images/kitasabi.jpeg"))
+    
+    cursor.execute("INSERT INTO AkunNoTelp \
+                    VALUES (%s, %s)", (1, "+6285322382578"))
 
     # DUMMY Permintaan Kesehatan
     cursor.execute("INSERT INTO Permintaan (IDPengguna, Judul, Deskripsi, Target, StatusAutentikasi) \
