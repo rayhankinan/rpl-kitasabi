@@ -5,7 +5,7 @@ from views.formKesehatan import FormKesehatan
 from views.formNonKesehatan import FormNonKesehatan
 import sys, pathlib
 
-class LamanPenggalangDana(QWidget):
+class LamanPenggalangDana(QWidget): # TODO: BUAT LAMAN EDIT PENGGALANGAN DANA
     channel = pyqtSignal(str)
     def __init__(self):
         super().__init__()

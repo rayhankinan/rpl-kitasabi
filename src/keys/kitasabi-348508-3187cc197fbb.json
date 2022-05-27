@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "kitasabi-348508",
+  "private_key_id": "3187cc197fbb0c145aa0e6973a0a1cbd4b1b7361",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDCUP8kvBouZiC4\ns9METHhezN7u2Vdlpp+F/knYsyoSBLpuR4bRcCNpxefMk8HWek5Kc5WVjawa5IEd\nAyPGaQfOWDD59Psz1iT3l/w6KXwFT/tbTF8+1A+LB+obql1KKcj/s4/eQilnVn0Z\nq3hvEfY/Ah2V4ShJTML54nCGOJUlpOjOb6TvARN5pNIKtf4dXyVxgXeVdi9HuLxs\n9vQf3JNGtug4ryBH6Hc7rLafG7w6R/trzQjBkSwIC9demigOy3rir+Sv1GDYd/PO\nE9jiGrY2/mKWyJZDH2vLzOhG9qax+zZ5oueAEEhuU81iOe157zKueteMnTwz2bDF\nPfhLla/HAgMBAAECggEAAcXnbhhhTMcVyVmqtUFVX9gSuK83AvBwSDK3zchku+Fb\nKiJw8nxJdm+d29oFTMW07Sz80m6GgYBQRUmADBFtRs67M6yulhyAHdo/LPCv9wRx\n0LVzsQkSUzxxQGtfiouzD9I9n9OOuSiq348W/Dx3uL92MaXqTjDrHoiYakEd60f/\n1h/xs++3Mf3Ux+jCQyTeD5X+/iUabzJBJwWkg5zFB2KUpzfbn6HCvegkZdUTuOFG\n0TrJUB177D/0VMUmNkqlD/AGwfabe3/WPIZreZ+lkveMqIWzbmDQyXEZFMGbO4jG\nwrC2nkg/o6+wZUv3kMgNEYpCQJhsoz9RQOdj9vKuIQKBgQD72e6uWctldKJzkoRk\nSdAJrNtdhPA2fqnqxf8n8gm7uJfXO6IIk+UVUwNEsdtwpOFBEeGGXnvkBvU6AB7n\n9R8S+1Y0xdkJq52zByzvAbl8omEdKVPXVTHEbdJMGjsdja8bbuLgmobSEOM3FAFz\n+mUal54eEC697whgXVguP8OobwKBgQDFhG/pyorQZHZ61bcXuj73nT1mNHEs4nLX\n9Ipnd8Mn+HSrMDQd6jdzLMdH/Af6Q6LKZu6zqPMEergvd4iHZzg9s4NXuynP2hgC\n+f4H0w6EqYm9Q1leJXmR2izmubWMFAag1eRIZZgNFPOMdymM3r2HkZW/+EoBZ/DH\nUjechfqqKQKBgQDyQW+VxkogDVE2Wnl+/oFezSc1jeqCgNRxQINvqSIzsBxerL3w\nAlMZcAB006CBehgyv0BwP/JsJUU9xV/1P5Pkbl895BIhezL2QrC2NrJ1cLx5kIdV\nWl3E1N601YaHpwIJIWCbLAkDh7sH//Zl2TXnnnA5+tb7XDJyf1eTJULPgQKBgD/V\n/smDsXuKjJREkCk2A3XJtvdaSZ2lDlLncPfhyAwaC7LsIFvuv78UoM+OEBH9XBao\nT8t29hvjgbWtn02LuayPYQqwreHEbfBAVa63ssCDfsXRh4ea+wB9j/d928QLEN1Y\nY7BWTV8k/1XNiXtC3eR70/c4SsrLihERbHHFB2+JAoGBAMirXg7fMoO2rLR+LzqF\nB9GbY8bUdpQns85Mzgw4XnT4yy3MPmlXw8WO+BmovO5DCbHYOFVKf6VWaHM8r6D5\nr3Pyqu9Wy3RBXRP5Xk6PwG80X/rZz7BbyhHuFFwF0LLdbH8uiS/vWrvxS4fqN54R\npYSuYEVa5Y20NsPoxZKCRaEw\n-----END PRIVATE KEY-----\n",
+  "client_email": "kitasabi-user@kitasabi-348508.iam.gserviceaccount.com",
+  "client_id": "116832425314146803502",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/kitasabi-user%40kitasabi-348508.iam.gserviceaccount.com"
+}

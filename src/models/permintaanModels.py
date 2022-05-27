@@ -38,7 +38,7 @@ class Permintaan:
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT IDPengguna, Judul, Deskripsi, Target, StatusAutentikasi\
                     FROM Permintaan \
-                    WHERE IDPermintaan = %s", (idPermintaan))
+                    WHERE IDPermintaan = %s", (idPermintaan, )) # BUG: LUPA KOMA
 
     dataPermintaan = cursor.fetchone()
     cursor.close()

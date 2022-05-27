@@ -205,7 +205,7 @@ class PengelolaanAkunWindow(QWidget):
   
   def register(self):
     # register 
-    self.goToMainWindow()
+    self.goToMainWindow() # TODO: UPDATE INI MENGGUNAKAN REQUESTS
   
   def goToMainWindow(self):
     self.channel.emit("mainWindow")
