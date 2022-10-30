@@ -120,7 +120,7 @@ class PageController:
 		self.formNonKesehatan.close()
 		self.mainWindow.show()
 
-	def handlePageBuilder(self, nextPage):
+	def handlePageBuilder(self):
 		self.lamanPermintaan.setLaman()
 		self.pageBuilder.close()
 		self.lamanPermintaan.show()
